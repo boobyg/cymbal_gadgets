@@ -60,7 +60,8 @@ view: marketing_campaign_impact {
     sql: ${TABLE}.event_impact ;;
   }
   dimension: totalprice {
-    hidden: yes
+    description:  "Bris not Boris on teh LookML UI"
+    hidden: no
     type: number
     sql: ${TABLE}.totalprice ;;
   }

@@ -1,7 +1,7 @@
 connection: "cymbal_gadgets"
 
 include: "/views/*"
-include: "/dashboards/*"
+#include: "/dashboards/*"
 
 datagroup: cymbal_gadgets_default_datagroup {
   max_cache_age: "1 hour"
