@@ -30,6 +30,7 @@ view: marketing_campaign_impact {
   dimension: eventname {
     group_label: "Campaign Details"
     label: "Event Name"
+    description: "The specific event within the campaign (e.g., 'Email Open', 'Ad Click')."
     type: string
     sql: ${TABLE}.eventname ;;
   }
