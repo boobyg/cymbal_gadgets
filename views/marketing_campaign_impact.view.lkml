@@ -60,8 +60,8 @@ view: marketing_campaign_impact {
     sql: ${TABLE}.event_impact ;;
   }
   dimension: totalprice {
-    description:  "Bris not Boris on teh LookML UI"
-    hidden: no
+    description: "The total price of the transaction associated with the campaign event."
+    hidden: yes
     type: number
     sql: ${TABLE}.totalprice ;;
   }
