@@ -61,7 +61,7 @@ view: marketing_campaign_impact {
     sql: ${TABLE}.event_impact ;;
   }
   dimension: totalprice {
-    description: "in VSCode  The total price of the transaction associated with the campaign event."
+    description: "in Looker IDE  The total price of the transaction associated with the campaign event."
     hidden: yes
     type: number
     sql: ${TABLE}.totalprice ;;
