@@ -60,7 +60,7 @@ view: marketing_campaign_impact {
     sql: ${TABLE}.event_impact ;;
   }
   dimension: totalprice {
-    description: "set to hidden: yes in teh IDE.....The total price of the transaction associated with the campaign event."
+    description: "The total price of the transaction associated with the campaign event."
     hidden: yes
     type: number
     sql: ${TABLE}.totalprice ;;
