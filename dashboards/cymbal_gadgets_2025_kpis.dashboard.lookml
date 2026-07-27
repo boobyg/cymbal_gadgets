@@ -27,3 +27,20 @@
     fields: [transactions.total_gross_profit]
     filters:
       transactions.transaction_year: '2025'
+  - title: Total Revenue by Category (2025)
+    name: Total Revenue by Category (2025)
+    model: cymbal_gadgets_boris
+    explore: transactions
+    type: looker_bar
+    fields: [transactions.category, transactions.total_revenue]
+    filters:
+      transactions.transaction_year: '2025'
+    sorts: [transactions.total_revenue desc]
+  - title: Transactions by Sales Channel (2025)
+    name: Transactions by Sales Channel (2025)
+    model: cymbal_gadgets_boris
+    explore: transactions
+    type: looker_pie
+    fields: [transactions.saleschannelname, transactions.count]
+    filters:
+      transactions.transaction_year: '2025'
