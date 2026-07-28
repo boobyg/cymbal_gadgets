@@ -3,18 +3,15 @@
   layout: newspaper
   preferred_viewer: dashboards
   filters:
-  - name: transaction_year
-    title: Transaction Year
-    type: field_filter
+  - name: transaction_date_range
+    title: Transaction Date Range
+    type: date_filter
     default_value: '2025'
     allow_multiple_values: true
     required: false
     ui_config:
-      type: button_group
-      display: inline
-    model: cymbal_gadgets_boris
-    explore: transactions
-    field: transactions.transaction_year
+      type: advanced
+      display: popover
 
   elements:
   - title: Average Order Value
@@ -24,7 +21,7 @@
     type: single_value
     fields: [transactions.average_order_value]
     listen:
-      transaction_year: transactions.transaction_year
+      transaction_date_range: transactions.transaction_date
     row: 0
     col: 0
     width: 8
@@ -37,7 +34,7 @@
     type: single_value
     fields: [transactions.gross_margin_percentage]
     listen:
-      transaction_year: transactions.transaction_year
+      transaction_date_range: transactions.transaction_date
     row: 0
     col: 8
     width: 8
@@ -50,7 +47,7 @@
     type: single_value
     fields: [transactions.total_gross_profit]
     listen:
-      transaction_year: transactions.transaction_year
+      transaction_date_range: transactions.transaction_date
     row: 0
     col: 16
     width: 8
@@ -63,7 +60,7 @@
     type: looker_bar
     fields: [transactions.category, transactions.total_revenue]
     listen:
-      transaction_year: transactions.transaction_year
+      transaction_date_range: transactions.transaction_date
     sorts: [transactions.total_revenue desc]
     row: 4
     col: 0
@@ -77,7 +74,7 @@
     type: looker_pie
     fields: [transactions.saleschannelname, transactions.count]
     listen:
-      transaction_year: transactions.transaction_year
+      transaction_date_range: transactions.transaction_date
     row: 4
     col: 12
     width: 12
@@ -90,7 +87,7 @@
     type: looker_column
     fields: [transactions.transaction_month, transactions.average_order_value]
     listen:
-      transaction_year: transactions.transaction_year
+      transaction_date_range: transactions.transaction_date
     sorts: [transactions.transaction_month asc]
     row: 12
     col: 0
@@ -104,7 +101,7 @@
     type: looker_column
     fields: [transactions.transaction_month, transactions.gross_margin_percentage]
     listen:
-      transaction_year: transactions.transaction_year
+      transaction_date_range: transactions.transaction_date
     sorts: [transactions.transaction_month asc]
     row: 12
     col: 12
@@ -118,7 +115,7 @@
     type: looker_column
     fields: [transactions.transaction_month, transactions.total_gross_profit]
     listen:
-      transaction_year: transactions.transaction_year
+      transaction_date_range: transactions.transaction_date
     sorts: [transactions.transaction_month asc]
     row: 20
     col: 0
@@ -132,7 +129,7 @@
     type: looker_column
     fields: [transactions.transaction_month, transactions.total_revenue]
     listen:
-      transaction_year: transactions.transaction_year
+      transaction_date_range: transactions.transaction_date
     sorts: [transactions.transaction_month asc]
     row: 20
     col: 12
@@ -146,7 +143,7 @@
     type: looker_column
     fields: [transactions.transaction_month, transactions.count]
     listen:
-      transaction_year: transactions.transaction_year
+      transaction_date_range: transactions.transaction_date
     sorts: [transactions.transaction_month asc]
     row: 28
     col: 0
