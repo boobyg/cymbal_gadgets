@@ -14,12 +14,12 @@
       display: popover
 
   elements:
-  - title: Transactions by Country
-    name: Transactions by Country
+  - title: Gross Margin % by Country
+    name: Gross Margin % by Country
     model: cymbal_gadgets_boris
     explore: transactions
     type: looker_pie
-    fields: [transactions.store_country, transactions.count]
+    fields: [transactions.store_country, transactions.gross_margin_percentage]
     listen:
       transaction_date_range: transactions.transaction_date
     row: 0
