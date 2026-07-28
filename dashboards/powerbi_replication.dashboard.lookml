@@ -31,11 +31,12 @@
     name: Gross Profit by Brand and Category
     model: cymbal_gadgets_boris
     explore: transactions
-    type: looker_bar
+    type: looker_column
     fields: [transactions.brand, transactions.category, transactions.total_gross_profit]
     listen:
       transaction_date_range: transactions.transaction_date
     sorts: [transactions.category asc, transactions.brand asc]
+    limit: 20
     row: 0
     col: 12
     width: 12
