@@ -80,6 +80,20 @@
     width: 12
     height: 8
 
+  - title: Gross Profit by Brand and Category
+    name: Gross Profit by Brand and Category
+    model: cymbal_gadgets_boris
+    explore: transactions
+    type: looker_bar
+    fields: [transactions.brand, transactions.category, transactions.total_gross_profit]
+    listen:
+      transaction_date_range: transactions.transaction_date
+    sorts: [transactions.category asc, transactions.brand asc]
+    row: 12
+    col: 0
+    width: 24
+    height: 8
+
   - title: Average Order Value by Month
     name: Average Order Value by Month
     model: cymbal_gadgets_boris
@@ -89,7 +103,7 @@
     listen:
       transaction_date_range: transactions.transaction_date
     sorts: [transactions.transaction_month asc]
-    row: 12
+    row: 20
     col: 0
     width: 12
     height: 8
@@ -103,7 +117,7 @@
     listen:
       transaction_date_range: transactions.transaction_date
     sorts: [transactions.transaction_month asc]
-    row: 12
+    row: 20
     col: 12
     width: 12
     height: 8
@@ -117,7 +131,7 @@
     listen:
       transaction_date_range: transactions.transaction_date
     sorts: [transactions.transaction_month asc]
-    row: 20
+    row: 28
     col: 0
     width: 12
     height: 8
@@ -131,7 +145,7 @@
     listen:
       transaction_date_range: transactions.transaction_date
     sorts: [transactions.transaction_month asc]
-    row: 20
+    row: 28
     col: 12
     width: 12
     height: 8
@@ -145,7 +159,20 @@
     listen:
       transaction_date_range: transactions.transaction_date
     sorts: [transactions.transaction_month asc]
-    row: 28
+    row: 36
     col: 0
-    width: 24
+    width: 12
+    height: 8
+
+  - title: Transactions by Country
+    name: Transactions by Country
+    model: cymbal_gadgets_boris
+    explore: transactions
+    type: looker_pie
+    fields: [transactions.store_country, transactions.count]
+    listen:
+      transaction_date_range: transactions.transaction_date
+    row: 36
+    col: 12
+    width: 12
     height: 8
