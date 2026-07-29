@@ -41,6 +41,7 @@ view: transactions {
   }
   dimension: isweekend {
     group_label: "Transaction Dates"
+    label: "in Vscode"
     label: "Is Weekend?"
     type: yesno
     sql: ${TABLE}.isweekend ;;
