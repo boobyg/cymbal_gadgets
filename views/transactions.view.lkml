@@ -27,6 +27,7 @@ view: transactions {
     hidden: yes
     type: number
     sql: ${TABLE}.storeid ;;
+    description:  "in VSCode"
   }
 
   # --- Date & Time ---
