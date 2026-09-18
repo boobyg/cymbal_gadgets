@@ -53,14 +53,47 @@ Modern enterprise generative AI applications fail when they hallucinate metrics 
 
 ---
 
-## 🛠️ Lab Prerequisites & Credentials
+## 🛠️ Lab Prerequisites & Mandatory Argolis Environment
+
+> [!IMPORTANT]
+> **MANDATORY: Deploy & Run in Your Own Argolis Environment**  
+> Every student **MUST deploy and run this lab within their own dedicated Google Cloud Argolis environment** (e.g. using **Google Cloud Shell** or **Cloud Workstations** in your personal Argolis project).  
+> **Why?**
+> 1. **Complete Isolation**: Prevents local port collisions (`8080`), file permission conflicts, and environment variable overwrites across concurrent students.
+> 2. **Credential Privacy**: Keeps your personal Looker API credentials securely stored inside your private GCP tenant.
+> 3. **Built-in Web Preview**: Argolis Cloud Shell and Cloud Workstations provide instant, authenticated HTTPS web preview proxies to port 8080 without requiring firewall adjustments or local laptop configuration.
+> 4. **Zero Local Dependencies**: All scripts run directly in the cloud container—no local Python or Git installation required on your laptop.
 
 * **Looker Instance Base URL:** `https://ceworkshops.cloud.looker.com`
 * **LookML Model:** `cymbal_gadgets_boris`
 * **LookML Explore:** `transactions` (Cymbal Gadgets Retail Sales & Transactions)
 * **API Credentials:** specify your own user id / secret (provided to you before the lab)
-* **Local Web App Directory:** `/home/user/cymbal_gadgets/agentic_web_app`
-* **Interactive Training Application:** `http://localhost:8080` (or your Cloud Workstations web preview URL)
+* **Git Repository:** `https://github.com/cloud-gtm/cymbal_gadgets.git` (or your assigned Git clone URL)
+* **Web Application Port:** `8080` (accessible via Cloud Shell Web Preview)
+
+---
+
+# 📥 Deploying the Lab from Git in Your Argolis Environment
+
+### Step A: Open Cloud Shell in your Argolis Project
+1. Log into the Google Cloud Console ([console.cloud.google.com](https://console.cloud.google.com)) and switch to your **Argolis project**.
+2. Click the **Activate Cloud Shell** icon (`>_`) in the top navigation bar.
+
+### Step B: Clone the Repository & Launch App
+```bash
+# 1. Clone the repository into your Argolis Cloud Shell home
+git clone https://github.com/cloud-gtm/cymbal_gadgets.git
+cd cymbal_gadgets/agentic_web_app
+
+# 2. Start the web server (automatically prepares .env and sets up server)
+./run.sh
+```
+
+### Step C: Open the Interactive Lab Portal
+In Google Cloud Shell:
+1. Click the **Web Preview** button in the upper-right corner of the Cloud Shell toolbar.
+2. Select **Preview on port 8080**.
+3. Your interactive SkillLabs training portal will open in a new browser tab!
 
 ---
 
@@ -100,17 +133,28 @@ If you prefer configuring credentials in the terminal:
 # 🚀 Step 1: Looker API Explorer & Creating Your Conversational Agent (10 Mins)
 
 ### 1.1 What is the Looker API Explorer?
-The **API Explorer** is an interactive, visual developer console built directly into Looker. It lets developers explore all 400+ Looker 4.0 REST endpoints, test live requests against the Looker instance, inspect schemas, and view real-time responses.
+The **Looker API Explorer** is a built-in, fully interactive developer workbench and documentation environment integrated directly into the Looker platform. It allows data engineers, architects, and developers to:
+* **Discover and Inspect All 400+ REST Endpoints:** Browse Looker API 4.0 specifications, including LookML modeling, project validation, query generation, and the modern **Conversational Analytics family** (`/agents`, `/conversations`, and `/conversational_analytics/chat`).
+* **Live In-Browser API Execution:** Test requests directly against your Looker instance without setting up local development tools, Postman collections, or curl scripts.
+* **Automatic Session Authentication:** When logged into the Looker web UI, API Explorer automatically authenticates using your active user session. No manual token headers or OAuth dance required in the browser.
+* **Schema Validation & SDK Code Generation:** Inspect exact JSON schema contracts, parameter types, and auto-generate client code across multiple languages (Python, TypeScript, Kotlin, Swift, C#).
+
+---
 
 ### 1.2 Accessing API Explorer in the Looker Web Interface
+You can access the API Explorer directly using the link below or via the Looker navigation menu:
+
+👉 **[Launch Looker API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer)**
+
+**Manual Navigation Steps:**
 1. Open your browser and navigate to your Looker instance:
    ```text
    https://ceworkshops.cloud.looker.com
    ```
-2. Log in with your workshop credentials.
-3. In the left-hand navigation menu, expand **Applications** (or **Marketplace / Extensions**) and click **API Explorer**.
-   * *Direct URL:* `https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer`
-4. In the API Explorer header, ensure **Looker API 4.0** is selected.
+2. Log in with your assigned workshop credentials.
+3. In the left-hand navigation sidebar, click **Applications** (or **Marketplace / Extensions**) and select **API Explorer**.
+   * Direct Link: [API Explorer Extension](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer)
+4. In the top-right version selector of the API Explorer header, verify that **Looker API 4.0** is selected.
 
 ### 1.3 Understanding Authentication for Data Engineers
 Looker APIs use an OAuth2 token workflow:
@@ -140,13 +184,16 @@ You will see the core Conversational Analytics API family:
 ### 1.5 Hands-On: Create Your Custom Agent (`POST /agents`)
 Let's build an agent tailored for the **Cymbal Gadgets** retail dataset.
 
+> ⚡ **Multi-Student Scaling Rule (500 Concurrent Users):**  
+> Because up to 500 students may be creating agents on the same shared Looker instance, **you MUST provide a unique name** for your agent (e.g. appending your name, student ID, or a random number like `Student 42`). This prevents agent discovery clutter and ensures you can easily find your agent!
+
 1. In API Explorer, click on **`POST /agents` (Create Agent)**.
 2. Click the **Run It** tab.
-3. In the **Request Body** editor, enter the following JSON payload:
+3. In the **Request Body** editor, enter the following JSON payload (substituting `<YOUR_NAME_OR_ID>`):
 
 ```json
 {
-  "name": "Cymbal Retail Analytics Agent - DE Lab",
+  "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
   "description": "Conversational BI agent providing governed retail insights for Cymbal Gadgets",
   "sources": [
     {
@@ -194,7 +241,7 @@ Let's build an agent tailored for the **Cymbal Gadgets** retail dataset.
 ### 🚩 CHECKPOINT 1: Verify Agent Creation
 **Goal:** Confirm your agent exists and is queryable on the Looker instance.
 
-> 💡 **SkillLabs Interactive Check:** In the interactive training application (`http://localhost:8080`), you can click the **Check my progress** button under Task 1 to automatically verify your agent and earn 25 points!
+> 💡 **SkillLabs Interactive Check:** In the interactive training application (`http://localhost:8080`), enter your generated **Agent ID** into the Task 1 input field and click **Check my progress** to verify your agent and earn 25 points! *(Note: Explicit Agent ID entry is required to prevent conflicts in 500-student workshops).*
 
 Alternatively, verify via curl in your terminal (prompt: specify your own user id / secret):
 ```bash
@@ -278,10 +325,20 @@ You should see:
 ### 🚩 CHECKPOINT 2: Verify Web Server Health
 **Goal:** Confirm the web server is running and connected to Looker.
 
-> 💡 **SkillLabs Interactive Check:** In the interactive training application (`http://localhost:8080`), you can click the **Check my progress** button under Task 2 to automatically verify web server health and earn 25 points!
+#### ❓ Where Do I Run the curl Command?
+A common point of confusion during labs is where to execute the verification `curl` command:
+1. **Open a SECOND Terminal Tab in Argolis:**
+   * In **Google Cloud Shell**: Click the **`+` (Open new terminal)** icon or split window icon in the top toolbar.
+   * In **Cloud Workstations / IDE**: Open a second terminal tab (**Terminal > New Terminal**).
+   * **⚠️ DO NOT paste into the first terminal:** The first terminal is busy running `./run.sh` and actively serving HTTP traffic in the foreground. Typing in that window or hitting `Ctrl+C` will terminate the server.
+2. **Execute INSIDE Your Argolis Cloud Environment (Not Your Local Laptop):**
+   * Execute the curl command inside your Argolis Cloud Shell or Cloud Workstation session.
+   * Running `curl http://localhost:8080/api/health` on your local laptop terminal will fail with `Connection refused` because `localhost:8080` is running in your remote Google Cloud environment.
+3. **Alternative (Recommended): Use the Interactive UI (No Terminal Needed!):**
+   * In the interactive web portal (`http://localhost:8080` via Cloud Shell Web Preview), simply navigate to **Task 2** and click the **Check my progress** button. The portal will automatically test the health endpoint and award your +25 points!
 
-In a second terminal window (or via curl), test the health endpoint:
 ```bash
+# In your SECOND Cloud Shell terminal window in Argolis:
 curl -s http://localhost:8080/api/health | jq .
 ```
 **Expected Output:**
@@ -302,9 +359,13 @@ curl -s http://localhost:8080/api/health | jq .
 
 ---
 
-# 🔍 Step 3: Walking Through the Conversational Analytics API Endpoints (10 Mins)
+# 🔍 Step 3: Querying Your Step 1 Agent & Tracing Conversational Analytics (10 Mins)
 
 Now, let's walk through how the application consumes each API endpoint in code, and test them live through the interactive Web UI.
+
+> [!IMPORTANT]
+> **Must Use Agent Created in Step 1:**  
+> In this step, you **must use the custom agent you created in Step 1**. In workshops with up to 500 concurrent students, querying default or arbitrary agents will cause conflicting results, rate limiting, and assessment failure. Make sure to bind your specific `agent_id` from Step 1 before testing queries or running checkpoints!
 
 ---
 
@@ -325,7 +386,7 @@ Now, let's walk through how the application consumes each API endpoint in code, 
 * **Payload:**
   ```json
   {
-    "agent_id": "a9b6933c74a045de9ed130ad024cca62",
+    "agent_id": "YOUR_STEP_1_AGENT_ID",
     "name": "Cymbal Gadgets Executive Session"
   }
   ```
@@ -359,9 +420,9 @@ Now, let's walk through how the application consumes each API endpoint in code, 
    ```text
    http://localhost:8080
    ```
-2. **Select Your Agent:**
-   * In the left sidebar under **Active Agent**, either select your agent from the dropdown or paste the `agent_id` you created in Step 1 into the input field and click **Use**.
-   * Notice that the **Conversation State** updates with a fresh `conversation_id`.
+2. **Select the Agent You Created in Step 1:**
+   * In the top ribbon under **Agent**, either select your uniquely named agent (`Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>`) from the dropdown, or enter the **`agent_id`** you created in Step 1 into the input field and click **Use Agent**.
+   * Notice that the **Conversation State** updates with a fresh `conversation_id` tied specifically to your Step 1 agent.
 
 3. **Submit Query 1 (Basic Aggregation):**
    * In the chat input, type:
@@ -393,13 +454,13 @@ Now, let's walk through how the application consumes each API endpoint in code, 
 ---
 
 ### 🚩 CHECKPOINT 3: Verify Interactive Query Flow
-**Goal:** Confirm that questions return governed data and clear reasoning steps.
+**Goal:** Confirm that questions return governed data and clear reasoning steps against your Step 1 agent.
 
-> 💡 **SkillLabs Interactive Check:** In the interactive training application (`http://localhost:8080`), you can click the **Check my progress** button under Task 3 to automatically submit an analytical verification query and earn 25 points!
+> 💡 **SkillLabs Interactive Check:** In the interactive training application (`http://localhost:8080`), enter your Step 1 **Agent ID** into the Task 3 input field and click **Check my progress** to execute an analytical verification query and earn 25 points!
 
-Alternatively, run the automated CLI verification script:
+Alternatively, run the automated CLI verification script passing your Step 1 Agent ID:
 ```bash
-python3 /home/user/cymbal_gadgets/agentic_web_app/test_pipeline.py
+python3 /home/user/cymbal_gadgets/agentic_web_app/test_pipeline.py YOUR_STEP_1_AGENT_ID
 ```
 **Expected Output:**
 ```text
@@ -410,9 +471,9 @@ python3 /home/user/cymbal_gadgets/agentic_web_app/test_pipeline.py
 ✅ Logged in successfully. Token prefix: mddgwZ6Y...
 
 [Step 2] Discovering available agents (GET /api/4.0/agents/search)...
-✅ Found 74 total agents on instance.
+✅ Found agents on instance.
 
-[Step 3] Using Agent: 'Cymbal Retail Analytics Agent' (a9b6933c...)
+[Step 3] Using Agent: 'Cymbal Retail Analytics Agent - Student ...' (YOUR_AGENT_ID)
 Creating Conversation (POST /api/4.0/conversations)...
 ✅ Created Conversation Session: 730371f2...
 

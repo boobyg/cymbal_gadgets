@@ -260,15 +260,36 @@ nano .env</pre>
             <h2 class="text-lg font-bold text-slate-900 mt-1">Looker API Explorer & Creating Your Conversational Agent</h2>
           </div>
 
+          <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-blue-900 flex items-center space-x-1.5">
+                <i class="fa-solid fa-compass text-blue-600"></i>
+                <span>What is the Looker API Explorer?</span>
+              </span>
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                <span>Open API Explorer</span>
+              </a>
+            </div>
+            <p class="text-xs text-blue-800 leading-relaxed">
+              The <strong>Looker API Explorer</strong> is Looker's built-in interactive developer workbench and documentation portal. It gives you instant, in-browser access to browse, inspect, and execute all 400+ endpoints of the Looker 4.0 REST API—including the modern Conversational Analytics suite (<code class="font-mono bg-blue-100 px-1 py-0.5 rounded text-blue-900">/agents</code>, <code class="font-mono bg-blue-100 px-1 py-0.5 rounded text-blue-900">/conversations</code>, and <code class="font-mono bg-blue-100 px-1 py-0.5 rounded text-blue-900">/conversational_analytics/chat</code>). It authenticates directly through your active browser session (no external API keys needed) and generates client SDK code in Python, TypeScript, and Kotlin.
+            </p>
+          </div>
+
           <p class="text-xs text-slate-600 leading-relaxed">
-            The <strong>Looker API Explorer</strong> is built directly into Looker. In this task, you'll create a new Conversational Analytics Agent bound to the <code class="text-indigo-600 font-mono">cymbal_gadgets_boris</code> model and <code class="text-indigo-600 font-mono">transactions</code> explore.
+            In this task, you'll create a new Conversational Analytics Agent bound to the <code class="text-indigo-600 font-mono">cymbal_gadgets_boris</code> model and <code class="text-indigo-600 font-mono">transactions</code> explore.
           </p>
+
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-xs text-amber-900 flex items-center space-x-2">
+            <i class="fa-solid fa-users text-amber-600 shrink-0"></i>
+            <span><strong>Scaling to 500 Users:</strong> Give your agent a unique name (e.g. append your name or student ID) so you can easily identify your agent among peers on this shared Looker instance.</span>
+          </div>
 
           <div class="space-y-2 text-xs">
             <h4 class="font-bold text-slate-800">1. Agent Creation Payload (`POST /api/4.0/agents`):</h4>
             <div class="relative group">
               <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
-  "name": "Cymbal Retail Analytics Agent",
+  "name": "Cymbal Retail Analytics Agent - Student &lt;YOUR_NAME_OR_ID&gt;",
   "description": "Conversational agent for Cymbal Gadgets retail sales & transactions",
   "sources": [
     {
@@ -307,11 +328,11 @@ nano .env</pre>
             </div>
             
             <p class="text-xs text-slate-600">
-              Confirm your agent exists on the Looker instance. Either provide your custom Agent ID or click to detect your created agent.
+              Confirm your agent exists on the Looker instance. Enter the unique Agent ID you created in Step 1 to verify.
             </p>
 
             <div class="flex flex-col sm:flex-row gap-2">
-              <input type="text" id="cp1AgentIdInput" placeholder="Agent ID (leave empty to auto-detect)..." class="flex-1 bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <input type="text" id="cp1AgentIdInput" placeholder="Enter Agent ID created in Step 1 (Required)..." class="flex-1 bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none">
               <button id="checkProgress1Btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-xl text-xs flex items-center justify-center space-x-2 transition shadow-sm">
                 <i class="fa-solid fa-circle-check"></i>
                 <span>Check my progress</span>
@@ -339,6 +360,18 @@ nano .env</pre>
             <div class="relative group">
               <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">curl -s http://localhost:8080/api/health | jq .</pre>
               <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy</button>
+            </div>
+            <!-- WHERE TO RUN THE CURL COMMAND CALLOUT -->
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-[11px] text-blue-900 space-y-1.5">
+              <div class="font-bold flex items-center space-x-1.5 text-blue-800">
+                <i class="fa-solid fa-circle-question text-blue-600"></i>
+                <span>Where do I run this curl command?</span>
+              </div>
+              <ul class="list-disc pl-4 space-y-1 text-blue-800">
+                <li><strong>In a SECOND terminal window in Argolis:</strong> Your first terminal is currently busy running <code class="font-mono bg-blue-100 px-1 rounded">./run.sh</code>. Open a new terminal tab (or split terminal) in Google Cloud Shell or Cloud Workstations.</li>
+                <li><strong>Inside your Argolis environment:</strong> Do NOT run this curl command on your local laptop terminal; the server is running inside your remote Argolis Cloud Shell/Workstation environment on port 8080.</li>
+                <li><strong>Or use the button below:</strong> If you are already viewing this page, you don't even need terminal curl—simply click <strong>Check my progress</strong> below to verify server health directly!</li>
+              </ul>
             </div>
           </div>
 
@@ -370,6 +403,11 @@ nano .env</pre>
           <div class="border-b border-slate-200 pb-2">
             <span class="text-xs font-bold text-purple-600 uppercase tracking-wider">Task 3</span>
             <h2 class="text-lg font-bold text-slate-900 mt-1">Interactive Conversational Analytics & Tracing</h2>
+          </div>
+
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-start space-x-2">
+            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-sm mt-0.5 shrink-0"></i>
+            <div><strong>Step 3 Requirement:</strong> You must test with the <strong>Agent created in Step 1</strong>. In workshops with up to 500 concurrent students, querying default or arbitrary agents can result in persona conflicts and scoring failures. Verify your active agent in the ribbon or enter your Step 1 Agent ID below.</div>
           </div>
 
           <p class="text-xs text-slate-600 leading-relaxed">
@@ -409,13 +447,16 @@ nano .env</pre>
             </div>
             
             <p class="text-xs text-slate-600">
-              Run an analytical query against the Looker semantic layer and verify reasoning thoughts and data results.
+              Run an analytical query against your Step 1 agent and verify reasoning thoughts and data results.
             </p>
 
-            <button id="checkProgress3Btn" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-xl text-xs flex items-center space-x-2 transition shadow-sm">
-              <i class="fa-solid fa-circle-check"></i>
-              <span>Check my progress</span>
-            </button>
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input type="text" id="cp3AgentIdInput" placeholder="Step 1 Agent ID (Required)..." class="flex-1 bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-mono focus:ring-2 focus:ring-purple-500 focus:outline-none">
+              <button id="checkProgress3Btn" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-xl text-xs flex items-center justify-center space-x-2 transition shadow-sm">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Check my progress</span>
+              </button>
+            </div>
 
             <div id="cp3Feedback" class="hidden text-xs p-3 rounded-xl"></div>
           </div>
@@ -928,7 +969,7 @@ nano .env</pre>
         const data = await res.json();
         availableAgents = data.agents || [];
 
-        agentSelect.innerHTML = '<option value="">Select an Agent...</option>';
+        agentSelect.innerHTML = '<option value="">Select your Step 1 Agent...</option>';
         availableAgents.forEach(a => {
           const opt = document.createElement('option');
           opt.value = a.id;
@@ -936,7 +977,9 @@ nano .env</pre>
           agentSelect.appendChild(opt);
         });
 
-        if (availableAgents.length > 0) {
+        if (currentAgentId) {
+          agentSelect.value = currentAgentId;
+        } else if (availableAgents.length === 1) {
           selectAgent(availableAgents[0].id);
         }
       } catch (err) {
@@ -945,9 +988,12 @@ nano .env</pre>
     }
 
     function selectAgent(agentId) {
+      if (!agentId) return;
       currentAgentId = agentId;
       agentSelect.value = agentId;
-      cp1AgentIdInput.value = agentId;
+      if (cp1AgentIdInput) cp1AgentIdInput.value = agentId;
+      const cp3Input = document.getElementById('cp3AgentIdInput');
+      if (cp3Input) cp3Input.value = agentId;
 
       const agent = availableAgents.find(a => a.id === agentId);
       if (agent) {
@@ -1013,13 +1059,19 @@ nano .env</pre>
 
     // Checkpoint 1 Validation
     checkProgress1Btn.addEventListener('click', async () => {
+      const targetId = cp1AgentIdInput.value.trim() || currentAgentId;
+      if (!targetId) {
+        cp1Feedback.className = 'text-xs p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800';
+        cp1Feedback.classList.remove('hidden');
+        cp1Feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-1.5"></i> Please enter your Agent ID created in Step 1. In 500-student workshops, explicit Agent ID is required to prevent collisions.`;
+        return;
+      }
+
       checkProgress1Btn.disabled = true;
       checkProgress1Btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Checking...';
       cp1Feedback.className = 'text-xs p-3 rounded-xl bg-slate-100 text-slate-700';
       cp1Feedback.classList.remove('hidden');
       cp1Feedback.textContent = "Verifying agent registration on Looker instance...";
-
-      const targetId = cp1AgentIdInput.value.trim() || currentAgentId;
 
       try {
         const res = await fetch('/api/checkpoints/1', {
@@ -1033,6 +1085,7 @@ nano .env</pre>
           cp1Feedback.className = 'text-xs p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium';
           cp1Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: ${data.message} (+25 points awarded!)`;
           awardCheckpoint(1, 25);
+          selectAgent(targetId);
           await loadAgents();
         } else {
           cp1Feedback.className = 'text-xs p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800';
@@ -1078,24 +1131,38 @@ nano .env</pre>
 
     // Checkpoint 3 Validation
     checkProgress3Btn.addEventListener('click', async () => {
+      const cp3Input = document.getElementById('cp3AgentIdInput');
+      const targetId = (cp3Input ? cp3Input.value.trim() : '') || currentAgentId;
+
+      if (!targetId) {
+        cp3Feedback.className = 'text-xs p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800';
+        cp3Feedback.classList.remove('hidden');
+        cp3Feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-1.5"></i> Please enter or select the Agent ID created in Step 1 before testing Checkpoint 3.`;
+        return;
+      }
+
+      if (targetId !== currentAgentId) {
+        selectAgent(targetId);
+      }
+
       checkProgress3Btn.disabled = true;
       checkProgress3Btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Executing Query...';
       cp3Feedback.className = 'text-xs p-3 rounded-xl bg-slate-100 text-slate-700';
       cp3Feedback.classList.remove('hidden');
-      cp3Feedback.textContent = "Submitting analytical verification question to Looker semantic layer...";
+      cp3Feedback.textContent = "Submitting analytical verification question to Step 1 agent on Looker...";
 
       try {
         const res = await fetch('/api/checkpoints/3', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ agent_id: currentAgentId })
+          body: JSON.stringify({ agent_id: targetId })
         });
         const data = await res.json();
 
         if (data.passed) {
           cp3Feedback.className = 'text-xs p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium';
           cp3Feedback.innerHTML = `
-            <div><i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: Verified LookML compilation & data results! (+25 points)</div>
+            <div><i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: Verified LookML compilation & data results with Step 1 Agent! (+25 points)</div>
             <div class="mt-1 text-[11px] font-mono text-emerald-700">Reasoning Steps: ${data.thoughts_count} &bull; Final: "${data.final_response.substring(0, 80)}..."</div>
           `;
           awardCheckpoint(3, 25);
@@ -1171,6 +1238,10 @@ nano .env</pre>
     // QUICK CREATE AGENT MODAL
     // ----------------------------------------------------
     function openCreateAgentModal() {
+      const nameInput = document.getElementById('newAgentName');
+      if (nameInput && (!nameInput.value || nameInput.value === 'Cymbal Retail Analytics Agent')) {
+        nameInput.value = `Cymbal Retail Analytics Agent - Student ${Math.floor(100 + Math.random() * 900)}`;
+      }
       createAgentModal.classList.remove('hidden');
     }
     function closeCreateAgentModal() {

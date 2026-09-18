@@ -43,27 +43,42 @@ def main():
     for a in agents[:3]:
         print(f"   - [{a['id'][:8]}...] {a['name']}")
 
-    # 3. Create or reuse conversation
+    # 3. Use Agent created in Step 1
+    target_id = sys.argv[1].strip() if len(sys.argv) > 1 else ""
+    if not target_id:
+        import os
+        target_id = os.environ.get("TARGET_AGENT_ID", "").strip()
+    if not target_id:
+        target_id = input("\nEnter the Agent ID created in Step 1 (or press Enter to auto-detect): ").strip()
+
     target_agent = None
-    # Look for an agent targeting cymbal_gadgets_boris or the first agent
-    for a in agents:
-        sources = a.get("sources", [])
-        if any(s.get("model") == config.DEFAULT_MODEL for s in sources):
-            target_agent = a
-            break
-    
-    if not target_agent and agents:
-        target_agent = agents[0]
+    if target_id:
+        try:
+            target_agent = client.get_agent(target_id)
+            print(f"✅ Verified Step 1 Agent: '{target_agent.get('name')}' ({target_id})")
+        except Exception as e:
+            print(f"⚠️ Could not find agent with ID '{target_id}': {e}. Falling back to search.")
 
     if not target_agent:
-        print("⚠️ No agents found. Creating a temporary agent for test...")
-        target_agent = client.create_agent(
-            name="SME Academy Test Agent",
-            description="Temporary test agent",
-            model=config.DEFAULT_MODEL,
-            explore=config.DEFAULT_EXPLORE,
-            instructions="Always use gross margin for sales profitability."
-        )
+        # Fallback to searching agents targeting cymbal_gadgets_boris
+        for a in agents:
+            sources = a.get("sources", [])
+            if any(s.get("model") == config.DEFAULT_MODEL for s in sources):
+                target_agent = a
+                break
+        
+        if not target_agent and agents:
+            target_agent = agents[0]
+
+        if not target_agent:
+            print("⚠️ No agents found. Creating a temporary agent for test...")
+            target_agent = client.create_agent(
+                name="SME Academy Test Agent",
+                description="Temporary test agent",
+                model=config.DEFAULT_MODEL,
+                explore=config.DEFAULT_EXPLORE,
+                instructions="Always use gross margin for sales profitability."
+            )
 
     print(f"\n[Step 3] Using Agent: '{target_agent['name']}' ({target_agent['id']})")
     print("Creating Conversation (POST /api/4.0/conversations)...")

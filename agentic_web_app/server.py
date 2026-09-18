@@ -243,39 +243,24 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 return
 
             agent_id = data.get("agent_id", "").strip()
+            if not agent_id:
+                self._send_json(400, {
+                    "passed": False,
+                    "error": "Please provide your specific Agent ID created in Step 1. Auto-selection is disabled to prevent cross-student conflicts when scaling to 500 users."
+                })
+                return
+
             try:
-                if agent_id:
-                    agent = client.get_agent(agent_id)
-                    self._send_json(200, {
-                        "passed": True,
-                        "message": f"Agent '{agent.get('name')}' ({agent_id[:8]}...) verified on Looker!",
-                        "agent": agent
-                    })
-                    return
-                
-                # If no agent_id given, search for any agent created targeting transactions explore
-                agents = client.list_agents()
-                cymbal_agents = [a for a in agents if any(s.get("explore") == config.DEFAULT_EXPLORE for s in a.get("sources", []))]
-                if cymbal_agents:
-                    self._send_json(200, {
-                        "passed": True,
-                        "message": f"Agent '{cymbal_agents[0].get('name')}' verified on Looker!",
-                        "agent": cymbal_agents[0]
-                    })
-                elif agents:
-                    self._send_json(200, {
-                        "passed": True,
-                        "message": f"Agent '{agents[0].get('name')}' verified on Looker!",
-                        "agent": agents[0]
-                    })
-                else:
-                    self._send_json(400, {
-                        "passed": False,
-                        "error": "No agent found on Looker instance. Complete Step 1 in API Explorer or use Quick Create Agent."
-                    })
+                agent = client.get_agent(agent_id)
+                self._send_json(200, {
+                    "passed": True,
+                    "message": f"Agent '{agent.get('name')}' ({agent_id[:8]}...) verified on Looker!",
+                    "agent": agent
+                })
+                return
             except Exception as e:
-                self._send_json(400, {"passed": False, "error": str(e)})
-            return
+                self._send_json(400, {"passed": False, "error": f"Agent verification failed: {str(e)}"})
+                return
 
         elif path == "/api/checkpoints/2":
             # Checkpoint 2: Web Server & Connection Verification
@@ -308,15 +293,14 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
             agent_id = data.get("agent_id", "").strip()
             question = data.get("question", "What is the total sales amount?")
 
-            try:
-                if not agent_id:
-                    agents = client.list_agents()
-                    if agents:
-                        agent_id = agents[0]["id"]
-                    else:
-                        self._send_json(400, {"passed": False, "error": "No agent found to run test query."})
-                        return
+            if not agent_id:
+                self._send_json(400, {
+                    "passed": False,
+                    "error": "Please specify the Agent ID created in Step 1. In high-concurrency workshops, you must query your own custom agent."
+                })
+                return
 
+            try:
                 conv = client.create_conversation(agent_id=agent_id, name="SkillLabs Assessment Checkpoint 3")
                 res = client.chat(conversation_id=conv["id"], user_message=question)
                 self._send_json(200, {
@@ -340,15 +324,14 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
             agent_id = data.get("agent_id", "").strip()
             apply_tuning = data.get("apply_tuning", False)
 
-            try:
-                if not agent_id:
-                    agents = client.list_agents()
-                    if agents:
-                        agent_id = agents[0]["id"]
+            if not agent_id:
+                self._send_json(400, {
+                    "passed": False,
+                    "error": "Please specify the Agent ID created in Step 1 to verify prompt tuning."
+                })
+                return
 
-                if not agent_id:
-                    self._send_json(400, {"passed": False, "error": "No agent ID available."})
-                    return
+            try:
 
                 if apply_tuning:
                     new_instructions = (
