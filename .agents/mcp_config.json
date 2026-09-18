@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "Looker": {
-      "serverUrl": "http://127.0.0.1:39449/mcp",
+      "serverUrl": "http://127.0.0.1:5050/mcp",
       "disabledTools": [
         "query_url",
         "get_looks",
