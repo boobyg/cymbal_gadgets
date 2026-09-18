@@ -68,7 +68,7 @@ Modern enterprise generative AI applications fail when they hallucinate metrics 
 * **LookML Model:** `cymbal_gadgets_boris`
 * **LookML Explore:** `transactions` (Cymbal Gadgets Retail Sales & Transactions)
 * **API Credentials:** specify your own user id / secret (provided to you before the lab)
-* **Git Repository:** `https://github.com/cloud-gtm/cymbal_gadgets.git` (or your assigned Git clone URL)
+* **Git Repository:** `https://github.com/boobyg/cymbal_gadgets.git` (public repository, no password needed)
 * **Web Application Port:** `8080` (accessible via Cloud Shell Web Preview)
 
 ---
@@ -81,8 +81,8 @@ Modern enterprise generative AI applications fail when they hallucinate metrics 
 
 ### Step B: Clone the Repository & Launch App
 ```bash
-# 1. Clone the repository into your Argolis Cloud Shell home
-git clone https://github.com/cloud-gtm/cymbal_gadgets.git
+# 1. Clone the public repository into your Argolis Cloud Shell home
+git clone https://github.com/boobyg/cymbal_gadgets.git
 cd cymbal_gadgets/agentic_web_app
 
 # 2. Start the web server (automatically prepares .env and sets up server)

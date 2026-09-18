@@ -85,12 +85,19 @@ Follow these steps to deploy and run the lab in your Argolis project:
 In your Cloud Shell terminal, run:
 
 ```bash
-# Clone the repository
-git clone https://github.com/cloud-gtm/cymbal_gadgets.git
+# Clone the public repository (no password or token required)
+git clone https://github.com/boobyg/cymbal_gadgets.git
 
 # Navigate to the web application directory
 cd cymbal_gadgets/agentic_web_app
 ```
+
+> [!TIP]
+> **Did Git ask for a Username or Password?**
+> * The public repository `https://github.com/boobyg/cymbal_gadgets.git` **does NOT require any username or password to clone**.
+> * If Git prompts `Username for 'https://github.com':`, you likely mistyped the URL or pointed to a private repository. Double-check that you typed `https://github.com/boobyg/cymbal_gadgets.git`.
+> * **Note on GitHub Passwords:** GitHub permanently deprecated account passwords for Git operations on August 13, 2021. If you are cloning a **private** repository or pushing code, you must enter a **GitHub Personal Access Token (PAT)** with `repo` scope when prompted for the password, or use the GitHub CLI (`gh auth login`).
+
 
 ### Step 3: Start the Web Server
 Launch the application using the startup script:
@@ -248,6 +255,7 @@ cymbal_gadgets/
 | Problem | Root Cause | Solution |
 | :--- | :--- | :--- |
 | `Address already in use (port 8080)` | Another process is using port 8080 | Edit `.env` and set `PORT=8085`, then restart `./run.sh` |
+| `git clone` asks for Username/Password or fails with `Support for password authentication was removed` | Typed incorrect/private repo URL or entered GitHub account password | Clone the public URL: `git clone https://github.com/boobyg/cymbal_gadgets.git` (no credentials needed). For private repos, use a **Personal Access Token (PAT)** with `repo` scope instead of password. |
 | `Failed to connect to localhost port 8080` | Ran `curl` in local laptop terminal instead of Argolis Cloud Shell | Open a second terminal tab in **Google Cloud Shell** and run the `curl` command there |
 | First terminal unresponsive to commands | Terminal is busy running `./run.sh` | Open a **second terminal tab** (`+`) in Cloud Shell rather than interrupting the server |
 | `401 Unauthorized` on Looker API calls | Invalid or missing API3 credentials | Click **Student Credentials** in the UI and verify your Client ID & Secret |

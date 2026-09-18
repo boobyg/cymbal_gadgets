@@ -28,9 +28,15 @@ This directory contains the student web application for the **Google Cloud SME A
 ### Step 2: Clone the Git Repository
 In your Cloud Shell terminal:
 ```bash
-git clone https://github.com/cloud-gtm/cymbal_gadgets.git
+# Clone the public repository (no password or token required)
+git clone https://github.com/boobyg/cymbal_gadgets.git
 cd cymbal_gadgets/agentic_web_app
 ```
+
+> [!TIP]
+> **No GitHub Password Needed:**  
+> The repository `https://github.com/boobyg/cymbal_gadgets.git` is public and clones directly without credentials. If you are prompted for a password or see `Support for password authentication was removed`, ensure you did not mistype the URL. For private repos, GitHub requires a **Personal Access Token (PAT)** rather than an account password.
+
 
 ### Step 3: Launch the Web Server
 ```bash
