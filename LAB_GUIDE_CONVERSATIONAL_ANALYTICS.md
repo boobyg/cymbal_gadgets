@@ -1,0 +1,527 @@
+# 🎓 SME Academy Lab: Building, Testing & Deploying Custom Conversational Analytics Agents with Looker APIs
+
+**Audience:** Data Engineers, Analytics Engineers, Cloud Architects  
+**Prerequisites:** Basic knowledge of SQL, REST APIs, and Python. No prior Looker experience required!  
+**Duration:** ~30 Minutes  
+**Track:** Google Cloud SME Academy &bull; Agentic & Data Analytics Track  
+
+---
+
+## 🧭 Executive Summary & Architecture
+
+Modern enterprise generative AI applications fail when they hallucinate metrics or query raw database tables without understanding complex business logic (e.g. how gross margin is computed, which order status counts as completed, or how joins must be deduplicated).
+
+**Looker Conversational Analytics APIs** bridge Generative AI with Looker's **Governed Semantic Layer**:
+1. **The Semantic Layer is Ground Truth**: The LLM queries Looker Explores (`model` + `explore`), where dimensions, measures, and joins are formally defined and governed in LookML.
+2. **Deterministic SQL Generation**: The agent converts natural language into governed Looker queries, which Looker compiles into dialect-optimized BigQuery SQL.
+3. **Auditable Chain of Thought**: The API returns full visibility into the agent's reasoning, schema introspection, generated query filters, and raw data tables.
+
+```
+┌─────────────────────────────────┐
+│   End User / Web Application    │
+└────────────────┬────────────────┘
+                 │ 1. Natural Language Prompt
+                 ▼
+┌─────────────────────────────────┐
+│   Looker Conversational API     │  POST /conversational_analytics/chat
+│   (Agent Context & Reasoning)   │
+└────────────────┬────────────────┘
+                 │ 2. Schema Discovery & Governed LookML Resolution
+                 ▼
+┌─────────────────────────────────┐
+│     Looker Semantic Layer       │  model: cymbal_gadgets_boris
+│   (Dimensions, Measures, Joins) │  explore: transactions
+└────────────────┬────────────────┘
+                 │ 3. Dialect-Optimized SQL Query
+                 ▼
+┌─────────────────────────────────┐
+│      Google Cloud BigQuery      │  High-Performance Cloud Data Warehouse
+└─────────────────────────────────┘
+```
+
+---
+
+## ⏱️ Lab Agenda & Timeline (30 Minutes)
+
+| Step | Topic | Duration | Key Deliverable |
+| :--- | :--- | :--- | :--- |
+| **Step 0** | Student Credentials Setup | 3 mins | Configure and verify your assigned Looker API credentials |
+| **Step 1** | Looker API Explorer & Create Agent | 10 mins | First Custom Conversational Agent created via API |
+| **Step 2** | Pre-Created Web Application Setup | 5 mins | Launch and verify local full-stack agent app |
+| **Step 3** | Consuming API Endpoints in Web App | 10 mins | Live conversational session, query tracing, & data audits |
+| **Step 4** | Prompt Tuning, Guardrails & Deployment | 5 mins | Agent instruction updates & Cloud Run production deployment |
+
+---
+
+## 🛠️ Lab Prerequisites & Credentials
+
+* **Looker Instance Base URL:** `https://ceworkshops.cloud.looker.com`
+* **LookML Model:** `cymbal_gadgets_boris`
+* **LookML Explore:** `transactions` (Cymbal Gadgets Retail Sales & Transactions)
+* **API Credentials:** specify your own user id / secret (provided to you before the lab)
+* **Local Web App Directory:** `/home/user/cymbal_gadgets/agentic_web_app`
+* **Interactive Training Application:** `http://localhost:8080` (or your Cloud Workstations web preview URL)
+
+---
+
+# 🔑 Step 0: Student Credentials Setup (3 Mins)
+
+Before beginning the lab, every student must configure their personal Looker API credentials (`client_id` and `client_secret`) provided by the workshop instructor before the lab.
+
+### Option A: Configure in the Interactive SkillLabs Application (Recommended)
+1. Open the interactive lab portal in your browser:
+   ```text
+   http://localhost:8080
+   ```
+   *(or the Cloud Workstations port 8080 preview URL)*
+2. In the top navigation bar, click on **Student Credentials** (or wait for the initial prompt dialog: **"specify your own user id / secret"**).
+3. Enter your assigned:
+   * **Client ID:** `specify your own user id / secret`
+   * **Client Secret:** `specify your own user id / secret`
+4. Click **Save & Test Connection**. The portal will authenticate with Looker API 4.0 and display a green connection status badge.
+
+### Option B: Configure via the Command Line (`.env`)
+If you prefer configuring credentials in the terminal:
+1. Open the `.env` file in the web app directory:
+   ```bash
+   cd /home/user/cymbal_gadgets/agentic_web_app
+   nano .env
+   ```
+2. Update the credentials using your assigned keys:
+   ```env
+   # Prompt: specify your own user id / secret
+   LOOKER_CLIENT_ID=specify your own user id / secret
+   LOOKER_CLIENT_SECRET=specify your own user id / secret
+   ```
+3. Save the file. The server will automatically use your credentials.
+
+---
+
+# 🚀 Step 1: Looker API Explorer & Creating Your Conversational Agent (10 Mins)
+
+### 1.1 What is the Looker API Explorer?
+The **API Explorer** is an interactive, visual developer console built directly into Looker. It lets developers explore all 400+ Looker 4.0 REST endpoints, test live requests against the Looker instance, inspect schemas, and view real-time responses.
+
+### 1.2 Accessing API Explorer in the Looker Web Interface
+1. Open your browser and navigate to your Looker instance:
+   ```text
+   https://ceworkshops.cloud.looker.com
+   ```
+2. Log in with your workshop credentials.
+3. In the left-hand navigation menu, expand **Applications** (or **Marketplace / Extensions**) and click **API Explorer**.
+   * *Direct URL:* `https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer`
+4. In the API Explorer header, ensure **Looker API 4.0** is selected.
+
+### 1.3 Understanding Authentication for Data Engineers
+Looker APIs use an OAuth2 token workflow:
+* External scripts send API3 credentials (`client_id` and `client_secret`) to `POST /api/4.0/login`.
+* Looker returns an `access_token`.
+* Subsequent requests authenticate using the header:
+  ```http
+  Authorization: token <access_token>
+  ```
+> 💡 **Note for Data Engineers:** In Looker, the header is `Authorization: token <token>`, NOT `Authorization: Bearer <token>`. In the API Explorer web UI, you are automatically authenticated using your browser session!
+
+---
+
+### 1.4 Locating the Conversational Analytics API Endpoints
+In the API Explorer search bar on the left, type: **`Agent`** or browse to the **Agent** / **Conversational Analytics** tag.
+
+You will see the core Conversational Analytics API family:
+* `POST /agents`: **Create Agent** (defines a new conversational agent bound to semantic explores)
+* `GET /agents/search`: **Search Agents** (lists all active agents)
+* `GET /agents/{agent_id}`: **Get Agent** (retrieves configuration and context)
+* `PATCH /agents/{agent_id}`: **Update Agent** (modifies instructions or explores)
+* `POST /conversations`: **Create Conversation** (initiates a conversational session state)
+* `POST /conversational_analytics/chat`: **Chat** (submits user questions and returns answers, thought traces, and data)
+
+---
+
+### 1.5 Hands-On: Create Your Custom Agent (`POST /agents`)
+Let's build an agent tailored for the **Cymbal Gadgets** retail dataset.
+
+1. In API Explorer, click on **`POST /agents` (Create Agent)**.
+2. Click the **Run It** tab.
+3. In the **Request Body** editor, enter the following JSON payload:
+
+```json
+{
+  "name": "Cymbal Retail Analytics Agent - DE Lab",
+  "description": "Conversational BI agent providing governed retail insights for Cymbal Gadgets",
+  "sources": [
+    {
+      "model": "cymbal_gadgets_boris",
+      "explore": "transactions"
+    }
+  ],
+  "context": {
+    "instructions": "- Always use Gross Margin Percentage when asked about profitability, margin, or sales performance.\n- When asked for trends over time, group by transaction date or transaction month.\n- If the user asks for store performance, breakdown by store country.\n- Keep executive summaries concise with key metrics highlighted in bold.",
+    "show_analytical_details": true,
+    "show_debug": false
+  }
+}
+```
+
+#### Why These Parameters Matter:
+* **`sources`**: Specifies the LookML model (`cymbal_gadgets_boris`) and explore (`transactions`). This tells the agent which semantic universe it can query.
+* **`context.instructions`**: System prompt and persona guidelines. As Data Engineers, this is where you encode business definitions (e.g., "profitability = Gross Margin Percentage") so the LLM doesn't guess column names!
+* **`show_analytical_details`**: Instructs the API to return the agent's chain-of-thought and query execution metadata.
+
+4. Click **Run Request**.
+5. Inspect the response in the **Response** pane:
+   ```json
+   {
+     "id": "a9b6933c74a045de9ed130ad024cca62",
+     "name": "Cymbal Retail Analytics Agent - DE Lab",
+     "sources": [
+       {
+         "model": "cymbal_gadgets_boris",
+         "explore": "transactions"
+       }
+     ],
+     "created_at": "2026-09-16T12:01:00.000Z",
+     "can": {
+       "chat": true,
+       "update": true,
+       "destroy": true
+     }
+   }
+   ```
+6. **Important:** Copy your generated **`id`** (e.g. `a9b6933c74a045de9ed130ad024cca62`). You will use this in Step 2 and Step 3.
+
+---
+
+### 🚩 CHECKPOINT 1: Verify Agent Creation
+**Goal:** Confirm your agent exists and is queryable on the Looker instance.
+
+> 💡 **SkillLabs Interactive Check:** In the interactive training application (`http://localhost:8080`), you can click the **Check my progress** button under Task 1 to automatically verify your agent and earn 25 points!
+
+Alternatively, verify via curl in your terminal (prompt: specify your own user id / secret):
+```bash
+TOKEN=$(python3 -c "
+import os, urllib.request, urllib.parse, json
+# Prompt: specify your own user id / secret
+client_id = os.environ.get('LOOKER_CLIENT_ID') or input('Client ID [specify your own user id / secret]: ')
+client_secret = os.environ.get('LOOKER_CLIENT_SECRET') or input('Client Secret [specify your own user id / secret]: ')
+data = urllib.parse.urlencode({'client_id': client_id, 'client_secret': client_secret}).encode()
+req = urllib.request.Request('https://ceworkshops.cloud.looker.com/api/4.0/login', data=data, method='POST')
+print(json.loads(urllib.request.urlopen(req).read().decode())['access_token'])
+")
+
+curl -s -H "Authorization: token $TOKEN" "https://ceworkshops.cloud.looker.com/api/4.0/agents/YOUR_AGENT_ID" | jq '{id, name, sources}'
+```
+**Expected Output:** A JSON object with your agent's `id`, `name`, and `sources`.
+
+#### 🆘 Help & Troubleshooting (Checkpoint 1)
+* **Got `422 Unprocessable Entity ("Category 'conversation' is not a supported category")`?**
+  * *Fix:* Remove the `"category"` attribute or leave it out of the payload. The API handles categorization automatically.
+* **Got `404 Not Found` when fetching explore?**
+  * *Fix:* Ensure model is exactly `"cymbal_gadgets_boris"` and explore is `"transactions"`. LookML names are case-sensitive.
+* **Got `401 Unauthorized`?**
+  * *Fix:* Ensure the header is `Authorization: token <access_token>`, not `Bearer`.
+
+---
+
+# 💻 Step 2: The Pre-Created Web Application Architecture (5 Mins)
+
+To consume these APIs in a real-world enterprise setup, a production-grade Web Application has been pre-created in your workspace under `/home/user/cymbal_gadgets/agentic_web_app`.
+
+### 2.1 Web Application Architecture
+```
+agentic_web_app/
+├── config.py           # Configuration loader (Looker host, credentials, ports)
+├── .env                # Environment secrets file
+├── looker_client.py    # Zero-dependency Python SDK client for Looker 4.0 APIs
+├── server.py           # Threading REST API Server & SPA static host
+├── static/
+│   └── index.html      # Responsive UI with Agentic Transparency Drawer
+├── test_pipeline.py    # CLI verification script
+└── run.sh              # One-click startup script
+```
+
+### 2.2 Inspecting `looker_client.py`
+Open and inspect `looker_client.py` in your editor or terminal:
+```bash
+cat /home/user/cymbal_gadgets/agentic_web_app/looker_client.py | head -n 45
+```
+Notice how it handles:
+1. **Automatic Token Refresh**: Tokens expire every 3600 seconds. The client caches the token and re-authenticates 60 seconds before expiration.
+2. **Conversation Lifecycle**: Creating conversations (`POST /conversations`) and binding them to the agent.
+3. **Message Stream Parsing**: Conversational Analytics chat returns a multi-part array. The client categorizes messages into:
+   * `thoughts`: Chain-of-Thought reasoning.
+   * `schema_events`: Explores inspected.
+   * `query`: LookML query dimensions, filters, and measures generated.
+   * `data`: The raw tabular query results.
+   * `final_response`: The executive markdown summary.
+
+---
+
+### 2.3 Starting the Web Application
+Run the startup script in your terminal:
+```bash
+cd /home/user/cymbal_gadgets/agentic_web_app
+./run.sh
+```
+
+You should see:
+```text
+============================================================
+🚀 SME Academy Conversational Analytics Web Server Running
+   Target Looker URL: https://ceworkshops.cloud.looker.com
+   Local UI Address : http://localhost:8080
+   Health Check     : http://localhost:8080/api/health
+============================================================
+```
+
+---
+
+### 🚩 CHECKPOINT 2: Verify Web Server Health
+**Goal:** Confirm the web server is running and connected to Looker.
+
+> 💡 **SkillLabs Interactive Check:** In the interactive training application (`http://localhost:8080`), you can click the **Check my progress** button under Task 2 to automatically verify web server health and earn 25 points!
+
+In a second terminal window (or via curl), test the health endpoint:
+```bash
+curl -s http://localhost:8080/api/health | jq .
+```
+**Expected Output:**
+```json
+{
+  "status": "healthy",
+  "looker_connected": true,
+  "looker_url": "https://ceworkshops.cloud.looker.com",
+  "user_email": "api_user@example.com"
+}
+```
+
+#### 🆘 Help & Troubleshooting (Checkpoint 2)
+* **Port 8080 already in use?**
+  * *Fix:* Edit `agentic_web_app/.env` and change `PORT=8080` to `PORT=8085`, then restart `./run.sh`.
+* **Looker connection failed or 401 Unauthorized?**
+  * *Fix:* Verify your internet connection and ensure you configure your assigned credentials via the **Student Credentials** button in the UI or in `agentic_web_app/.env` (Prompt: specify your own user id / secret).
+
+---
+
+# 🔍 Step 3: Walking Through the Conversational Analytics API Endpoints (10 Mins)
+
+Now, let's walk through how the application consumes each API endpoint in code, and test them live through the interactive Web UI.
+
+---
+
+### 3.1 Endpoint Deep-Dive
+
+#### 1. Authentication Handshake (`POST /api/4.0/login`)
+* **Endpoint:** `POST https://ceworkshops.cloud.looker.com/api/4.0/login`
+* **Content-Type:** `application/x-www-form-urlencoded`
+* **Payload:** `client_id=<specify your own user id / secret>&client_secret=<specify your own user id / secret>`
+* **Why it matters:** Establishes an ephemeral session token without passing long-lived secrets with every analytical query.
+
+#### 2. Agent Retrieval (`GET /api/4.0/agents/search` & `GET /api/4.0/agents/{agent_id}`)
+* **Header:** `Authorization: token <access_token>`
+* **Why it matters:** Discovers what semantic sources (models/explores) and system instructions govern the agent's behavior.
+
+#### 3. Conversation Session Initialization (`POST /api/4.0/conversations`)
+* **Endpoint:** `POST https://ceworkshops.cloud.looker.com/api/4.0/conversations`
+* **Payload:**
+  ```json
+  {
+    "agent_id": "a9b6933c74a045de9ed130ad024cca62",
+    "name": "Cymbal Gadgets Executive Session"
+  }
+  ```
+* **Why it matters:** Looker Conversational Analytics maintains conversation state on the server. You don't need to append all previous chat history to every query—Looker automatically tracks context via the `conversation_id`!
+
+#### 4. Natural Language Execution (`POST /api/4.0/conversational_analytics/chat`)
+* **Endpoint:** `POST https://ceworkshops.cloud.looker.com/api/4.0/conversational_analytics/chat`
+* **Payload:**
+  ```json
+  {
+    "conversation_id": "730371f2ee85482ebfeb43d62fc20326",
+    "user_message": "What is the total sales amount across all stores?"
+  }
+  ```
+* **Payload Unwrapping:**
+  Unlike generic chat completions that just return a string of text, Looker returns an array of messages representing the agent's lifecycle:
+
+| Message Type | Field in Payload | Purpose |
+| :--- | :--- | :--- |
+| **THOUGHT** | `systemMessage.text.textType == "THOUGHT"` | Chain-of-thought: what the agent plans to do |
+| **SCHEMA** | `systemMessage.schema` | Explores fetched from the LookML semantic layer |
+| **QUERY** | `systemMessage.data.query` | Dimensions, measures, and filters selected by agent |
+| **DATA** | `systemMessage.data.result` | Verified tabular data returned from database |
+| **FINAL_RESPONSE** | `systemMessage.text.textType == "FINAL_RESPONSE"` | Formatted natural language executive summary |
+
+---
+
+### 3.2 Hands-On: Test Your Agent in the Web UI
+
+1. Open your browser and navigate to:
+   ```text
+   http://localhost:8080
+   ```
+2. **Select Your Agent:**
+   * In the left sidebar under **Active Agent**, either select your agent from the dropdown or paste the `agent_id` you created in Step 1 into the input field and click **Use**.
+   * Notice that the **Conversation State** updates with a fresh `conversation_id`.
+
+3. **Submit Query 1 (Basic Aggregation):**
+   * In the chat input, type:
+     ```text
+     What is our total sales amount across all transactions?
+     ```
+   * Click **Ask**.
+
+4. **Audit the Agentic Transparency Hub:**
+   Once the answer appears:
+   * Click **Agent Thought Process**: Read the model's reasoning on how it identified the revenue metric in the `transactions` explore.
+   * Click **Governed Data Result**: View the exact tabular row returned from Looker.
+   * Click **Generated Looker Query Specification**: See the precise fields selected (`transactions.total_sales_amount`).
+
+5. **Submit Query 2 (Dimension Breakdown & Grouping):**
+   * Ask:
+     ```text
+     Show the average transaction amount by store country.
+     ```
+   * Observe the table generated with countries and averages.
+
+6. **Submit Query 3 (Multi-turn Contextual Follow-up):**
+   * Ask:
+     ```text
+     Which store country had the highest transaction volume?
+     ```
+   * Because the session is stateful, notice how the agent understands "store country" in context without having to redefine the question!
+
+---
+
+### 🚩 CHECKPOINT 3: Verify Interactive Query Flow
+**Goal:** Confirm that questions return governed data and clear reasoning steps.
+
+> 💡 **SkillLabs Interactive Check:** In the interactive training application (`http://localhost:8080`), you can click the **Check my progress** button under Task 3 to automatically submit an analytical verification query and earn 25 points!
+
+Alternatively, run the automated CLI verification script:
+```bash
+python3 /home/user/cymbal_gadgets/agentic_web_app/test_pipeline.py
+```
+**Expected Output:**
+```text
+=================================================================
+🧪 SME Academy: Verifying Looker Conversational Analytics API
+=================================================================
+[Step 1] Authenticating with Looker 4.0 API...
+✅ Logged in successfully. Token prefix: mddgwZ6Y...
+
+[Step 2] Discovering available agents (GET /api/4.0/agents/search)...
+✅ Found 74 total agents on instance.
+
+[Step 3] Using Agent: 'Cymbal Retail Analytics Agent' (a9b6933c...)
+Creating Conversation (POST /api/4.0/conversations)...
+✅ Created Conversation Session: 730371f2...
+
+[Step 4] Submitting Conversational Query: 'What is the total sales amount?'...
+Calling POST /api/4.0/conversational_analytics/chat...
+
+=================================================================
+📊 RESULTS RECEIVED FROM LOOKER SEMANTIC LAYER:
+=================================================================
+• Thought Steps Recorded : 3
+• Explore Queried        : 1 explore schema calls
+• Governed Query Built   : Yes
+• Data Returned          : Yes
+
+📝 FINAL SYNTHESIZED RESPONSE:
+## Total Sales Overview
+* Total Sales (Revenue): The total sales amount across all transactions is $1,074,890,772.
+=================================================================
+🎉 ALL API CHECKS PASSED! Web app and APIs are verified.
+```
+
+#### 🆘 Help & Troubleshooting (Checkpoint 3)
+* **Agent returned "I cannot find data for that question"?**
+  * *Fix:* The question might refer to fields outside the `transactions` explore. Try: "What is the total sales amount?" or "Show sales by country".
+* **Response takes 15–20 seconds?**
+  * *Explanation:* The first query initiates schema introspection and LLM compilation against the Looker instance. Subsequent queries in the same conversation are cached and faster.
+
+---
+
+# 🛡️ Step 4: Agent Instruction Tuning & Production Deployment (5 Mins)
+
+### 4.1 Tuning Agent Behavior (`PATCH /api/4.0/agents/{agent_id}`)
+In real-world data engineering, stakeholders require strict formatting and guardrails. You can update agent behavior on the fly using `PATCH /agents/{agent_id}`.
+
+Let's update our agent instructions:
+```bash
+python3 -c "
+import urllib.request, json, sys
+sys.path.append('/home/user/cymbal_gadgets/agentic_web_app')
+import config
+from looker_client import LookerClient
+
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+agent_id = 'YOUR_AGENT_ID'  # Replace with your Agent ID
+
+new_instructions = '''
+- Always begin your answer with '🌟 Cymbal Executive Summary:'
+- Format all currency metrics in EUR with thousands separators (e.g. \$1,234,567)
+- If asked about gross margin, always state the exact percentage with two decimals
+- Keep explanations under 3 sentences
+'''
+
+updated = client._request('PATCH', f'/agents/{agent_id}', payload={
+    'context': {'instructions': new_instructions, 'show_analytical_details': True}
+})
+print('Successfully updated instructions for:', updated.get('name'))
+"
+```
+After running this, ask your agent in the web app: *"What is our total gross margin percentage?"*  
+Notice that the agent immediately complies with the new persona and formatting rules!
+
+---
+
+### 4.2 Enterprise Production Architecture on GCP
+
+For enterprise deployment, data engineers wrap this pattern into Google Cloud serverless architecture:
+
+```
+                      ┌─────────────────────────────────────────┐
+                      │            Cloud Armor / IAP            │
+                      └────────────────────┬────────────────────┘
+                                           │
+                                           ▼
+                      ┌─────────────────────────────────────────┐
+                      │           Google Cloud Run              │
+                      │  (FastAPI / Python Web App Container)   │
+                      └─────────────┬───────────────────────────┘
+                                    │
+           ┌────────────────────────┴────────────────────────┐
+           ▼                                                 ▼
+┌─────────────────────────┐                       ┌─────────────────────────┐
+│  Secret Manager (GSM)   │                       │  Looker Conversational  │
+│ (LOOKER_CLIENT_SECRET)  │                       │      Analytics API      │
+└─────────────────────────┘                       └─────────────┬───────────┘
+                                                                │
+                                                                ▼
+                                                  ┌─────────────────────────┐
+                                                  │  Google Cloud BigQuery  │
+                                                  │    (Analytical Data)    │
+                                                  └─────────────────────────┘
+```
+
+#### Production Checklist:
+1. **Containerize:** Package `server.py` or FastAPI with Docker into Google Artifact Registry (`gcr.io` or `pkg.dev`).
+2. **Secrets via Secret Manager:** Mount `LOOKER_CLIENT_SECRET` as an environment variable in Cloud Run using Google Cloud Secret Manager.
+3. **Identity & Access Management (IAM):** Use Cloud Run Service Identity with least-privilege roles to authenticate to internal GCP services.
+4. **Embedding:** Use the Web App as an embedded iframe inside internal customer portals, Salesforce, or Google Chat / Slack bots.
+
+---
+
+### 🚩 CHECKPOINT 4: Lab Wrap-Up & SME Academy Takeaways
+Congratulations! You have completed the **Looker Conversational Analytics Agent Lab**.
+
+> 💡 **SkillLabs Interactive Check:** In the interactive training application (`http://localhost:8080`), you can click the **Check my progress** button under Task 4 to verify prompt tuning, complete the lab, and earn your final 25 points (100/100)!
+
+### Key Takeaways for Data Engineers:
+1. **No Hallucinated SQL:** By pointing LLMs at Looker's semantic layer rather than raw database tables, metric calculations remain governed and auditable.
+2. **API Explorer as the First Stop:** The Looker API Explorer is the fastest tool for discovering endpoints, validating schemas, and testing payloads.
+3. **Conversational State is Managed Server-side:** `POST /conversations` frees your frontend or microservices from managing token budgets and multi-turn message history.
+4. **Full Transparency:** Looker APIs expose the entire chain of thought, explore schema resolution, and raw query output for compliance and debugging.
+
+---
