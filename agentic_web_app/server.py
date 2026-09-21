@@ -11,6 +11,7 @@ import json
 import mimetypes
 from pathlib import Path
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
+import urllib.parse
 import logging
 
 import config
@@ -170,7 +171,11 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 self._send_json(400, {"error": "Credentials not configured. Please specify your own user id / secret."})
                 return
             try:
-                agents = client.list_agents()
+                # Query param ?all=true allows instructor to see all agents; default is only student's own agents
+                parsed_url = urllib.parse.urlparse(self.path)
+                query_params = urllib.parse.parse_qs(parsed_url.query)
+                show_all = query_params.get("all", ["false"])[0].lower() in ("true", "1")
+                agents = client.list_agents(only_own=(not show_all))
                 self._send_json(200, {"agents": agents})
             except Exception as e:
                 self._send_json(500, {"error": str(e)})
@@ -218,6 +223,7 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 client.client_secret = client_secret
                 client.access_token = test_client.access_token
                 client.token_expiry = test_client.token_expiry
+                client._current_user = user
                 config.LOOKER_CLIENT_ID = client_id
                 config.LOOKER_CLIENT_SECRET = client_secret
 
@@ -459,6 +465,9 @@ def run():
     print(f"   Target Looker URL: {config.LOOKER_BASE_URL}")
     print(f"   Local UI Address : http://localhost:{config.PORT}")
     print(f"   Health Check     : http://localhost:{config.PORT}/api/health")
+    print(f"   Terminal curl    : curl -s http://localhost:{config.PORT}/api/health | jq .")
+    print(f"   ⚠️ Cloud Shell Note: Inside terminal, curl http://localhost:{config.PORT}")
+    print(f"      Do NOT curl external https://*.cloudshell.dev without cookies")
     print("=" * 60)
     httpd.serve_forever()
 

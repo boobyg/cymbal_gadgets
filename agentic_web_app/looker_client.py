@@ -22,9 +22,11 @@ class LookerClient:
         self.client_secret = client_secret
         self.access_token = None
         self.token_expiry = 0
+        self._current_user = None
 
     def login(self) -> str:
         """Authenticate using API3 credentials and retrieve an access token."""
+        self._current_user = None
         url = f"{self.base_url}/api/4.0/login"
         payload = urllib.parse.urlencode({
             "client_id": self.client_id,
@@ -102,12 +104,33 @@ class LookerClient:
         except Exception as e:
             logger.warning(f"Failed to set workspace to {workspace_id}: {e}")
 
-    def list_agents(self) -> list:
-        """Search and list all available Conversational Analytics agents."""
+    def get_current_user(self) -> dict:
+        """Fetch and cache the current authenticated Looker user profile."""
+        if not self._current_user:
+            self._current_user = self._request("GET", "/user")
+        return self._current_user
+
+    def list_agents(self, only_own: bool = True) -> list:
+        """
+        Search and list Conversational Analytics agents.
+        If only_own is True (default), filters agents to those created by the authenticated user.
+        """
         agents = self._request("GET", "/agents/search")
+        current_user_id = None
+        if only_own:
+            try:
+                user = self.get_current_user()
+                if user and user.get("id") is not None:
+                    current_user_id = str(user.get("id"))
+            except Exception as e:
+                logger.warning(f"Could not fetch current user for agent filtering: {e}")
+
         # Format and sort by created_at descending
         formatted = []
         for a in agents:
+            creator_id = str(a.get("created_by_user_id")) if a.get("created_by_user_id") is not None else None
+            if only_own and current_user_id and creator_id != current_user_id:
+                continue
             formatted.append({
                 "id": a.get("id"),
                 "name": a.get("name", "Unnamed Agent"),

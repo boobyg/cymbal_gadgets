@@ -157,7 +157,15 @@ In the opened web portal:
 > ```
 > *Why?* Because `localhost:8080` exists **inside the remote Argolis Cloud Shell container**, not on your personal laptop.
 >
-> #### 3. The Correct Way: Open a SECOND Terminal Tab in Argolis Cloud Shell
+> #### 3. DO NOT curl Your External Cloud Shell Preview URL (`https://*.cloudshell.dev`)
+> If you copy your browser preview URL and run `curl -s "https://8080-cs-...cloudshell.dev/api/health" | jq .`, it will fail with:
+> ```text
+> jq: parse error: Invalid numeric literal at line 1, column ...
+> ```
+> *Why?* The external Cloud Shell preview URL requires Google SSO browser cookies. From the terminal, `curl` receives an HTML login redirect (`<a href=...>`), which `jq` cannot parse as JSON.
+> *Fix:* Inside your Cloud Shell terminal, **always** curl `http://localhost:8080/api/health`!
+>
+> #### 4. The Correct Way: Open a SECOND Terminal Tab in Argolis Cloud Shell
 > 1. In Google Cloud Shell, look at the tab bar above the terminal prompt.
 > 2. Click the **`+` (Open new tab)** button or press the **Split Window** icon.
 > 3. In this fresh, second terminal tab, run:
@@ -174,7 +182,7 @@ In the opened web portal:
 >    }
 >    ```
 >
-> #### 4. Alternative (Fastest): Use the Web UI Button (No Terminal Needed!)
+> #### 5. Alternative (Fastest): Use the Web UI Button (No Terminal Needed!)
 > If you already have the interactive web portal open in your browser (`http://localhost:8080` via Web Preview):
 > 1. Scroll to **Task 2: Assessment Checkpoint 2** in the left lab guide panel.
 > 2. Click the green **Check my progress** button.
@@ -255,6 +263,8 @@ cymbal_gadgets/
 | Problem | Root Cause | Solution |
 | :--- | :--- | :--- |
 | `Address already in use (port 8080)` | Another process is using port 8080 | Edit `.env` and set `PORT=8085`, then restart `./run.sh` |
+| `jq: parse error: Invalid numeric literal at line 1, column ...` | Curled external `https://*.cloudshell.dev` URL which requires Google cookies and returns HTML redirect | Curl `http://localhost:8080/api/health` in Cloud Shell terminal tab, or click **Check my progress** in the Web UI |
+| Agent dropdown shows agents from other students | Shared Looker instance has multiple students' agents | The web app now automatically filters agents by your user ID (`created_by_user_id == current_user.id`) so you only see your own! |
 | `git clone` asks for Username/Password or fails with `Support for password authentication was removed` | Typed incorrect/private repo URL or entered GitHub account password | Clone the public URL: `git clone https://github.com/boobyg/cymbal_gadgets.git` (no credentials needed). For private repos, use a **Personal Access Token (PAT)** with `repo` scope instead of password. |
 | `Failed to connect to localhost port 8080` | Ran `curl` in local laptop terminal instead of Argolis Cloud Shell | Open a second terminal tab in **Google Cloud Shell** and run the `curl` command there |
 | First terminal unresponsive to commands | Terminal is busy running `./run.sh` | Open a **second terminal tab** (`+`) in Cloud Shell rather than interrupting the server |

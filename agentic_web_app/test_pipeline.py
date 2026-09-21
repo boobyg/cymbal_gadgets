@@ -38,8 +38,8 @@ def main():
 
     # 2. Discover agents
     print("\n[Step 2] Discovering available agents (GET /api/4.0/agents/search)...")
-    agents = client.list_agents()
-    print(f"✅ Found {len(agents)} total agents on instance.")
+    agents = client.list_agents(only_own=True)
+    print(f"✅ Found {len(agents)} agents created by your user.")
     for a in agents[:3]:
         print(f"   - [{a['id'][:8]}...] {a['name']}")
 

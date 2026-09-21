@@ -333,8 +333,9 @@ A common point of confusion during labs is where to execute the verification `cu
    * **⚠️ DO NOT paste into the first terminal:** The first terminal is busy running `./run.sh` and actively serving HTTP traffic in the foreground. Typing in that window or hitting `Ctrl+C` will terminate the server.
 2. **Execute INSIDE Your Argolis Cloud Environment (Not Your Local Laptop):**
    * Execute the curl command inside your Argolis Cloud Shell or Cloud Workstation session.
+   * **⚠️ Crucial Cloud Shell Note:** Inside your Cloud Shell terminal, always use `http://localhost:8080/api/health`. Do **NOT** replace `localhost:8080` with your browser's external Web Preview URL (`https://8080-cs-...cloudshell.dev`). External Cloud Shell URLs require Google SSO session cookies and return an HTML login page, triggering a `jq` parse error!
    * Running `curl http://localhost:8080/api/health` on your local laptop terminal will fail with `Connection refused` because `localhost:8080` is running in your remote Google Cloud environment.
-3. **Alternative (Recommended): Use the Interactive UI (No Terminal Needed!):**
+3. **Alternative (Recommended - Fastest!): Use the Interactive UI (No Terminal Needed!):**
    * In the interactive web portal (`http://localhost:8080` via Cloud Shell Web Preview), simply navigate to **Task 2** and click the **Check my progress** button. The portal will automatically test the health endpoint and award your +25 points!
 
 ```bash
@@ -352,6 +353,9 @@ curl -s http://localhost:8080/api/health | jq .
 ```
 
 #### 🆘 Help & Troubleshooting (Checkpoint 2)
+* **`jq: parse error: Invalid numeric literal at line 1, column ...`?**
+  * *Cause:* You executed `curl` against your external Cloud Shell Web Preview URL (e.g., `https://8080-cs-*.cloudshell.dev/api/health`). That URL is protected by Google OAuth authentication and returns an HTML login redirect (`<a href=...>`), which `jq` cannot parse as JSON.
+  * *Fix:* Run `curl -s http://localhost:8080/api/health | jq .` inside your Cloud Shell terminal. Cloud Shell routes `localhost:8080` directly to your local Python process without hitting the external authentication proxy. Alternatively, click the green **Check my progress** button in the Web UI!
 * **Port 8080 already in use?**
   * *Fix:* Edit `agentic_web_app/.env` and change `PORT=8080` to `PORT=8085`, then restart `./run.sh`.
 * **Looker connection failed or 401 Unauthorized?**

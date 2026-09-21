@@ -78,6 +78,11 @@ cd cymbal_gadgets/agentic_web_app
 > `curl: (7) Failed to connect to localhost port 8080: Connection refused`  
 > *Reason:* Port 8080 is listening inside your **remote Argolis Cloud Shell container**, not on your personal machine!
 >
+> ❌ **DO NOT curl your external Cloud Shell Web Preview URL (`https://*.cloudshell.dev`):**  
+> If you copy your browser preview URL and run `curl -s "https://8080-cs-...cloudshell.dev/api/health" | jq .`, it will fail with:  
+> `jq: parse error: Invalid numeric literal at line 1, column ...`  
+> *Reason:* External Cloud Shell preview URLs require Google OAuth login cookies. Terminal `curl` does not carry your Google browser cookies, so Cloud Shell returns an HTML redirect page (`<a href=...>`), which `jq` cannot parse as JSON. Inside your Cloud Shell terminal, **always curl `http://localhost:8080/api/health`** directly!
+>
 > ✅ **WHERE TO RUN IT (Option A - Second Terminal Tab):**  
 > 1. In Google Cloud Shell, look at the tab bar above the terminal prompt.
 > 2. Click the **`+` (Open new terminal tab)** button.

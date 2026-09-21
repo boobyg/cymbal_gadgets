@@ -358,9 +358,25 @@ nano .env</pre>
           <div class="space-y-2 text-xs">
             <h4 class="font-bold text-slate-800">Verification via curl:</h4>
             <div class="relative group">
-              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">curl -s http://localhost:8080/api/health | jq .</pre>
+              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono select-all">curl -s http://localhost:8080/api/health | jq .</pre>
               <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy</button>
             </div>
+
+            <!-- CRITICAL CLOUD SHELL WARNING -->
+            <div class="bg-amber-50 border border-amber-300 rounded-xl p-3 text-[11px] text-amber-900 space-y-1.5 shadow-sm">
+              <div class="font-bold flex items-center space-x-1.5 text-amber-900">
+                <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
+                <span>Cloud Shell Note: Do NOT curl your external Web Preview URL</span>
+              </div>
+              <p class="leading-relaxed">
+                Run the command with <code class="font-mono bg-amber-100 px-1 py-0.5 rounded font-bold text-amber-950">http://localhost:8080</code> directly in a second Cloud Shell terminal window.
+              </p>
+              <p class="leading-relaxed text-amber-800">
+                ⚠️ Do <strong>NOT</strong> replace <code class="font-mono">localhost:8080</code> with your browser's <code class="font-mono">https://*.cloudshell.dev</code> URL. The external Web Preview proxy requires Google SSO login cookies and returns HTML, which results in:
+                <code class="font-mono bg-rose-50 border border-rose-200 text-rose-700 block p-1.5 rounded mt-1 font-semibold">jq: parse error: Invalid numeric literal at line 1, column ...</code>
+              </p>
+            </div>
+
             <!-- WHERE TO RUN THE CURL COMMAND CALLOUT -->
             <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-[11px] text-blue-900 space-y-1.5">
               <div class="font-bold flex items-center space-x-1.5 text-blue-800">
@@ -368,9 +384,9 @@ nano .env</pre>
                 <span>Where do I run this curl command?</span>
               </div>
               <ul class="list-disc pl-4 space-y-1 text-blue-800">
-                <li><strong>In a SECOND terminal window in Argolis:</strong> Your first terminal is currently busy running <code class="font-mono bg-blue-100 px-1 rounded">./run.sh</code>. Open a new terminal tab (or split terminal) in Google Cloud Shell or Cloud Workstations.</li>
-                <li><strong>Inside your Argolis environment:</strong> Do NOT run this curl command on your local laptop terminal; the server is running inside your remote Argolis Cloud Shell/Workstation environment on port 8080.</li>
-                <li><strong>Or use the button below:</strong> If you are already viewing this page, you don't even need terminal curl—simply click <strong>Check my progress</strong> below to verify server health directly!</li>
+                <li><strong>In a SECOND terminal window in Cloud Shell:</strong> Your first terminal is currently busy running <code class="font-mono bg-blue-100 px-1 rounded">./run.sh</code>. Open a new terminal tab (or click <code class="font-mono bg-blue-100 px-1 rounded">+</code> in Cloud Shell).</li>
+                <li><strong>Inside Cloud Shell (Not your personal laptop):</strong> The server is running inside your remote Cloud Shell environment. In that Cloud Shell terminal, <code class="font-mono">localhost:8080</code> routes directly to the local Python process.</li>
+                <li><strong>Or use the 1-click button below (Fastest!):</strong> You don't even need terminal curl—simply click <strong>Check my progress</strong> below to verify server health directly!</li>
               </ul>
             </div>
           </div>
@@ -567,9 +583,12 @@ nano .env</pre>
       <!-- Agent Control Ribbon -->
       <div class="p-3 bg-white border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
         <div class="flex items-center space-x-2 flex-1 min-w-[240px]">
-          <label class="font-bold text-slate-700 shrink-0">Agent:</label>
+          <div class="flex items-center space-x-1.5 shrink-0">
+            <label class="font-bold text-slate-700">My Agent:</label>
+            <span class="text-[10px] text-indigo-700 font-semibold bg-indigo-50 border border-indigo-200 px-1.5 py-0.5 rounded-full" title="Filtered to show only your agents">Your Agents</span>
+          </div>
           <select id="agentSelect" class="flex-1 bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none truncate">
-            <option value="">Loading available agents...</option>
+            <option value="">Loading your agents...</option>
           </select>
           <button id="openQuickCreateBtn" title="Create Agent in Looker" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold px-2.5 py-1.5 rounded-lg border border-indigo-200 transition shrink-0">
             <i class="fa-solid fa-plus"></i>
@@ -969,7 +988,20 @@ nano .env</pre>
         const data = await res.json();
         availableAgents = data.agents || [];
 
-        agentSelect.innerHTML = '<option value="">Select your Step 1 Agent...</option>';
+        agentSelect.innerHTML = '';
+        if (availableAgents.length === 0) {
+          const opt = document.createElement('option');
+          opt.value = "";
+          opt.textContent = "No agents found for your user. Create one in Step 1!";
+          agentSelect.appendChild(opt);
+          return;
+        }
+
+        const placeholder = document.createElement('option');
+        placeholder.value = "";
+        placeholder.textContent = `Select your Step 1 Agent (${availableAgents.length} created by you)...`;
+        agentSelect.appendChild(placeholder);
+
         availableAgents.forEach(a => {
           const opt = document.createElement('option');
           opt.value = a.id;
@@ -977,7 +1009,7 @@ nano .env</pre>
           agentSelect.appendChild(opt);
         });
 
-        if (currentAgentId) {
+        if (currentAgentId && availableAgents.some(a => a.id === currentAgentId)) {
           agentSelect.value = currentAgentId;
         } else if (availableAgents.length === 1) {
           selectAgent(availableAgents[0].id);
