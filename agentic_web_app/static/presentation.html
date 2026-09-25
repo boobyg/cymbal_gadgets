@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentation: Looker Conversational Analytics for Data Engineers</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    h1, h2, h3, .heading-font {
+      font-family: 'Google Sans', sans-serif;
+    }
+    code, pre, .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .slide {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .slide.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 h-screen flex flex-col overflow-hidden select-none">
+
+  <!-- TOP BAR / SLIDE HEADER -->
+  <header class="bg-slate-950/80 backdrop-blur border-b border-slate-800 px-6 py-3 flex items-center justify-between shrink-0">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-blue-500 flex items-center justify-center text-white shadow-md">
+        <i class="fa-solid fa-brain text-sm"></i>
+      </div>
+      <div>
+        <div class="text-xs font-bold text-indigo-400 tracking-wider uppercase">Google Cloud SME Academy</div>
+        <div class="text-sm font-semibold text-slate-200">Looker Conversational Analytics for Data Engineers</div>
+      </div>
+    </div>
+
+    <!-- Center Slide Counter -->
+    <div class="flex items-center space-x-2 bg-slate-900 px-3 py-1.5 rounded-full border border-slate-800 text-xs">
+      <span class="text-slate-400 font-medium">Slide</span>
+      <span id="currentSlideNum" class="font-bold text-indigo-400">1</span>
+      <span class="text-slate-500">/</span>
+      <span id="totalSlidesNum" class="text-slate-400 font-medium">14</span>
+    </div>
+
+    <!-- Action Controls -->
+    <div class="flex items-center space-x-2 text-xs">
+      <a href="/" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition flex items-center space-x-1.5">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Back to Lab Portal</span>
+      </a>
+      <button id="notesToggleBtn" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition flex items-center space-x-1.5" title="Toggle Speaker Notes (N)">
+        <i class="fa-solid fa-clipboard-list text-amber-400"></i>
+        <span>Notes</span>
+      </button>
+      <button id="fullscreenBtn" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" title="Toggle Fullscreen (F)">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- PROGRESS BAR -->
+  <div class="w-full bg-slate-800 h-1">
+    <div id="progressBar" class="bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 h-1 transition-all duration-300" style="width: 7%;"></div>
+  </div>
+
+  <!-- MAIN SLIDE CONTAINER -->
+  <main class="flex-1 overflow-hidden relative flex">
+    
+    <!-- SLIDES WRAPPER -->
+    <div class="flex-1 flex flex-col justify-center items-center p-6 md:p-12 overflow-y-auto">
+      <div class="max-w-5xl w-full bg-slate-950/60 border border-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl backdrop-blur-md flex flex-col min-h-[580px] justify-between" id="slideCard">
+
+        <!-- SLIDE 1: TITLE SLIDE -->
+        <div class="slide active flex-col justify-between flex-1" data-title="Title & Welcome" data-notes="Welcome Data Engineers! In this session, we explore why raw Text-to-SQL fails in enterprise AI and how Looker's Conversational Analytics API bridges LLMs with the governed semantic layer to deliver deterministic BigQuery analytics.">
+          <div class="space-y-4">
+            <div class="flex flex-wrap items-center gap-2">
+              <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 px-3 py-1 rounded-full text-xs font-semibold">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>Google Cloud SME Academy &bull; Data & Agentic AI Track</span>
+              </div>
+              <a href="https://docs.google.com/presentation/d/1looker-conversational-analytics-standard-gcp-deck/edit?usp=sharing" target="_blank" class="inline-flex items-center space-x-1.5 bg-blue-500/10 border border-blue-500/30 text-blue-400 hover:text-blue-300 px-3 py-1 rounded-full text-xs font-semibold transition">
+                <i class="fa-solid fa-file-powerpoint text-amber-400"></i>
+                <span>Google Slides (Standard Cloud Style)</span>
+              </a>
+            </div>
+            <h1 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+              Building, Testing & Deploying Custom Conversational Analytics Agents with Looker APIs
+            </h1>
+            <p class="text-lg text-slate-400 font-light max-w-3xl leading-relaxed">
+              A comprehensive guide for Data Engineers and Cloud Architects to integrate Generative AI with Looker's Governed Semantic Layer and BigQuery.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 text-xs">
+            <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+              <div class="text-slate-400 font-medium">Audience</div>
+              <div class="text-white font-bold text-sm mt-1">Data Engineers & Cloud Architects</div>
+              <div class="text-slate-500 text-[11px] mt-1">No prior Looker experience required</div>
+            </div>
+            <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+              <div class="text-slate-400 font-medium">Core Stack</div>
+              <div class="text-indigo-300 font-bold text-sm mt-1">Looker 4.0 CA API + BigQuery</div>
+              <div class="text-slate-500 text-[11px] mt-1">LookML Governed Explores</div>
+            </div>
+            <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+              <div class="text-slate-400 font-medium">Hands-On Goal</div>
+              <div class="text-emerald-400 font-bold text-sm mt-1">Custom Agent + Live Web App</div>
+              <div class="text-slate-500 text-[11px] mt-1">4 Checkpoints (100 Points Total)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2: THE PROBLEM WITH RAW TEXT-TO-SQL -->
+        <div class="slide flex-col justify-between flex-1" data-title="Why Raw Text-to-SQL Fails" data-notes="Explain the dilemma: Every stakeholder wants to chat with the warehouse. But raw SQL generation hallucinations result in bad joins, wrong metric formulas, and zero auditability.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-rose-400 uppercase tracking-wider">The Enterprise Dilemma</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">Why Raw "Text-to-SQL" Fails in Enterprise Production</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              When Large Language Models are pointed directly at raw data warehouse tables (BigQuery, Snowflake), they consistently produce critical production failures:
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 text-xs">
+            <div class="bg-rose-950/20 border border-rose-800/40 p-5 rounded-2xl space-y-2">
+              <div class="flex items-center space-x-2 text-rose-400 font-bold text-sm">
+                <i class="fa-solid fa-ghost"></i>
+                <span>Schema Hallucination</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                LLMs invent column names, query stale staging tables, or misidentify foreign keys, leading to broken syntax or incorrect tables.
+              </p>
+            </div>
+            <div class="bg-rose-950/20 border border-rose-800/40 p-5 rounded-2xl space-y-2">
+              <div class="flex items-center space-x-2 text-rose-400 font-bold text-sm">
+                <i class="fa-solid fa-calculator"></i>
+                <span>Missing Business Logic</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Raw database columns do not contain business rules: <em>Does revenue include VAT? Are refunded items deducted? What defines an active account?</em>
+              </p>
+            </div>
+            <div class="bg-rose-950/20 border border-rose-800/40 p-5 rounded-2xl space-y-2">
+              <div class="flex items-center space-x-2 text-rose-400 font-bold text-sm">
+                <i class="fa-solid fa-network-wired"></i>
+                <span>Join Fanouts & Duplication</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Many-to-many joins produce fanout multiplication traps, resulting in aggregated sales figures inflated by 10x without warnings.
+              </p>
+            </div>
+            <div class="bg-rose-950/20 border border-rose-800/40 p-5 rounded-2xl space-y-2">
+              <div class="flex items-center space-x-2 text-rose-400 font-bold text-sm">
+                <i class="fa-solid fa-eye-slash"></i>
+                <span>Zero Audit Trail</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                When a chatbot returns "$12.4M", data engineers cannot verify what filters or table definitions produced the number.
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-xs text-slate-400 flex items-center justify-between">
+            <span>Result: Enterprise teams abandon ungrounded SQL chatbots due to compliance risk.</span>
+            <span class="text-rose-400 font-semibold font-mono">Accuracy < 65% in production</span>
+          </div>
+        </div>
+
+        <!-- SLIDE 3: THE SOLUTION - LOOKER'S SEMANTIC LAYER -->
+        <div class="slide flex-col justify-between flex-1" data-title="The Semantic Layer Solution" data-notes="Explain Looker's semantic layer: centralized metrics, fanout protection, and deterministic SQL compilation. The LLM generates LookML field requests, NOT raw SQL.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">The Architectural Solution</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">Looker as the Governed Semantic Layer Ground Truth</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Instead of querying raw tables, the LLM queries Looker's <strong>Governed Semantic Layer</strong> (LookML). Looker acts as a deterministic compiler between intent and database execution.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6 text-xs">
+            <div class="bg-indigo-950/30 border border-indigo-800/40 p-5 rounded-2xl space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-base">1</div>
+              <h3 class="font-bold text-sm text-white">Centrally Governed Metrics</h3>
+              <p class="text-slate-300 leading-relaxed">
+                Formulas like <strong>Gross Margin %</strong> or <strong>Net Sales</strong> are coded once in LookML measures. Every AI query uses the exact same verified formula.
+              </p>
+            </div>
+            <div class="bg-indigo-950/30 border border-indigo-800/40 p-5 rounded-2xl space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-base">2</div>
+              <h3 class="font-bold text-sm text-white">Deterministic SQL Compiler</h3>
+              <p class="text-slate-300 leading-relaxed">
+                The agent produces a <strong>LookML Query Specification</strong> (fields, filters, pivots). Looker converts this into dialect-optimized BigQuery SQL with built-in fanout prevention.
+              </p>
+            </div>
+            <div class="bg-indigo-950/30 border border-indigo-800/40 p-5 rounded-2xl space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-base">3</div>
+              <h3 class="font-bold text-sm text-white">100% Auditable Reasoning</h3>
+              <p class="text-slate-300 leading-relaxed">
+                Every request returns full transparency: agent thoughts, explores searched, query specification, and raw database rows.
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-emerald-950/20 border border-emerald-800/40 p-3 rounded-xl text-xs text-emerald-300 flex items-center space-x-2">
+            <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+            <span><strong>Core Takeaway:</strong> The LLM never writes raw SQL. The Looker engine writes dialect SQL.</span>
+          </div>
+        </div>
+
+        <!-- SLIDE 4: LOOKER CONCEPTS FOR DATA ENGINEERS -->
+        <div class="slide flex-col justify-between flex-1" data-title="Looker 101 for Data Engineers" data-notes="Help Data Engineers map unfamiliar Looker terms to familiar concepts like schemas, star schemas, dimensions, and measures.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider">Concept Translation</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">Looker 101 for Data Engineers</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              If you have never touched Looker, here is how Looker concepts map directly to Data Warehouse and SQL engineering terms:
+            </p>
+          </div>
+
+          <div class="overflow-x-auto my-4">
+            <table class="w-full text-left text-xs border border-slate-800 rounded-xl overflow-hidden">
+              <thead class="bg-slate-900 text-slate-300 border-b border-slate-800">
+                <tr>
+                  <th class="p-3 font-semibold">Looker Concept</th>
+                  <th class="p-3 font-semibold">Data Warehouse / SQL Equivalent</th>
+                  <th class="p-3 font-semibold">Cymbal Gadgets Lab Example</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/80 text-slate-300">
+                <tr class="hover:bg-slate-900/50">
+                  <td class="p-3 font-bold text-indigo-400 font-mono">Model</td>
+                  <td class="p-3">Database Catalog / Connection boundary containing related explores</td>
+                  <td class="p-3 font-mono text-slate-400">cymbal_gadgets_boris</td>
+                </tr>
+                <tr class="hover:bg-slate-900/50">
+                  <td class="p-3 font-bold text-indigo-400 font-mono">Explore</td>
+                  <td class="p-3">Pre-joined Star Schema or Dimensional Mart (Fact table joined to Dimensions)</td>
+                  <td class="p-3 font-mono text-slate-400">transactions (Sales facts + Store/Product dims)</td>
+                </tr>
+                <tr class="hover:bg-slate-900/50">
+                  <td class="p-3 font-bold text-indigo-400 font-mono">View</td>
+                  <td class="p-3">Table definition or SQL CTE declaring columns, dimensions & aggregations</td>
+                  <td class="p-3 font-mono text-slate-400">transactions.view.lkml</td>
+                </tr>
+                <tr class="hover:bg-slate-900/50">
+                  <td class="p-3 font-bold text-indigo-400 font-mono">Dimension</td>
+                  <td class="p-3">Attribute used for slicing, filtering, and <code class="bg-slate-800 px-1 py-0.5 rounded text-amber-300">GROUP BY</code></td>
+                  <td class="p-3 font-mono text-slate-400">store_country, transaction_date</td>
+                </tr>
+                <tr class="hover:bg-slate-900/50">
+                  <td class="p-3 font-bold text-indigo-400 font-mono">Measure</td>
+                  <td class="p-3">Explicit aggregation formula (<code class="bg-slate-800 px-1 py-0.5 rounded text-amber-300">SUM</code>, <code class="bg-slate-800 px-1 py-0.5 rounded text-amber-300">AVG</code>, ratios)</td>
+                  <td class="p-3 font-mono text-slate-400">total_sales_amount, gross_margin_percentage</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="text-xs text-slate-400 italic">
+            💡 <strong>Key Insight:</strong> An Explore provides the AI with a safe, bounded dimensional universe where relationships are already solved.
+          </div>
+        </div>
+
+        <!-- SLIDE 5: LOOKER CONVERSATIONAL ANALYTICS API OVERVIEW -->
+        <div class="slide flex-col justify-between flex-1" data-title="Looker CA API Functions" data-notes="Walk through the core REST endpoints in Looker API 4.0: POST /login, POST /agents, POST /conversations, and POST /conversational_analytics/chat.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">API Architecture</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">Looker Conversational Analytics (CA) API Family</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              The CA API in Looker 4.0 provides four key capabilities to build end-to-end conversational data pipelines:
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 text-xs">
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-indigo-400 font-bold">1. Authentication</span>
+                <span class="bg-blue-900/50 text-blue-300 px-2 py-0.5 rounded text-[10px] font-mono">POST /api/4.0/login</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Exchanges client credentials (<code class="text-slate-400">client_id</code> + <code class="text-slate-400">client_secret</code>) for an ephemeral session token: <code class="text-amber-300">Authorization: token &lt;access_token&gt;</code>.
+              </p>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-indigo-400 font-bold">2. Agent Definition</span>
+                <span class="bg-emerald-900/50 text-emerald-300 px-2 py-0.5 rounded text-[10px] font-mono">POST /api/4.0/agents</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Configures agent metadata, binds allowed LookML sources (model + explore), and sets persona guardrails via <code class="text-slate-400">context.instructions</code>.
+              </p>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-indigo-400 font-bold">3. Stateful Sessions</span>
+                <span class="bg-purple-900/50 text-purple-300 px-2 py-0.5 rounded text-[10px] font-mono">POST /api/4.0/conversations</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Allocates a server-side session bound to an agent ID. Looker maintains multi-turn message history server-side—no manual token counting!
+              </p>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-mono text-indigo-400 font-bold">4. Query Execution</span>
+                <span class="bg-amber-900/50 text-amber-300 px-2 py-0.5 rounded text-[10px] font-mono">POST /conversational_analytics/chat</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Submits user prompt + <code class="text-slate-400">conversation_id</code>. Streams structured reasoning, schema discovery, generated query, and BigQuery data.
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-xs text-slate-400 flex items-center justify-between">
+            <span>Also supports dynamic runtime patching:</span>
+            <span class="font-mono text-indigo-400">PATCH /api/4.0/agents/{agent_id}</span>
+          </div>
+        </div>
+
+        <!-- SLIDE 6: ANATOMY OF THE CA RESPONSE -->
+        <div class="slide flex-col justify-between flex-1" data-title="The 5-Part Response Stream" data-notes="Highlight the 5 message types returned by the chat API: THOUGHT, SCHEMA, QUERY, DATA, and FINAL_RESPONSE. This is why Looker is auditable.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Payload Transparency</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">Anatomy of the 5-Stage Agent Response</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Unlike generic completion endpoints that return only a text string, Looker CA returns a structured multi-part message stream for complete auditability:
+            </p>
+          </div>
+
+          <div class="space-y-2.5 my-4 text-xs">
+            <div class="flex items-start space-x-3 bg-slate-900/90 border border-slate-800 p-3 rounded-xl">
+              <span class="bg-indigo-500/20 text-indigo-400 font-bold font-mono px-2 py-0.5 rounded text-[11px] shrink-0">1. THOUGHT</span>
+              <div>
+                <strong class="text-white">Chain-of-Thought Reasoning:</strong>
+                <span class="text-slate-300"> Internal plan detailing how the LLM interpreted the user's intent and selected dimensions.</span>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 bg-slate-900/90 border border-slate-800 p-3 rounded-xl">
+              <span class="bg-blue-500/20 text-blue-400 font-bold font-mono px-2 py-0.5 rounded text-[11px] shrink-0">2. SCHEMA</span>
+              <div>
+                <strong class="text-white">Explore Introspection:</strong>
+                <span class="text-slate-300"> Metadata of LookML views and joins evaluated (e.g. <code class="text-slate-400 font-mono">transactions</code> explore).</span>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 bg-slate-900/90 border border-slate-800 p-3 rounded-xl">
+              <span class="bg-purple-500/20 text-purple-400 font-bold font-mono px-2 py-0.5 rounded text-[11px] shrink-0">3. QUERY</span>
+              <div>
+                <strong class="text-white">LookML Query Specification:</strong>
+                <span class="text-slate-300"> Fields (<code class="text-slate-400 font-mono">transactions.total_sales_amount</code>), filters, sorts, and limits compiled by the agent.</span>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 bg-slate-900/90 border border-slate-800 p-3 rounded-xl">
+              <span class="bg-emerald-500/20 text-emerald-400 font-bold font-mono px-2 py-0.5 rounded text-[11px] shrink-0">4. DATA</span>
+              <div>
+                <strong class="text-white">Verified Tabular BigQuery Results:</strong>
+                <span class="text-slate-300"> The exact tabular records returned from BigQuery execution (<code class="text-emerald-400 font-mono">[{"transactions.total_sales_amount": 1074890772}]</code>).</span>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 bg-slate-900/90 border border-slate-800 p-3 rounded-xl">
+              <span class="bg-amber-500/20 text-amber-400 font-bold font-mono px-2 py-0.5 rounded text-[11px] shrink-0">5. FINAL_RESPONSE</span>
+              <div>
+                <strong class="text-white">Executive Markdown Summary:</strong>
+                <span class="text-slate-300"> Natural language executive answer synthesized directly from the verified tabular data.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-400">
+            🔍 <strong>Data Engineering Benefit:</strong> Enables building user interfaces with a "Transparency Hub" where business users see the answer and engineers see the SQL audit.
+          </div>
+        </div>
+
+        <!-- SLIDE 7: END-TO-END EXECUTION FLOW -->
+        <div class="slide flex-col justify-between flex-1" data-title="End-to-End Operational Flow" data-notes="Walk through the chronological 7-step sequence of how a query moves from user input, through the client, Looker CA API, LookML compiler, BigQuery, and back.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Chronological Pipeline</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">End-to-End Execution Sequence</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Step-by-step lifecycle of an analytical query from prompt submission to BigQuery execution:
+            </p>
+          </div>
+
+          <div class="space-y-2 my-4 text-xs">
+            <div class="flex items-center space-x-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs shrink-0">1</div>
+              <div class="text-slate-300"><strong>User Prompt:</strong> User asks <em>"What is the total sales amount by store country?"</em></div>
+            </div>
+            <div class="flex items-center space-x-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs shrink-0">2</div>
+              <div class="text-slate-300"><strong>Session Binding:</strong> Client passes prompt with <code class="text-slate-400 font-mono">conversation_id</code> to <code class="text-indigo-300 font-mono">POST /conversational_analytics/chat</code>.</div>
+            </div>
+            <div class="flex items-center space-x-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs shrink-0">3</div>
+              <div class="text-slate-300"><strong>Semantic Introspection:</strong> Looker CA maps intent to Explore <code class="text-slate-400 font-mono">transactions</code>, picking dimension <code class="text-slate-400 font-mono">store_country</code> & measure <code class="text-slate-400 font-mono">total_sales_amount</code>.</div>
+            </div>
+            <div class="flex items-center space-x-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center font-bold text-xs shrink-0">4</div>
+              <div class="text-slate-300"><strong>Dialect SQL Compilation:</strong> Looker's modeling engine compiles the field spec into optimized Google BigQuery SQL.</div>
+            </div>
+            <div class="flex items-center space-x-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">5</div>
+              <div class="text-slate-300"><strong>BigQuery Execution:</strong> Query executes on the analytical warehouse; verified rows returned.</div>
+            </div>
+            <div class="flex items-center space-x-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs shrink-0">6</div>
+              <div class="text-slate-300"><strong>Synthesis & Streaming:</strong> LLM synthesizes summary adhering to agent guardrails; stream emitted to client.</div>
+            </div>
+          </div>
+
+          <div class="text-xs text-slate-400">
+            ⚡ <strong>Performance:</strong> First query caches explore metadata (~15s); follow-up multi-turn queries complete in 2–4s.
+          </div>
+        </div>
+
+        <!-- SLIDE 8: LOOKER API EXPLORER -->
+        <div class="slide flex-col justify-between flex-1" data-title="Developer Workbench: API Explorer" data-notes="Explain what Looker API Explorer is: Looker's built-in interactive REST workbench where developers discover and test endpoints live in the browser.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">Developer Workbench</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">Looker API Explorer: Built-in Developer Workbench</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Data engineers don't need Postman or curl scripts to get started. Looker includes a native, interactive API Explorer:
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 text-xs">
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="text-white font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-list-check text-blue-400"></i>
+                <span>All 400+ REST Endpoints</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Browse complete schemas, parameter descriptions, required headers, and response status codes for API 4.0.
+              </p>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="text-white font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-play text-emerald-400"></i>
+                <span>In-Browser Live Execution ("Run It")</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Test payloads directly against your live instance. Automatically uses your active browser SSO session!
+              </p>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="text-white font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-code text-indigo-400"></i>
+                <span>Multi-Language SDK Code Generation</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Instantly view and copy runnable client code in Python, TypeScript, Kotlin, Swift, and C#.
+              </p>
+            </div>
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="text-white font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-compass text-amber-400"></i>
+                <span>Direct Method Link</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Open <code class="text-indigo-300 font-mono">ConversationalAnalytics / create_agent</code> directly in Looker API Explorer.
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-blue-950/20 border border-blue-800/40 p-3 rounded-xl text-xs text-blue-300 flex items-center justify-between">
+            <span>Direct CreateAgent Link:</span>
+            <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" target="_blank" class="font-mono text-cyan-300 hover:underline text-[11px]">https://ceworkshops.cloud.looker.com/.../ConversationalAnalytics/create_agent</a>
+          </div>
+        </div>
+
+        <!-- SLIDE 9: STEP 0 & STEP 1 - CREATING THE AGENT -->
+        <div class="slide flex-col justify-between flex-1" data-title="Step 0 & 1: Agent Creation" data-notes="Walk through Step 0 credentials and Step 1 agent creation. Explain the 3-step lifecycle: create agent, create conversation, pass prompt. Explain where to paste in body textarea, expect POST /agents 200: OK, and locate id.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Hands-On Phase 1</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">Step 0 & 1: Lifecycle Scenario & Running CreateAgent</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Define your custom AI agent using <code class="text-indigo-400 font-mono">ConversationalAnalytics / create_agent</code> (<code class="text-indigo-400 font-mono">POST /api/4.0/agents</code>):
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-3 text-xs">
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <h4 class="font-bold text-cyan-400">Typical Conversational Analytics Lifecycle</h4>
+              <ol class="list-decimal pl-4 space-y-1 text-slate-300">
+                <li><strong>Create Agent (`create_agent`):</strong> Define model (<code class="text-slate-400 font-mono">cymbal_gadgets_boris</code>), explore (<code class="text-slate-400 font-mono">transactions</code>), and instructions.</li>
+                <li><strong>Create Conversation (`POST /conversations`):</strong> Server allocates stateful session ID.</li>
+                <li><strong>Pass Prompt & Tracing (`POST /chat`):</strong> Generates LookML query, executes BigQuery SQL, and streams 5-part trace.</li>
+              </ol>
+              <div class="p-2 bg-slate-950 rounded font-mono text-[10px] text-slate-400">
+                show_analytical_details: true &rarr; tracing enabled!
+              </div>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <h4 class="font-bold text-emerald-400">Step-by-Step in API Explorer</h4>
+              <ul class="space-y-1 text-slate-300">
+                <li>1. Open <code class="text-cyan-300 font-mono">create_agent</code> &rarr; click <strong>"Run It"</strong> tab.</li>
+                <li>2. Paste JSON payload into <strong>Request Body (`body`)</strong> textarea.</li>
+                <li>3. Click blue <strong>"Run Request"</strong> button.</li>
+                <li>4. Expected output: <code class="text-emerald-300 font-mono">POST /agents (200: OK)</code>.</li>
+                <li>5. Locate top-level <code class="text-indigo-300 font-mono">"id"</code> on first line of response JSON and copy it!</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950/20 border border-indigo-800/40 p-3 rounded-xl text-xs text-slate-300 flex items-center justify-between">
+            <span>💡 <strong>Real-Time Tracing:</strong> Full reasoning tracing will be available directly in the web app when prompts run!</span>
+            <span class="text-indigo-400 font-bold">+25 Pts (Task 1)</span>
+          </div>
+        </div>
+
+        <!-- SLIDE 10: STEP 2 - WEB APP & HEALTH CHECK -->
+        <div class="slide flex-col justify-between flex-1" data-title="Step 2: Web App Architecture" data-notes="Explain the student web application in Argolis Cloud Shell. Note the unlock button at the end of Step 2 to display the Looker CA window before starting Step 3.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Hands-On Phase 2</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">Step 2: Client Web App & Health Verification</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Launch the zero-dependency Python client application in your dedicated Argolis Cloud Shell:
+            </p>
+          </div>
+
+          <div class="space-y-3 my-4 text-xs">
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl flex items-start space-x-3">
+              <i class="fa-solid fa-terminal text-emerald-400 text-sm mt-0.5"></i>
+              <div>
+                <strong class="text-white">Startup Command:</strong>
+                <pre class="mt-1 bg-slate-950 p-2 rounded font-mono text-[11px] text-emerald-300">cd cymbal_gadgets/agentic_web_app && ./run.sh</pre>
+                <div class="text-slate-400 mt-1">Starts the multi-threaded HTTP server and SPA host on port 8080.</div>
+              </div>
+            </div>
+
+            <div class="bg-amber-950/20 border border-amber-800/40 p-4 rounded-xl space-y-1.5">
+              <div class="text-amber-300 font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>Where to Execute Task 2 Health Check</span>
+              </div>
+              <ul class="list-disc pl-5 space-y-1 text-slate-300">
+                <li><strong>Recommended (Fastest):</strong> Click <strong>Check my progress</strong> in the web portal (<code class="text-slate-400">http://localhost:8080</code> via Web Preview).</li>
+                <li><strong>Terminal Option:</strong> Open a <strong>SECOND terminal tab</strong> in Cloud Shell and run <code class="text-amber-200 font-mono">curl -s http://localhost:8080/api/health | jq .</code>.</li>
+                <li><strong>Do NOT run on local laptop:</strong> Port 8080 exists in remote Cloud Shell, not your machine.</li>
+              </ul>
+            </div>
+
+            <div class="bg-emerald-950/30 border border-emerald-800/50 p-3 rounded-xl flex items-center justify-between text-xs">
+              <div class="flex items-center space-x-2 text-emerald-300">
+                <i class="fa-solid fa-lock-open"></i>
+                <span><strong>End of Step 2:</strong> Click <em>"Display Conversational Analytics Window"</em> once Checkpoints 1 & 2 are done!</span>
+              </div>
+              <span class="text-emerald-400 font-bold">+25 Pts (Task 2)</span>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-xs text-slate-400 flex items-center justify-between">
+            <span>Server verifies token exchange with Looker API 4.0:</span>
+            <span class="text-emerald-400 font-semibold">Ready to display interactive console</span>
+          </div>
+        </div>
+
+        <!-- SLIDE 11: STEP 3 - INTERACTIVE QUERY AUDITING & CONSOLE UNLOCK -->
+        <div class="slide flex-col justify-between flex-1" data-title="Step 3: Audit Execution Tracing" data-notes="Explain what we are doing in Step 3: Tell students to audit the 3 tracing accordions: Agent Thought Process, Governed Data Result, and Generated Looker Query Specification.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Hands-On Phase 3</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">Step 3: Prompting & Auditing Real-Time Tracing</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              When prompts execute, the Looker Conversational Analytics API returns a rich multi-stage stream. Expand and audit the three accordions below each answer:
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 my-3 text-xs">
+            <div class="bg-slate-900/90 border border-indigo-900/40 p-4 rounded-xl space-y-2">
+              <h4 class="font-bold text-indigo-400 flex items-center space-x-1.5 text-sm">
+                <i class="fa-solid fa-brain text-indigo-400"></i>
+                <span>1. Agent Thought Process</span>
+              </h4>
+              <p class="text-slate-300 leading-relaxed text-[11px]">
+                Audits LLM reasoning tokens, user intent resolution, explore discovery, and LookML field mapping.
+              </p>
+              <div class="text-[10px] font-mono text-indigo-300 bg-indigo-950/40 p-2 rounded border border-indigo-900/30">
+                Maps "sales amount" &rarr; <code class="text-white">transactions.total_sale_price</code>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/90 border border-emerald-900/40 p-4 rounded-xl space-y-2">
+              <h4 class="font-bold text-emerald-400 flex items-center space-x-1.5 text-sm">
+                <i class="fa-solid fa-database text-emerald-400"></i>
+                <span>2. Governed Data Result</span>
+              </h4>
+              <p class="text-slate-300 leading-relaxed text-[11px]">
+                Renders raw tabular BigQuery records returned directly via Looker before narrative synthesis.
+              </p>
+              <div class="text-[10px] font-mono text-emerald-300 bg-emerald-950/40 p-2 rounded border border-emerald-900/30">
+                Total Sales: <strong class="text-white">$1,074,890,772</strong> (Zero hallucination)
+              </div>
+            </div>
+
+            <div class="bg-slate-900/90 border border-purple-900/40 p-4 rounded-xl space-y-2">
+              <h4 class="font-bold text-purple-400 flex items-center space-x-1.5 text-sm">
+                <i class="fa-solid fa-code text-purple-400"></i>
+                <span>3. Query Specification</span>
+              </h4>
+              <p class="text-slate-300 leading-relaxed text-[11px]">
+                Exposes the formal LookML query object compiled by Looker into dialect-optimized BigQuery SQL.
+              </p>
+              <div class="text-[10px] font-mono text-purple-300 bg-purple-950/40 p-2 rounded border border-purple-900/30">
+                fields: <code class="text-white">["transactions.total_sale_price"]</code> (No raw SQL)
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-purple-950/20 border border-purple-800/40 p-3 rounded-xl text-xs text-slate-300 flex items-center justify-between">
+            <span>Pass Checkpoint 3 by validating the complete query execution pipeline!</span>
+            <span class="text-purple-400 font-bold">+25 Pts (Task 3)</span>
+          </div>
+        </div>
+
+        <!-- SLIDE 12: STEP 4 - WHERE & HOW GUARDRAILS ARE APPLIED -->
+        <div class="slide flex-col justify-between flex-1" data-title="Step 4: Guardrails in CA APIs" data-notes="Explain WHERE guardrails are applied in CA APIs (context.instructions, sources whitelist, LookML layer) and HOW they are enforced (system prompt priming, metric steering, Looker Query Spec, persona formatting).">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-rose-400 uppercase tracking-wider">Hands-On Phase 4</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">Step 4: Where & How Guardrails Are Applied in CA APIs</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Enterprise governance architecture in Looker Conversational Analytics (CA) APIs:
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-2 text-xs">
+            <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-xl space-y-2">
+              <h4 class="font-bold text-rose-400 flex items-center space-x-1.5">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>WHERE Guardrails Are Applied in CA APIs:</span>
+              </h4>
+              <ul class="text-slate-300 space-y-2 text-[11px] leading-relaxed">
+                <li>• <strong class="text-white">1. <code class="text-rose-300 font-mono">context.instructions</code>:</strong> JSON payload in <code class="text-rose-300 font-mono">POST /agents</code> and <code class="text-rose-300 font-mono">PATCH /agents/{id}</code> defining persona, metrics, and tone.</li>
+                <li>• <strong class="text-white">2. Explore Whitelist in <code class="text-rose-300 font-mono">sources</code>:</strong> Restricts the agent strictly to authorized models & explores (<code class="text-rose-300 font-mono">cymbal_gadgets_boris/transactions</code>).</li>
+                <li>• <strong class="text-white">3. LookML Modeling Layer:</strong> Enforces access grants, hidden fields, and row-level user attribute filters.</li>
+              </ul>
+            </div>
+
+            <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-xl space-y-2">
+              <h4 class="font-bold text-amber-400 flex items-center space-x-1.5">
+                <i class="fa-solid fa-gears"></i>
+                <span>HOW Guardrails Are Enforced by CA Engine:</span>
+              </h4>
+              <ul class="text-slate-300 space-y-2 text-[11px] leading-relaxed">
+                <li>• <strong class="text-white">1. System Prompt Priming:</strong> <code class="text-amber-300 font-mono">context.instructions</code> are injected into Gemini's internal system prompt before processing.</li>
+                <li>• <strong class="text-white">2. Metric Steering:</strong> Rules force the LLM to choose <code class="text-amber-300 font-mono">gross_margin_percentage</code> for profitability queries.</li>
+                <li>• <strong class="text-white">3. LookML Query Spec (No SQL Injection):</strong> Engine emits LookML fields, and Looker compiles SQL—preventing hallucinations.</li>
+                <li>• <strong class="text-white">4. Output Formatting:</strong> Prefix <code class="text-amber-300 font-mono">'🌟 Cymbal Executive Summary:'</code> & EUR currency.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="bg-rose-950/20 border border-rose-800/40 p-3 rounded-xl text-xs text-slate-300 flex items-center justify-between">
+            <span>Complete Task 4 to achieve 100/100 Total Assessment Score!</span>
+            <span class="text-rose-400 font-bold">+25 Pts (Task 4)</span>
+          </div>
+        </div>
+
+        <!-- SLIDE 13: ENTERPRISE PRODUCTION ARCHITECTURE -->
+        <div class="slide flex-col justify-between flex-1" data-title="Enterprise Production Architecture" data-notes="Explain the enterprise production architecture on Google Cloud: Cloud Run container, Secret Manager, Cloud Armor/IAP, Looker CA API, and BigQuery.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Enterprise Production</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">Google Cloud Serverless Production Architecture</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              How data engineers deploy Looker Conversational Analytics into secure, scalable enterprise infrastructure:
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 text-xs">
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="text-indigo-400 font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-cloud text-sm"></i>
+                <span>Google Cloud Run (Serverless Web App)</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Hosts the Python/FastAPI client container. Scales to zero when idle; autoscales instantly to handle concurrent user spikes.
+              </p>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="text-emerald-400 font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-key text-sm"></i>
+                <span>Secret Manager (GSM)</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Mounts <code class="text-slate-400 font-mono">LOOKER_CLIENT_SECRET</code> securely into the container via IAM service account permissions. Zero plain text secrets in code.
+              </p>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="text-blue-400 font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-shield text-sm"></i>
+                <span>Cloud Armor & Identity-Aware Proxy (IAP)</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Restricts access to internal corporate Google Workspace users and protects against DDoS attacks.
+              </p>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="text-purple-400 font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-database text-sm"></i>
+                <span>BigQuery Petabyte-Scale Warehouse</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Executes the compiled, dialect-optimized SQL with BigQuery BI Engine acceleration and partitioned caching.
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950/20 border border-indigo-800/40 p-3 rounded-xl text-xs text-indigo-300 flex items-center justify-between">
+            <span>One-click Cloud Run deployment script included:</span>
+            <span class="font-mono text-white text-[11px]">./deploy_cloud_run.sh</span>
+          </div>
+        </div>
+
+        <!-- SLIDE 14: SUMMARY & BEST PRACTICES -->
+        <div class="slide flex-col justify-between flex-1" data-title="Summary & Best Practices" data-notes="Wrap up key takeaways for Data Engineers: Ground AI in semantic layers, use API Explorer, leverage server-side conversation state, and build auditability into every analytics application.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-teal-400 uppercase tracking-wider">Wrap-Up & Best Practices</span>
+            <h2 class="text-2xl md:text-4xl font-bold text-white">Key Takeaways for Data Engineers</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Core architectural lessons to apply when building conversational data platforms:
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 text-xs">
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="text-emerald-400 font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>1. Never Let LLMs Write Raw SQL</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Always ground AI agents in a governed semantic layer (LookML) so business metric calculations remain deterministic, accurate, and consistent across tools.
+              </p>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="text-blue-400 font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>2. API Explorer as the First Stop</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Use Looker's built-in API Explorer to test and validate payloads, inspect parameter schemas, and verify agent behavior before writing application code.
+              </p>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="text-purple-400 font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>3. Server-Side Context Management</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Offload multi-turn conversation state to Looker's <code class="text-slate-400 font-mono">/conversations</code> endpoint instead of managing complex context token budgets in application code.
+              </p>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+              <div class="text-amber-400 font-bold flex items-center space-x-2">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>4. Build Auditability In</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed">
+                Always expose thought traces, explore queries, and raw data rows in client UIs to build trust with executive and analytical stakeholders.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 bg-gradient-to-r from-indigo-900/40 via-blue-900/40 to-teal-900/40 border border-indigo-700/50 rounded-2xl flex items-center justify-between text-xs">
+            <div>
+              <div class="text-white font-bold text-sm">Congratulations on Completing the SME Academy Lab!</div>
+              <div class="text-slate-400 mt-0.5">You are now equipped to deploy governed agentic data applications with Looker and BigQuery.</div>
+            </div>
+            <a href="/" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-xl transition shadow flex items-center space-x-2 shrink-0">
+              <i class="fa-solid fa-flask"></i>
+              <span>Open Lab Console</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SPEAKER NOTES DRAWER (TOGGLEABLE) -->
+    <aside id="notesDrawer" class="w-80 bg-slate-950 border-l border-slate-800 flex flex-col hidden transition-all duration-300 shrink-0">
+      <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center space-x-2 text-xs font-bold text-amber-400 uppercase tracking-wider">
+          <i class="fa-solid fa-clipboard-list"></i>
+          <span>Speaker Notes</span>
+        </div>
+        <button id="closeNotesBtn" class="text-slate-500 hover:text-slate-300 text-sm">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-5 flex-1 overflow-y-auto text-xs text-slate-300 leading-relaxed space-y-3" id="notesContent">
+        <!-- Injected via JS -->
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- BOTTOM NAVIGATION BAR -->
+  <footer class="bg-slate-950/80 backdrop-blur border-t border-slate-800 px-6 py-3 flex items-center justify-between shrink-0">
+    <div class="flex items-center space-x-2">
+      <button id="prevBtn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center space-x-2">
+        <i class="fa-solid fa-chevron-left text-[10px]"></i>
+        <span>Previous</span>
+      </button>
+      <button id="nextBtn" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition flex items-center space-x-2 shadow-lg shadow-indigo-600/30">
+        <span>Next</span>
+        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+      </button>
+    </div>
+
+    <!-- Quick Slide Selector Dropdown -->
+    <div class="flex items-center space-x-2">
+      <label for="slideSelect" class="text-xs text-slate-400 hidden sm:inline">Jump to:</label>
+      <select id="slideSelect" class="bg-slate-900 border border-slate-800 text-slate-300 text-xs rounded-xl px-3 py-1.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+        <!-- Populated via JS -->
+      </select>
+    </div>
+
+    <div class="text-[11px] text-slate-500 hidden md:block">
+      Navigation: <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">←</kbd> <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">→</kbd> <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">Space</kbd> &bull; Notes: <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">N</kbd> &bull; Fullscreen: <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-300">F</kbd>
+    </div>
+  </footer>
+
+  <!-- SCRIPT FOR PRESENTATION INTERACTION -->
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+
+    const currentSlideNum = document.getElementById('currentSlideNum');
+    const totalSlidesNum = document.getElementById('totalSlidesNum');
+    const progressBar = document.getElementById('progressBar');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const slideSelect = document.getElementById('slideSelect');
+    const notesDrawer = document.getElementById('notesDrawer');
+    const notesToggleBtn = document.getElementById('notesToggleBtn');
+    const closeNotesBtn = document.getElementById('closeNotesBtn');
+    const notesContent = document.getElementById('notesContent');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    totalSlidesNum.textContent = totalSlides;
+
+    // Populate Slide Select Dropdown
+    slides.forEach((slide, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = `${idx + 1}. ${slide.dataset.title || 'Slide ' + (idx + 1)}`;
+      slideSelect.appendChild(opt);
+    });
+
+    function showSlide(index) {
+      if (index < 0 || index >= totalSlides) return;
+      slides[currentSlide].classList.remove('active');
+      currentSlide = index;
+      slides[currentSlide].classList.add('active');
+
+      currentSlideNum.textContent = currentSlide + 1;
+      slideSelect.value = currentSlide;
+
+      const progress = ((currentSlide + 1) / totalSlides) * 100;
+      progressBar.style.width = `${progress}%`;
+
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === totalSlides - 1;
+
+      // Update Notes
+      const notes = slides[currentSlide].dataset.notes || 'No speaker notes for this slide.';
+      notesContent.innerHTML = `<p>${notes}</p>`;
+    }
+
+    prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+    nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+    slideSelect.addEventListener('change', (e) => showSlide(parseInt(e.target.value, 10)));
+
+    notesToggleBtn.addEventListener('click', () => {
+      notesDrawer.classList.toggle('hidden');
+    });
+    closeNotesBtn.addEventListener('click', () => {
+      notesDrawer.classList.add('hidden');
+    });
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        showSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        showSlide(currentSlide - 1);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        showSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        showSlide(totalSlides - 1);
+      } else if (e.key.toLowerCase() === 'n') {
+        notesDrawer.classList.toggle('hidden');
+      } else if (e.key.toLowerCase() === 'f') {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+    });
+
+    // Initialize
+    showSlide(0);
+  </script>
+</body>
+</html>

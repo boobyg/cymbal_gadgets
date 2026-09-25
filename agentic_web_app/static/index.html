@@ -90,6 +90,13 @@
         </div>
       </div>
 
+      <!-- Presentation Slides Link -->
+      <a href="/presentation.html" target="_blank" class="flex items-center space-x-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition shadow-sm" title="Open Presentation Slides in new tab">
+        <i class="fa-solid fa-person-chalkboard text-indigo-600"></i>
+        <span class="hidden md:inline">Presentation Slides</span>
+        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70"></i>
+      </a>
+
       <!-- Student Credentials Button -->
       <button id="openCredentialsBtn" class="flex items-center space-x-2 text-xs font-semibold px-3 py-1.5 rounded-xl border transition shadow-sm bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100">
         <i class="fa-solid fa-key text-amber-600"></i>
@@ -99,13 +106,13 @@
 
       <!-- View Switcher -->
       <div class="hidden xl:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
-        <button id="viewSplitBtn" class="px-2.5 py-1 rounded-lg font-medium bg-white text-slate-800 shadow-sm transition">
+        <button id="viewSplitBtn" class="px-2.5 py-1 rounded-lg font-medium text-slate-500 hover:text-slate-800 transition">
           <i class="fa-solid fa-table-columns mr-1"></i>Split View
         </button>
-        <button id="viewGuideBtn" class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition">
+        <button id="viewGuideBtn" class="px-2.5 py-1 rounded-lg font-medium bg-white text-slate-800 shadow-sm transition">
           <i class="fa-solid fa-book-open mr-1"></i>Lab Guide
         </button>
-        <button id="viewConsoleBtn" class="px-2.5 py-1 rounded-lg font-medium text-slate-600 hover:text-slate-900 transition">
+        <button id="viewConsoleBtn" class="px-2.5 py-1 rounded-lg font-medium text-slate-500 hover:text-slate-800 transition">
           <i class="fa-solid fa-terminal mr-1"></i>Agent Console
         </button>
       </div>
@@ -121,7 +128,7 @@
     <!-- ========================================================== -->
     <!-- LEFT PANE: SKILLSLABS INTERACTIVE LAB GUIDE                -->
     <!-- ========================================================== -->
-    <section id="guidePane" class="w-1/2 flex flex-col bg-white border-r border-slate-200 overflow-hidden transition-all duration-300">
+    <section id="guidePane" class="w-full flex flex-col bg-white overflow-hidden transition-all duration-300">
       
       <!-- Guide Task Navigation Tabs -->
       <nav class="h-11 bg-slate-50 border-b border-slate-200 px-4 flex items-center space-x-1 overflow-x-auto text-xs shrink-0 custom-scrollbar">
@@ -160,35 +167,97 @@
           </div>
 
           <div class="bg-indigo-50/60 border border-indigo-100 rounded-xl p-4 text-xs text-slate-700 space-y-2">
-            <p class="font-semibold text-indigo-900">🎯 Learning Objectives:</p>
+            <p class="font-semibold text-indigo-900">🎯 Learning Objectives for Data Engineers:</p>
             <ul class="list-disc pl-5 space-y-1">
-              <li>Eliminate generative SQL hallucinations by grounding an AI agent directly in the <strong>Looker Governed Semantic Layer</strong>.</li>
-              <li>Master the 4 core Looker Conversational Analytics REST endpoints (`/login`, `/agents`, `/conversations`, `/chat`).</li>
-              <li>Inspect reasoning traces, LookML explore resolution, and live query specifications.</li>
-              <li>Enforce strict persona and formatting guardrails using runtime instruction patching.</li>
+              <li><strong>Eliminate SQL Hallucinations:</strong> Ground Generative AI directly in the <strong>Looker Governed Semantic Layer</strong> instead of querying raw database tables.</li>
+              <li><strong>Looker Conversational Analytics (CA) API:</strong> Master the 4 core REST endpoints (<code class="font-mono text-indigo-700">/login</code>, <code class="font-mono text-indigo-700">/agents</code>, <code class="font-mono text-indigo-700">/conversations</code>, <code class="font-mono text-indigo-700">/chat</code>).</li>
+              <li><strong>Audit the 5-Stage Execution Stream:</strong> Trace reasoning thoughts, explored schemas, generated LookML query specs, and raw BigQuery data records.</li>
+              <li><strong>Enforce Runtime Guardrails:</strong> Apply persona rules, number formatting, and output length constraints dynamically via <code class="font-mono text-indigo-700">PATCH /agents/{id}</code>.</li>
             </ul>
           </div>
 
-          <!-- Architecture ASCII Art -->
+          <!-- Quick Presentation Callout -->
+          <div class="bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-200 rounded-xl p-3 text-xs flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center space-x-2 text-indigo-900">
+              <i class="fa-solid fa-person-chalkboard text-indigo-600 text-sm"></i>
+              <span><strong>New to Looker?</strong> View the visual slide deck.</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <a href="https://docs.google.com/presentation/d/1looker-conversational-analytics-standard-gcp-deck/edit?usp=sharing" target="_blank" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold px-2.5 py-1.5 rounded-lg text-xs transition shadow-sm flex items-center space-x-1">
+                <i class="fa-solid fa-file-powerpoint text-amber-500"></i>
+                <span>Google Slides (Standard Style)</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-70"></i>
+              </a>
+              <a href="/presentation.html" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs transition shadow-sm shrink-0 flex items-center space-x-1">
+                <span>Launch Interactive Slides</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Concept Mapping for Data Engineers -->
           <div class="space-y-2">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Solution Architecture</h3>
-            <pre class="text-[11px] bg-slate-900 text-indigo-200 p-4 rounded-xl overflow-x-auto leading-relaxed">
-┌─────────────────────────┐          ┌───────────────────────────────────────┐
-│ User / Analytical App   │◄────────►│ Web Server (FastAPI / Python stdlib)  │
-└─────────────────────────┘          └──────────────────┬────────────────────┘
-                                                        │ Authenticated REST 4.0
-                                                        ▼
-                                     ┌───────────────────────────────────────┐
-                                     │ Looker Conversational Analytics API   │
-                                     │   POST /conversational_analytics/chat │
-                                     └──────────────────┬────────────────────┘
-                                                        │
-                      ┌─────────────────────────────────┴─────────────────────────────────┐
-                      ▼                                                                   ▼
-       ┌─────────────────────────────┐                                     ┌─────────────────────────────┐
-       │   Explore Schema Resolution │                                     │ Governed BigQuery Execution │
-       │  (cymbal_gadgets_boris)     │                                     │ (metrics, joins, dimensions)│
-       └─────────────────────────────┘                                     └─────────────────────────────┘</pre>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600">Looker Concepts for Data Engineers (Quick Reference)</h3>
+            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                  <tr>
+                    <th class="p-2 font-semibold">Looker Concept</th>
+                    <th class="p-2 font-semibold">Data Engineering Equivalent</th>
+                    <th class="p-2 font-semibold">Cymbal Gadgets Lab Context</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-slate-600">
+                  <tr>
+                    <td class="p-2 font-bold font-mono text-indigo-700">Model</td>
+                    <td class="p-2">Database catalog & connection boundary</td>
+                    <td class="p-2 font-mono text-slate-500">cymbal_gadgets_boris</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-bold font-mono text-indigo-700">Explore</td>
+                    <td class="p-2">Pre-joined Star Schema / Dimensional Mart</td>
+                    <td class="p-2 font-mono text-slate-500">transactions (Sales facts + store/product dims)</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-bold font-mono text-indigo-700">Dimension</td>
+                    <td class="p-2">Attribute / column for slicing & GROUP BY</td>
+                    <td class="p-2 font-mono text-slate-500">store_country, transaction_date</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 font-bold font-mono text-indigo-700">Measure</td>
+                    <td class="p-2">Centrally defined aggregation (SUM, AVG, ratio)</td>
+                    <td class="p-2 font-mono text-slate-500">total_sales_amount, gross_margin_percentage</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- End-to-End Execution Sequence -->
+          <div class="space-y-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600">End-to-End Query Execution Sequence</h3>
+            <div class="grid grid-cols-1 gap-2 text-xs">
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-center space-x-2.5">
+                <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-700 font-bold text-[10px] flex items-center justify-center shrink-0">1</span>
+                <span><strong>User Prompt:</strong> Question submitted (e.g., <em>"What is total sales by country?"</em>).</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-center space-x-2.5">
+                <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-[10px] flex items-center justify-center shrink-0">2</span>
+                <span><strong>Session Context:</strong> Bound to stateful session via <code class="font-mono bg-slate-200 px-1 rounded text-[11px]">POST /conversational_analytics/chat</code>.</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-center space-x-2.5">
+                <span class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 font-bold text-[10px] flex items-center justify-center shrink-0">3</span>
+                <span><strong>Semantic Introspection:</strong> Agent resolves LookML fields (<code class="font-mono text-slate-600">store_country</code>, <code class="font-mono text-slate-600">total_sales_amount</code>).</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-center space-x-2.5">
+                <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-700 font-bold text-[10px] flex items-center justify-center shrink-0">4</span>
+                <span><strong>Dialect SQL Compilation:</strong> Looker compiles the formal spec into optimized BigQuery SQL.</span>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 flex items-center space-x-2.5">
+                <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px] flex items-center justify-center shrink-0">5</span>
+                <span><strong>BigQuery Execution & Audit:</strong> Database executes query; verified rows returned with full audit stream.</span>
+              </div>
+            </div>
           </div>
 
           <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
@@ -257,36 +326,62 @@ nano .env</pre>
         <article id="section-step1" class="space-y-4 pt-4 border-t border-slate-200">
           <div class="border-b border-slate-200 pb-2">
             <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Task 1</span>
-            <h2 class="text-lg font-bold text-slate-900 mt-1">Looker API Explorer & Creating Your Conversational Agent</h2>
+            <h2 class="text-lg font-bold text-slate-900 mt-1">Conversational Analytics API & Creating Your Custom Agent</h2>
           </div>
 
-          <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 space-y-2">
+          <!-- Typical Lifecycle Scenario Box -->
+          <div class="bg-indigo-50/70 border border-indigo-200 rounded-xl p-3.5 space-y-2">
+            <span class="text-xs font-bold text-indigo-900 flex items-center space-x-1.5">
+              <i class="fa-solid fa-arrows-spin text-indigo-600"></i>
+              <span>Typical Conversational Analytics Lifecycle Scenario</span>
+            </span>
+            <p class="text-xs text-indigo-950 leading-relaxed">
+              When building AI data applications with Looker, your application executes a 3-step sequence:
+            </p>
+            <ol class="list-decimal pl-5 text-xs text-slate-700 space-y-1">
+              <li><strong>Create Agent (<code class="font-mono text-indigo-700">CreateAgent</code> / <code class="font-mono text-indigo-700">POST /agents</code>):</strong> Ground the agent in LookML model (<code class="font-mono text-slate-600">cymbal_gadgets_boris</code>), explore (<code class="font-mono text-slate-600">transactions</code>), domain guardrails, and enable analytical details (<code class="font-mono text-indigo-700">show_analytical_details: true</code>).</li>
+              <li><strong>Create Conversation Session (<code class="font-mono text-indigo-700">POST /conversations</code>):</strong> Looker allocates a stateful server-side thread, managing conversation history and token limits automatically.</li>
+              <li><strong>Pass Prompt & Query (<code class="font-mono text-indigo-700">POST /conversational_analytics/chat</code>):</strong> The API generates deterministic BigQuery SQL, executes it, and streams back governed data with a 5-part execution trace.</li>
+            </ol>
+            <div class="bg-white/80 border border-indigo-100 rounded-lg p-2.5 text-xs text-indigo-900 flex items-center space-x-2">
+              <i class="fa-solid fa-lightbulb text-amber-500 shrink-0"></i>
+              <span><strong>What We Are Doing & Tracing in the App:</strong> In this step, you create your custom agent with <code class="font-mono bg-indigo-100 px-1 py-0.5 rounded text-indigo-800">show_analytical_details: true</code>. This setting ensures that <strong>full execution tracing will be available in the application when prompts are run</strong> during Step 3!</span>
+            </div>
+          </div>
+
+          <!-- Step-by-Step API Explorer Instructions -->
+          <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 space-y-3">
             <div class="flex items-center justify-between">
               <span class="text-xs font-bold text-blue-900 flex items-center space-x-1.5">
                 <i class="fa-solid fa-compass text-blue-600"></i>
-                <span>What is the Looker API Explorer?</span>
+                <span>Direct Access: CreateAgent Method in Looker API Explorer</span>
               </span>
-              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                <span>Open API Explorer</span>
+                <span>Open CreateAgent Method</span>
               </a>
             </div>
-            <p class="text-xs text-blue-800 leading-relaxed">
-              The <strong>Looker API Explorer</strong> is Looker's built-in interactive developer workbench and documentation portal. It gives you instant, in-browser access to browse, inspect, and execute all 400+ endpoints of the Looker 4.0 REST API—including the modern Conversational Analytics suite (<code class="font-mono bg-blue-100 px-1 py-0.5 rounded text-blue-900">/agents</code>, <code class="font-mono bg-blue-100 px-1 py-0.5 rounded text-blue-900">/conversations</code>, and <code class="font-mono bg-blue-100 px-1 py-0.5 rounded text-blue-900">/conversational_analytics/chat</code>). It authenticates directly through your active browser session (no external API keys needed) and generates client SDK code in Python, TypeScript, and Kotlin.
-            </p>
-          </div>
 
-          <p class="text-xs text-slate-600 leading-relaxed">
-            In this task, you'll create a new Conversational Analytics Agent bound to the <code class="text-indigo-600 font-mono">cymbal_gadgets_boris</code> model and <code class="text-indigo-600 font-mono">transactions</code> explore.
-          </p>
+            <div class="space-y-1 text-xs text-blue-950">
+              <p class="font-semibold text-slate-800">Step-by-Step: How to Run CreateAgent in Conversational Analytics API</p>
+              <ol class="list-decimal pl-5 space-y-1 text-slate-700">
+                <li>Click the <strong>Open CreateAgent Method</strong> button above (or navigate to <code class="font-mono text-slate-700">ConversationalAnalytics &gt; create_agent</code>).</li>
+                <li>In the top right, click the <strong>Run It</strong> tab.</li>
+                <li><strong>Where to paste the JSON payload:</strong> Scroll down to the <strong>Request Body</strong> editor field labeled <code class="font-mono text-indigo-700">body</code>. Clear any placeholder text and paste the JSON payload below into the <code class="font-mono text-indigo-700">body</code> editor.</li>
+                <li>Click the blue <strong>Run Request</strong> button.</li>
+                <li><strong>What to expect as an output:</strong> The response status will display <strong><code class="font-mono bg-emerald-100 text-emerald-800 px-1 rounded">POST /agents (200: OK)</code></strong> (or <code class="font-mono text-emerald-800">201: Created</code>).</li>
+                <li><strong>Where to find the newly created agent id:</strong> Look at the very top line of the response JSON for the <strong><code class="font-mono bg-slate-200 text-slate-900 px-1 rounded">"id"</code></strong> property (e.g., <code class="font-mono text-slate-600">"id": "a9b6933c..."</code>). Copy this 32-character ID!</li>
+              </ol>
+            </div>
+          </div>
 
           <div class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-xs text-amber-900 flex items-center space-x-2">
             <i class="fa-solid fa-users text-amber-600 shrink-0"></i>
-            <span><strong>Scaling to 500 Users:</strong> Give your agent a unique name (e.g. append your name or student ID) so you can easily identify your agent among peers on this shared Looker instance.</span>
+            <span><strong>Multi-Student Naming Rule:</strong> Give your agent a unique name (e.g., <code class="font-mono text-amber-800">Cymbal Retail Analytics Agent - Student 42</code>) so you can easily identify your agent among peers on this shared Looker instance.</span>
           </div>
 
           <div class="space-y-2 text-xs">
-            <h4 class="font-bold text-slate-800">1. Agent Creation Payload (`POST /api/4.0/agents`):</h4>
+            <h4 class="font-bold text-slate-800">JSON Payload to Paste into Request Body (<code class="font-mono text-indigo-600">body</code>):</h4>
             <div class="relative group">
               <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
   "name": "Cymbal Retail Analytics Agent - Student &lt;YOUR_NAME_OR_ID&gt;",
@@ -298,7 +393,7 @@ nano .env</pre>
     }
   ],
   "context": {
-    "instructions": "You are Cymbal Gadgets' Senior Data Analyst. When asked about sales or revenue, use gross margin as the key indicator.",
+    "instructions": "- Always use Gross Margin Percentage when asked about profitability, margin, or sales performance.\n- When asked for trends over time, group by transaction date or transaction month.\n- If the user asks for store performance, breakdown by store country.\n- Keep executive summaries concise with key metrics highlighted in bold.",
     "show_analytical_details": true,
     "show_debug": false
   }
@@ -412,6 +507,36 @@ nano .env</pre>
 
             <div id="cp2Feedback" class="hidden text-xs p-3 rounded-xl"></div>
           </div>
+
+          <!-- UNLOCK LOOKER CONVERSATIONAL ANALYTICS WINDOW (END OF STEP 2) -->
+          <div id="unlockConsoleContainer" class="bg-gradient-to-r from-indigo-50 via-purple-50 to-blue-50 border-2 border-indigo-200 rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <span class="w-7 h-7 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">
+                  <i class="fa-solid fa-desktop"></i>
+                </span>
+                <h4 class="font-bold text-sm text-slate-900">Looker Conversational Analytics Interactive Window</h4>
+              </div>
+              <span id="unlockConsoleBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-200 flex items-center space-x-1">
+                <i class="fa-solid fa-lock" id="unlockBadgeIcon"></i>
+                <span id="unlockBadgeText">Locked (Steps 1 & 2 Required)</span>
+              </span>
+            </div>
+
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Now that your agent is created (Step 1) and your backend client is verified healthy (Step 2), display the Looker Conversational Analytics window on the right side of the screen so you can see where to select your agent and paste prompts in Step 3!
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-1">
+              <div class="text-[11px] text-slate-500 font-medium" id="unlockRequirementsText">
+                Prerequisites: <span class="font-bold text-slate-700" id="unlockReqCount">0 of 2</span> completed (Checkpoints 1 & 2).
+              </div>
+              <button id="unlockConsoleBtn" disabled class="bg-slate-300 text-slate-500 cursor-not-allowed font-semibold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 transition shadow-sm">
+                <i class="fa-solid fa-lock" id="unlockConsoleIcon"></i>
+                <span id="unlockConsoleText">Complete Steps 1 & 2 to Display</span>
+              </button>
+            </div>
+          </div>
         </article>
 
         <!-- SECTION: STEP 3 -->
@@ -421,17 +546,67 @@ nano .env</pre>
             <h2 class="text-lg font-bold text-slate-900 mt-1">Interactive Conversational Analytics & Tracing</h2>
           </div>
 
-          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-start space-x-2">
-            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-sm mt-0.5 shrink-0"></i>
-            <div><strong>Step 3 Requirement:</strong> You must test with the <strong>Agent created in Step 1</strong>. In workshops with up to 500 concurrent students, querying default or arbitrary agents can result in persona conflicts and scoring failures. Verify your active agent in the ribbon or enter your Step 1 Agent ID below.</div>
+          <!-- Explanation of Step 3 -->
+          <div class="bg-purple-50/70 border border-purple-200 rounded-xl p-3.5 space-y-2">
+            <span class="text-xs font-bold text-purple-900 flex items-center space-x-1.5">
+              <i class="fa-solid fa-circle-info text-purple-600"></i>
+              <span>What We Are Doing in Step 3: Interactive Prompting & Execution Tracing</span>
+            </span>
+            <p class="text-xs text-purple-950 leading-relaxed">
+              With the <strong>Looker Conversational Analytics window displayed on the right pane</strong> (unlocked at the end of Step 2), data engineers interactively run business queries, test session continuity, and audit the real-time execution trace.
+            </p>
           </div>
 
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Submit analytical questions to your agent. Notice how the agent parses intent, resolves dimensions and measures in the LookML model, queries BigQuery, and formats governed outputs.
-          </p>
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-start space-x-2">
+            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-sm mt-0.5 shrink-0"></i>
+            <div><strong>Step 3 Verification Rule:</strong> You must test with the <strong>Agent created in Step 1</strong>. In workshops with up to 500 concurrent students, querying default or arbitrary agents can result in persona conflicts and scoring failures. Verify your active agent in the ribbon or enter your Step 1 Agent ID below.</div>
+          </div>
+
+          <!-- THREE-PART TRACING AUDIT INSTRUCTION -->
+          <div class="bg-blue-50/70 border-2 border-blue-200 rounded-xl p-4 space-y-3 text-xs text-slate-700 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-blue-950 flex items-center space-x-1.5 text-sm">
+                <i class="fa-solid fa-magnifying-glass-chart text-blue-600"></i>
+                <span>Audit the Three Execution Tracing Accordions:</span>
+              </span>
+              <span class="text-[10px] font-bold uppercase tracking-wider bg-blue-200 text-blue-900 px-2 py-0.5 rounded-full">Essential for Data Engineers</span>
+            </div>
+            <p class="leading-relaxed text-blue-950">
+              When your prompt executes in the Conversational Analytics window, the API returns a rich multi-stage stream. <strong>Click each accordion beneath the agent's answer to inspect the following 3 components:</strong>
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1 text-[11px]">
+              <div class="bg-white p-3 rounded-xl border border-blue-200 shadow-xs space-y-1.5">
+                <div class="font-bold text-indigo-700 flex items-center space-x-1.5">
+                  <i class="fa-solid fa-brain text-indigo-600 text-sm"></i>
+                  <span>1. Agent Thought Process</span>
+                </div>
+                <p class="text-slate-600 leading-snug">
+                  Audits the LLM's step-by-step reasoning chain, user intent resolution, explore discovery, and LookML field mapping. Look here to understand <em>why</em> the agent selected specific metrics!
+                </p>
+              </div>
+              <div class="bg-white p-3 rounded-xl border border-blue-200 shadow-xs space-y-1.5">
+                <div class="font-bold text-emerald-700 flex items-center space-x-1.5">
+                  <i class="fa-solid fa-database text-emerald-600 text-sm"></i>
+                  <span>2. Governed Data Result</span>
+                </div>
+                <p class="text-slate-600 leading-snug">
+                  Renders the raw tabular records returned directly from BigQuery via Looker (e.g. verifying the <strong>$1.07B</strong> total sales volume). Confirms metric accuracy before visualization.
+                </p>
+              </div>
+              <div class="bg-white p-3 rounded-xl border border-blue-200 shadow-xs space-y-1.5">
+                <div class="font-bold text-purple-700 flex items-center space-x-1.5">
+                  <i class="fa-solid fa-code text-purple-600 text-sm"></i>
+                  <span>3. Query Specification</span>
+                </div>
+                <p class="text-slate-600 leading-snug">
+                  Displays the exact LookML query object (<code class="font-mono text-purple-700 font-semibold">transactions.total_sale_price</code>) compiled into SQL. Proves no raw hallucinated SQL was executed.
+                </p>
+              </div>
+            </div>
+          </div>
 
           <div class="space-y-2 text-xs">
-            <h4 class="font-bold text-slate-800">Sample Questions to Test:</h4>
+            <h4 class="font-bold text-slate-800">Sample Prompts to Test in the Chat Window:</h4>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <button onclick="injectPrompt('What is the total sales amount across all stores?')" class="p-2.5 bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 rounded-xl text-left transition">
                 <span class="font-semibold text-slate-800">1. Simple Aggregation</span>
@@ -499,6 +674,69 @@ nano .env</pre>
             </ul>
           </div>
 
+          <!-- WHERE AND HOW GUARDRAILS ARE APPLIED IN CA APIS -->
+          <div class="bg-gradient-to-r from-rose-50 via-amber-50 to-indigo-50 border-2 border-rose-300 rounded-2xl p-5 space-y-4 shadow-sm text-xs">
+            <div class="flex items-center space-x-2 border-b border-rose-200 pb-2">
+              <span class="w-7 h-7 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold">
+                <i class="fa-solid fa-shield-halved"></i>
+              </span>
+              <div>
+                <h3 class="font-bold text-sm text-slate-900">Where & How Guardrails Are Applied in Conversational Analytics (CA) APIs</h3>
+                <p class="text-[11px] text-slate-600">Enterprise AI governance architecture & enforcement mechanisms</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- WHERE GUARDRAILS ARE APPLIED -->
+              <div class="bg-white p-4 rounded-xl border border-rose-200 shadow-xs space-y-2">
+                <h4 class="font-bold text-xs text-rose-900 flex items-center space-x-1.5">
+                  <i class="fa-solid fa-map-location-dot text-rose-600"></i>
+                  <span>WHERE Guardrails Are Applied in CA APIs:</span>
+                </h4>
+                <ul class="space-y-2 text-[11px] text-slate-700">
+                  <li class="leading-relaxed">
+                    <strong class="text-rose-950 font-semibold">1. <code class="bg-rose-100 text-rose-800 px-1 py-0.5 rounded font-mono">context.instructions</code> in API Payload:</strong>
+                    Applied during agent creation (<code class="font-mono text-indigo-700">POST /api/4.0/agents</code>) or tuning (<code class="font-mono text-indigo-700">PATCH /api/4.0/agents/{id}</code>). Developers inject natural language constraints, formatting rules, and business KPI definitions directly into the JSON request body.
+                  </li>
+                  <li class="leading-relaxed">
+                    <strong class="text-rose-950 font-semibold">2. Explore Whitelist in <code class="bg-rose-100 text-rose-800 px-1 py-0.5 rounded font-mono">sources</code>:</strong>
+                    The agent is bound strictly to authorized models and explores (e.g. <code class="font-mono text-indigo-700">model: cymbal_gadgets_boris</code>, <code class="font-mono text-indigo-700">explore: transactions</code>). The CA API engine rejects queries against unlisted tables, databases, or schemas.
+                  </li>
+                  <li class="leading-relaxed">
+                    <strong class="text-rose-950 font-semibold">3. LookML Modeling Layer:</strong>
+                    Field descriptions, dimension groups, hidden fields (<code class="font-mono text-indigo-700">hidden: yes</code>), access grants, and user-attribute data filters apply row- and column-level access control before any SQL is generated.
+                  </li>
+                </ul>
+              </div>
+
+              <!-- HOW GUARDRAILS ARE ENFORCED -->
+              <div class="bg-white p-4 rounded-xl border border-amber-200 shadow-xs space-y-2">
+                <h4 class="font-bold text-xs text-amber-900 flex items-center space-x-1.5">
+                  <i class="fa-solid fa-gears text-amber-600"></i>
+                  <span>HOW Guardrails Are Enforced by the CA Engine:</span>
+                </h4>
+                <ul class="space-y-2 text-[11px] text-slate-700">
+                  <li class="leading-relaxed">
+                    <strong class="text-amber-950 font-semibold">1. System Prompt Priming & Grounding:</strong>
+                    Looker compiles <code class="font-mono text-amber-800">context.instructions</code> into the Gemini model's system-level instructions, enforcing behavior before user queries are parsed.
+                  </li>
+                  <li class="leading-relaxed">
+                    <strong class="text-amber-950 font-semibold">2. KPI Steering:</strong>
+                    When an executive asks about "profitability" or "sales health", the rule <em>"Always use Gross Margin Percentage"</em> forces the engine to pick <code class="font-mono text-indigo-700">transactions.gross_margin_percentage</code> rather than raw revenue.
+                  </li>
+                  <li class="leading-relaxed">
+                    <strong class="text-amber-950 font-semibold">3. Deterministic LookML Query Spec (No SQL Injection):</strong>
+                    The CA engine does not generate raw SQL strings. It generates a structured Looker Query Specification (<code class="font-mono text-indigo-700">fields</code>, <code class="font-mono text-indigo-700">filters</code>), which Looker's trusted compiler transforms into BigQuery SQL.
+                  </li>
+                  <li class="leading-relaxed">
+                    <strong class="text-amber-950 font-semibold">4. Response Persona Formatting:</strong>
+                    Formatting directives (e.g., prefixing with <code class="font-mono text-rose-800">🌟 Cymbal Executive Summary:</code>, EUR currency formatting, two decimal places) are enforced on the natural language synthesis pass.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
           <!-- CHECKPOINT 4 INTERACTIVE CARD -->
           <div class="bg-slate-50 border-2 border-rose-200 rounded-2xl p-5 shadow-sm space-y-3">
             <div class="flex items-center justify-between">
@@ -554,7 +792,7 @@ nano .env</pre>
     <!-- ========================================================== -->
     <!-- RIGHT PANE: LIVE LOOKER CONVERSATIONAL AGENT CONSOLE       -->
     <!-- ========================================================== -->
-    <section id="consolePane" class="w-1/2 flex flex-col bg-white overflow-hidden transition-all duration-300">
+    <section id="consolePane" class="w-1/2 flex flex-col bg-white overflow-hidden transition-all duration-300" style="display: none;">
       
       <!-- Console Header Bar -->
       <div class="h-11 bg-slate-50 border-b border-slate-200 px-4 flex items-center justify-between shrink-0 text-xs">
@@ -681,7 +919,7 @@ nano .env</pre>
           </div>
         </div>
 
-        <form id="credentialsForm" class="space-y-3">
+        <form id="credentialsForm" class="space-y-3" autocomplete="off">
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Looker Instance URL</label>
             <input type="text" id="credBaseUrl" value="https://ceworkshops.cloud.looker.com" disabled class="w-full bg-slate-100 border border-slate-300 rounded-lg px-3 py-2 text-slate-600 font-mono text-xs">
@@ -689,23 +927,29 @@ nano .env</pre>
 
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Looker Client ID <span class="text-rose-500">*</span></label>
-            <input type="text" id="credClientId" required placeholder="specify your own user id / secret" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 font-mono text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+            <input type="text" id="credClientId" required placeholder="specify your own user id / secret" autocomplete="off" value="" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 font-mono text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
           </div>
 
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Looker Client Secret <span class="text-rose-500">*</span></label>
-            <input type="password" id="credClientSecret" required placeholder="specify your own user id / secret" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 font-mono text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+            <input type="password" id="credClientSecret" required placeholder="specify your own user id / secret" autocomplete="new-password" value="" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 font-mono text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
           </div>
 
           <div id="credErrorAlert" class="hidden p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-[11px]"></div>
           <div id="credSuccessAlert" class="hidden p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-[11px]"></div>
 
-          <div class="pt-2 flex justify-end space-x-2">
-            <button type="button" onclick="closeCredentialsModal()" class="px-3 py-2 border border-slate-300 rounded-lg font-medium text-slate-700 hover:bg-slate-50 transition">Cancel</button>
-            <button type="submit" id="saveCredsBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-lg transition shadow flex items-center space-x-1.5">
-              <span>Save & Test Connection</span>
-              <i class="fa-solid fa-arrow-right text-xs"></i>
+          <div class="pt-2 flex items-center justify-between">
+            <button type="button" id="clearCredsBtn" class="px-3 py-2 border border-rose-200 bg-rose-50 text-rose-700 rounded-lg font-medium text-xs hover:bg-rose-100 transition flex items-center space-x-1" title="Clear saved credentials from server and browser">
+              <i class="fa-solid fa-trash-can text-xs"></i>
+              <span>Clear Saved Credentials</span>
             </button>
+            <div class="flex space-x-2">
+              <button type="button" onclick="closeCredentialsModal()" class="px-3 py-2 border border-slate-300 rounded-lg font-medium text-slate-700 hover:bg-slate-50 transition">Cancel</button>
+              <button type="submit" id="saveCredsBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-lg transition shadow flex items-center space-x-1.5">
+                <span>Save & Test Connection</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+              </button>
+            </div>
           </div>
         </form>
       </div>
@@ -803,6 +1047,7 @@ nano .env</pre>
     let availableAgents = [];
     let completedCheckpoints = new Set();
     let isConfigured = false;
+    let consoleUnlocked = false;
     
     // Timer state
     let timerSeconds = 30 * 60; // 30 minutes
@@ -850,6 +1095,7 @@ nano .env</pre>
     const credErrorAlert = document.getElementById('credErrorAlert');
     const credSuccessAlert = document.getElementById('credSuccessAlert');
     const saveCredsBtn = document.getElementById('saveCredsBtn');
+    const clearCredsBtn = document.getElementById('clearCredsBtn');
 
     const createAgentModal = document.getElementById('createAgentModal');
     const createAgentForm = document.getElementById('createAgentForm');
@@ -867,12 +1113,26 @@ nano .env</pre>
     const applyTuningBtn = document.getElementById('applyTuningBtn');
     const cp4Feedback = document.getElementById('cp4Feedback');
 
+    // Step 3 Console Unlock Elements
+    const unlockConsoleBtn = document.getElementById('unlockConsoleBtn');
+    const unlockConsoleBadge = document.getElementById('unlockConsoleBadge');
+    const unlockBadgeIcon = document.getElementById('unlockBadgeIcon');
+    const unlockBadgeText = document.getElementById('unlockBadgeText');
+    const unlockConsoleIcon = document.getElementById('unlockConsoleIcon');
+    const unlockConsoleText = document.getElementById('unlockConsoleText');
+    const unlockReqCount = document.getElementById('unlockReqCount');
+
     // Initialize application
     async function init() {
+      // Ensure credential input fields never flash previous values
+      credClientId.value = '';
+      credClientSecret.value = '';
+
       setupTimer();
       setupLayoutSwitcher();
       setupGuideNavigation();
       setupEventListeners();
+      updateConsoleUnlockStatus();
       
       await checkCredentialsStatus();
       if (isConfigured) {
@@ -904,13 +1164,43 @@ nano .env</pre>
     }
 
     function openCredentialsModal() {
+      credClientId.value = '';
+      credClientSecret.value = '';
       credErrorAlert.classList.add('hidden');
       credSuccessAlert.classList.add('hidden');
       credentialsModal.classList.remove('hidden');
     }
 
     function closeCredentialsModal() {
+      credClientId.value = '';
+      credClientSecret.value = '';
       credentialsModal.classList.add('hidden');
+    }
+
+    if (clearCredsBtn) {
+      clearCredsBtn.addEventListener('click', async () => {
+        try {
+          clearCredsBtn.disabled = true;
+          clearCredsBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Clearing...';
+          const res = await fetch('/api/credentials/clear', { method: 'POST' });
+          const data = await res.json();
+          credClientId.value = '';
+          credClientSecret.value = '';
+          isConfigured = false;
+          openCredentialsBtn.className = 'flex items-center space-x-2 text-xs font-semibold px-3 py-1.5 rounded-xl border transition shadow-sm bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100';
+          credButtonText.textContent = 'Specify your own user id / secret';
+          connectionPill.className = 'flex items-center space-x-1.5 px-2.5 py-1 rounded-full font-medium bg-amber-50 text-amber-700 border border-amber-200';
+          connectionPill.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500"></span><span>Credentials Needed</span>';
+          credSuccessAlert.textContent = 'Saved credentials cleared. Please enter new credentials.';
+          credSuccessAlert.classList.remove('hidden');
+          credErrorAlert.classList.add('hidden');
+        } catch (err) {
+          showCredError('Failed to clear credentials: ' + err.message);
+        } finally {
+          clearCredsBtn.disabled = false;
+          clearCredsBtn.innerHTML = '<i class="fa-solid fa-trash-can text-xs"></i><span>Clear Saved Credentials</span>';
+        }
+      });
     }
 
     credentialsForm.addEventListener('submit', async (e) => {
@@ -1070,6 +1360,8 @@ nano .env</pre>
         const score = completedCheckpoints.size * 25;
         scoreDisplay.textContent = score;
         scoreBar.style.width = `${score}%`;
+
+        updateConsoleUnlockStatus();
 
         // Check if all complete
         if (completedCheckpoints.size === 4) {
@@ -1342,6 +1634,17 @@ nano .env</pre>
       openCredentialsBtn.addEventListener('click', openCredentialsModal);
       document.getElementById('openQuickCreateBtn').addEventListener('click', openCreateAgentModal);
 
+      if (unlockConsoleBtn) {
+        unlockConsoleBtn.addEventListener('click', () => {
+          const stepsDone = [1, 2].filter(n => completedCheckpoints.has(n)).length;
+          if (stepsDone === 2) {
+            unlockAndShowConsole();
+          } else {
+            alert(`The Looker Conversational Analytics window is locked.\n\nYou have completed ${stepsDone} of 2 required steps. Please complete Checkpoints 1 and 2 first!`);
+          }
+        });
+      }
+
       chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const msg = chatInput.value.trim();
@@ -1504,8 +1807,63 @@ nano .env</pre>
     // ----------------------------------------------------
     // LAYOUT SWITCHER & TIMER
     // ----------------------------------------------------
+    function updateConsoleUnlockStatus() {
+      const stepsDone = [1, 2].filter(n => completedCheckpoints.has(n)).length;
+      if (unlockReqCount) {
+        unlockReqCount.textContent = `${stepsDone} of 2`;
+      }
+
+      if (stepsDone === 2) {
+        if (!consoleUnlocked) {
+          if (unlockConsoleBtn) {
+            unlockConsoleBtn.disabled = false;
+            unlockConsoleBtn.className = 'bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 transition shadow-md cursor-pointer animate-pulse';
+          }
+          if (unlockConsoleBadge) {
+            unlockConsoleBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center space-x-1';
+          }
+          if (unlockBadgeIcon) unlockBadgeIcon.className = 'fa-solid fa-lock-open text-emerald-600';
+          if (unlockBadgeText) unlockBadgeText.textContent = 'Ready to Display!';
+          if (unlockConsoleIcon) unlockConsoleIcon.className = 'fa-solid fa-rocket';
+          if (unlockConsoleText) unlockConsoleText.textContent = 'Display Conversational Analytics Window';
+        } else {
+          if (unlockConsoleBtn) {
+            unlockConsoleBtn.disabled = false;
+            unlockConsoleBtn.className = 'bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 transition shadow-sm cursor-pointer';
+          }
+          if (unlockConsoleBadge) {
+            unlockConsoleBadge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 border border-blue-200 flex items-center space-x-1';
+          }
+          if (unlockBadgeIcon) unlockBadgeIcon.className = 'fa-solid fa-circle-check text-blue-600';
+          if (unlockBadgeText) unlockBadgeText.textContent = 'Window Active';
+          if (unlockConsoleIcon) unlockConsoleIcon.className = 'fa-solid fa-table-columns';
+          if (unlockConsoleText) unlockConsoleText.textContent = 'Switch to Conversational Window';
+        }
+      }
+    }
+
+    function unlockAndShowConsole() {
+      consoleUnlocked = true;
+      guidePane.style.display = 'flex';
+      consolePane.style.display = 'flex';
+      guidePane.className = 'w-1/2 flex flex-col bg-white border-r border-slate-200 overflow-hidden transition-all duration-300';
+      consolePane.className = 'w-1/2 flex flex-col bg-white overflow-hidden transition-all duration-300';
+      setActiveLayoutBtn(viewSplitBtn);
+      updateConsoleUnlockStatus();
+
+      if (messagesContainer) messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      if (availableAgents.length > 0 && !currentAgentId) {
+        selectAgent(availableAgents[0].id);
+      }
+    }
+
     function setupLayoutSwitcher() {
       viewSplitBtn.addEventListener('click', () => {
+        if (!consoleUnlocked) {
+          const stepsDone = [1, 2].filter(n => completedCheckpoints.has(n)).length;
+          alert(`The Looker Conversational Analytics window is locked until the end of Step 2.\n\nYou have completed ${stepsDone} of 2 required steps. Please complete Checkpoints 1 and 2 first to display the interactive window!`);
+          return;
+        }
         guidePane.style.display = 'flex';
         consolePane.style.display = 'flex';
         guidePane.className = 'w-1/2 flex flex-col bg-white border-r border-slate-200 overflow-hidden';
@@ -1521,6 +1879,11 @@ nano .env</pre>
       });
 
       viewConsoleBtn.addEventListener('click', () => {
+        if (!consoleUnlocked) {
+          const stepsDone = [1, 2].filter(n => completedCheckpoints.has(n)).length;
+          alert(`The Looker Conversational Analytics window is locked until the end of Step 2.\n\nYou have completed ${stepsDone} of 2 required steps. Please complete Checkpoints 1 and 2 first to display the interactive window!`);
+          return;
+        }
         guidePane.style.display = 'none';
         consolePane.style.display = 'flex';
         consolePane.className = 'w-full flex flex-col bg-white overflow-hidden';

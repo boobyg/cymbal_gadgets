@@ -241,6 +241,21 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 self._send_json(400, {"status": "error", "error": str(e)})
             return
 
+        elif path == "/api/credentials/clear":
+            client.client_id = "specify your own user id / secret"
+            client.client_secret = "specify your own user id / secret"
+            client.access_token = None
+            client.token_expiry = 0
+            client._current_user = None
+            config.LOOKER_CLIENT_ID = "specify your own user id / secret"
+            config.LOOKER_CLIENT_SECRET = "specify your own user id / secret"
+            save_credentials_to_env("specify your own user id / secret", "specify your own user id / secret")
+            self._send_json(200, {
+                "status": "cleared",
+                "message": "Previous credentials cleared successfully."
+            })
+            return
+
         # Checkpoints Verification Endpoints for SkillLabs
         elif path == "/api/checkpoints/1":
             # Checkpoint 1: Agent Creation Verification
