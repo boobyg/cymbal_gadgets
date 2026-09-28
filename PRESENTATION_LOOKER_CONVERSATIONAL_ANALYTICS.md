@@ -100,12 +100,16 @@ Natural Language Prompt  ──►  Looker CA API  ──►  LookML Semantic La
 # Slide 5: The Looker Conversational Analytics (CA) API Family
 
 ### Core REST Endpoints in Looker API 4.0
+*(Follows the official Looker EMEA CE walkthrough video: [youtube.com/watch?v=XyU90O49p8o](https://www.youtube.com/watch?v=XyU90O49p8o))*
 
 * **`POST /api/4.0/login` &mdash; Authentication:**
   * Exchanges `client_id` and `client_secret` for an ephemeral bearer token: `Authorization: token <access_token>`.
 
 * **`POST /api/4.0/agents` &mdash; Agent Definition:**
   * Defines an AI agent, its allowed LookML sources (`model` and `explore`), and system instructions (`context.instructions`).
+
+* **`POST /api/4.0/golden_queries` &mdash; Golden Query Grounding:**
+  * Pairs user questions with verified Looker Explore answer URLs. Acts as few-shot training to eliminate metric ambiguity and hallucinations.
 
 * **`GET /api/4.0/agents/search` & `GET /api/4.0/agents/{id}` &mdash; Discovery:**
   * Lists and inspects available agents and their semantic bindings.
@@ -114,13 +118,13 @@ Natural Language Prompt  ──►  Looker CA API  ──►  LookML Semantic La
   * Modifies agent persona, formatting rules, or explore sources dynamically without redeploying code.
 
 * **`POST /api/4.0/conversations` &mdash; Stateful Sessions:**
-  * Allocates a multi-turn conversation thread bound to an agent. Looker manages message history and token context server-side!
+  * Allocates a multi-turn conversation thread bound to an agent ID. Looker manages message history and token context server-side!
 
 * **`POST /api/4.0/conversational_analytics/chat` &mdash; Query Execution:**
   * Submits natural language queries and streams back structured thoughts, schema resolution, query specs, and BigQuery data.
 
 > **Speaker Notes:**  
-> Notice how clean this API family is: You create an agent, start a conversation, and send chat prompts. Looker handles the heavy lifting of context management and semantic routing.
+> Notice how complete this API family is: You create an agent, supply golden queries for verified grounding, start a stateful conversation, and call the chat API method. Looker handles all context budgeting, semantic translation, and BigQuery SQL compilation.
 
 ---
 
@@ -192,35 +196,72 @@ When you call `/chat`, Looker returns a multi-part payload containing 5 distinct
 ---
 
 <!-- slide -->
-# Slide 9: Step 0 & Step 1: Authentication & Creating Your Custom Agent
+# Slide 9: Step 0 & Step 1: Agent Creation, Golden Queries & Chat API Flow
 
-### Typical 3-Step Lifecycle Scenario
-1. **Create Agent (`CreateAgent`):** Define semantic grounding (`cymbal_gadgets_boris/transactions`) and instructions.
-2. **Create Conversation (`POST /conversations`):** Looker allocates a server-side stateful conversation thread.
-3. **Pass Prompt & Query (`POST /conversational_analytics/chat`):** Looker compiles BigQuery SQL and streams back data + **5-stage tracing**.
+### Complete Video Walkthrough Sequence (Looker EMEA CE)
+*(Video Companion: [youtube.com/watch?v=XyU90O49p8o](https://www.youtube.com/watch?v=XyU90O49p8o))*
 
-### Step 1 Step-by-Step: Run `CreateAgent` in API Explorer
-* 🔗 **Direct URL:** [create_agent method](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)
-* **Where to Paste Payload:** Click the **Run It** tab &rarr; scroll to the **Request Body (`body`)** editor textarea.
-* **Paste JSON Payload:**
+1. **Create Agent (`POST /agents`):** Define semantic grounding (`cymbal_gadgets_boris/transactions`) and instructions.
+2. **Golden Query Grounding (`POST /golden_queries`):** Ground agent with verified question-to-Explore URL pairs.
+3. **Create Conversation (`POST /conversations`):** Use the new `agent_id` to allocate a stateful conversation thread.
+4. **Test Chat API Method (`POST /conversational_analytics/chat`):** Validate the 5-stage stream contract before opening UI.
+
+---
+
+### 1. Create Agent (`POST /api/4.0/agents`)
+* 🔗 [Open create_agent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)
+* **Payload:** `{"name": "Cymbal Retail Agent - Student <ID>", "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}], "context": {"instructions": "...", "show_analytical_details": true}}`
+* **Python Snippet:**
+  ```python
+  # looker_sdk
+  agent = sdk.create_agent(body=models40.WriteAgent(name="Cymbal Agent", sources=[...], context=...))
+  # Zero-dependency LookerClient
+  agent = client.create_agent("Cymbal Agent", "cymbal_gadgets_boris", "transactions")
+  ```
+
+---
+
+### 2. Supply Golden Query Example (`POST /api/4.0/golden_queries`)
+* 🔗 [Open create_golden_query in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query)
+* **Payload:**
   ```json
   {
-    "name": "Cymbal Retail Analytics Agent - Student <YOUR_ID>",
-    "description": "Conversational BI agent providing governed retail insights",
-    "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}],
-    "context": {
-      "instructions": "Always use Gross Margin Percentage when asked about profitability. Format numbers clearly.",
-      "show_analytical_details": true
-    }
+    "questions": ["What is our total sales amount across all transactions?"],
+    "answer": "https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
   }
   ```
-* **Click:** **Run Request** button.
-* **Expected Output:** Status **`POST /agents (200: OK)`** (or `201: Created`).
-* **Where to Find the Newly Created Agent ID:** Top line of response JSON: `"id": "a9b6933c..."`. Copy this 32-character ID!
-* 💡 **Tracing in the App:** Setting `show_analytical_details: true` ensures that **full tracing will be available in the application when prompts are run**!
+* **Python Snippet:**
+  ```python
+  # Link golden query to your agent
+  gq = client.create_golden_query(questions=["What is our total sales?"], answer="https://.../explore/...")
+  client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})
+  ```
+
+---
+
+### 3. Create Conversation Session (`POST /api/4.0/conversations`)
+* 🔗 [Open create_conversation in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_conversation)
+* **Payload:** `{"agent_id": "<YOUR_AGENT_ID>", "name": "Cymbal Retail Session"}`
+* **Python Snippet:**
+  ```python
+  conv = client.create_conversation(agent_id=agent_id, name="Cymbal Session")
+  print("Conversation ID:", conv["id"])
+  ```
+
+---
+
+### 4. Test Chat API Method Before Showing Chat UI (`POST /conversational_analytics/chat`)
+* 🔗 [Open conversational_analytics_chat in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/conversational_analytics_chat)
+* **Payload:** `{"conversation_id": "<CONVERSATION_ID>", "user_message": "What is our total sales amount?"}`
+* **Python Snippet:**
+  ```python
+  # Stream returns: THOUGHT, SCHEMA, QUERY, DATA, FINAL_RESPONSE
+  result = client.chat(conversation_id=conv["id"], user_message="What is our total sales?")
+  print("Query Spec:", result["query"], "Data:", result["data"])
+  ```
 
 > **Speaker Notes:**  
-> Emphasize where to paste the payload in the `body` field of the Run It tab. Point out the `200: OK` response and the `"id"` line. Remind students that the full execution tracing will be visible in the web app during Step 3.
+> This slide mirrors the exact video walkthrough: students create the agent, anchor it with a golden query example, initialize a stateful conversation thread, and test the raw Chat API method to inspect the 5-stage stream contract before launching the web UI.
 
 ---
 
@@ -299,15 +340,21 @@ Data engineers must understand both the configuration points (**WHERE**) and enf
 
 ### Dynamic Instruction Tuning (`PATCH /api/4.0/agents/{agent_id}`)
 ```python
-# Dynamically patch agent instructions at runtime
-client._request("PATCH", f"/agents/{agent_id}", payload={
+# Option A: Looker Python SDK (looker_sdk)
+sdk.update_agent(
+    agent_id=agent_id,
+    body=models40.WriteAgent(
+        context=models40.AgentContext(
+            instructions="- Always begin your answer with '🌟 Cymbal Executive Summary:'...",
+            show_analytical_details=True
+        )
+    )
+)
+
+# Option B: Zero-Dependency LookerClient
+client.update_agent(agent_id, {
     "context": {
-        "instructions": """
-        - Always begin your answer with '🌟 Cymbal Executive Summary:'
-        - Format all currency metrics in EUR with thousands separators
-        - Always state gross margin percentages with two decimals
-        - Keep explanations under 3 sentences
-        """,
+        "instructions": "- Always begin your answer with '🌟 Cymbal Executive Summary:'...",
         "show_analytical_details": True
     }
 })

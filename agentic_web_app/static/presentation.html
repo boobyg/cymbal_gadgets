@@ -272,60 +272,72 @@
         </div>
 
         <!-- SLIDE 5: LOOKER CONVERSATIONAL ANALYTICS API OVERVIEW -->
-        <div class="slide flex-col justify-between flex-1" data-title="Looker CA API Functions" data-notes="Walk through the core REST endpoints in Looker API 4.0: POST /login, POST /agents, POST /conversations, and POST /conversational_analytics/chat.">
+        <div class="slide flex-col justify-between flex-1" data-title="Looker CA API Functions" data-notes="Walk through the core REST endpoints in Looker API 4.0: POST /login, POST /agents, POST /golden_queries, POST /conversations, and POST /conversational_analytics/chat.">
           <div class="space-y-4">
-            <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">API Architecture</span>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">API Architecture</span>
+              <a href="https://www.youtube.com/watch?v=XyU90O49p8o" target="_blank" class="text-xs text-red-400 hover:text-red-300 flex items-center space-x-1">
+                <i class="fa-brands fa-youtube"></i>
+                <span>Companion Video (Looker EMEA CE)</span>
+              </a>
+            </div>
             <h2 class="text-2xl md:text-4xl font-bold text-white">Looker Conversational Analytics (CA) API Family</h2>
             <p class="text-sm text-slate-400 leading-relaxed">
-              The CA API in Looker 4.0 provides four key capabilities to build end-to-end conversational data pipelines:
+              The CA API in Looker 4.0 provides a complete suite of endpoints to build grounded, governed conversational data applications:
             </p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 text-xs">
-            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 my-4 text-xs">
+            <div class="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl space-y-1.5">
               <div class="flex items-center justify-between">
                 <span class="font-mono text-indigo-400 font-bold">1. Authentication</span>
                 <span class="bg-blue-900/50 text-blue-300 px-2 py-0.5 rounded text-[10px] font-mono">POST /api/4.0/login</span>
               </div>
-              <p class="text-slate-300 leading-relaxed">
+              <p class="text-slate-300 leading-relaxed text-[11px]">
                 Exchanges client credentials (<code class="text-slate-400">client_id</code> + <code class="text-slate-400">client_secret</code>) for an ephemeral session token: <code class="text-amber-300">Authorization: token &lt;access_token&gt;</code>.
               </p>
             </div>
 
-            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+            <div class="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl space-y-1.5">
               <div class="flex items-center justify-between">
                 <span class="font-mono text-indigo-400 font-bold">2. Agent Definition</span>
                 <span class="bg-emerald-900/50 text-emerald-300 px-2 py-0.5 rounded text-[10px] font-mono">POST /api/4.0/agents</span>
               </div>
-              <p class="text-slate-300 leading-relaxed">
+              <p class="text-slate-300 leading-relaxed text-[11px]">
                 Configures agent metadata, binds allowed LookML sources (model + explore), and sets persona guardrails via <code class="text-slate-400">context.instructions</code>.
               </p>
             </div>
 
-            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+            <div class="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl space-y-1.5">
               <div class="flex items-center justify-between">
-                <span class="font-mono text-indigo-400 font-bold">3. Stateful Sessions</span>
-                <span class="bg-purple-900/50 text-purple-300 px-2 py-0.5 rounded text-[10px] font-mono">POST /api/4.0/conversations</span>
+                <span class="font-mono text-indigo-400 font-bold">3. Golden Query Grounding</span>
+                <span class="bg-amber-900/50 text-amber-300 px-2 py-0.5 rounded text-[10px] font-mono">POST /api/4.0/golden_queries</span>
               </div>
-              <p class="text-slate-300 leading-relaxed">
-                Allocates a server-side session bound to an agent ID. Looker maintains multi-turn message history server-side—no manual token counting!
+              <p class="text-slate-300 leading-relaxed text-[11px]">
+                Pairs natural language question variations with verified Looker Explore answer URLs. Acts as few-shot training to eliminate metric ambiguity.
               </p>
             </div>
 
-            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+            <div class="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl space-y-1.5">
               <div class="flex items-center justify-between">
-                <span class="font-mono text-indigo-400 font-bold">4. Query Execution</span>
-                <span class="bg-amber-900/50 text-amber-300 px-2 py-0.5 rounded text-[10px] font-mono">POST /conversational_analytics/chat</span>
+                <span class="font-mono text-indigo-400 font-bold">4. Stateful Sessions</span>
+                <span class="bg-purple-900/50 text-purple-300 px-2 py-0.5 rounded text-[10px] font-mono">POST /api/4.0/conversations</span>
               </div>
-              <p class="text-slate-300 leading-relaxed">
-                Submits user prompt + <code class="text-slate-400">conversation_id</code>. Streams structured reasoning, schema discovery, generated query, and BigQuery data.
+              <p class="text-slate-300 leading-relaxed text-[11px]">
+                Allocates a server-side session bound to an agent ID. Looker maintains multi-turn message history server-side—no manual token counting!
               </p>
             </div>
           </div>
 
-          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-xs text-slate-400 flex items-center justify-between">
-            <span>Also supports dynamic runtime patching:</span>
-            <span class="font-mono text-indigo-400">PATCH /api/4.0/agents/{agent_id}</span>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div class="bg-slate-900 border border-slate-800 p-2.5 rounded-xl text-slate-300 flex items-center justify-between">
+              <span>Query Execution:</span>
+              <span class="font-mono text-amber-400">POST /api/4.0/conversational_analytics/chat</span>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-2.5 rounded-xl text-slate-300 flex items-center justify-between">
+              <span>Dynamic Runtime Tuning:</span>
+              <span class="font-mono text-indigo-400">PATCH /api/4.0/agents/{agent_id}</span>
+            </div>
           </div>
         </div>
 
@@ -483,44 +495,90 @@
           </div>
         </div>
 
-        <!-- SLIDE 9: STEP 0 & STEP 1 - CREATING THE AGENT -->
-        <div class="slide flex-col justify-between flex-1" data-title="Step 0 & 1: Agent Creation" data-notes="Walk through Step 0 credentials and Step 1 agent creation. Explain the 3-step lifecycle: create agent, create conversation, pass prompt. Explain where to paste in body textarea, expect POST /agents 200: OK, and locate id.">
-          <div class="space-y-4">
-            <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Hands-On Phase 1</span>
-            <h2 class="text-2xl md:text-4xl font-bold text-white">Step 0 & 1: Lifecycle Scenario & Running CreateAgent</h2>
-            <p class="text-sm text-slate-400 leading-relaxed">
-              Define your custom AI agent using <code class="text-indigo-400 font-mono">ConversationalAnalytics / create_agent</code> (<code class="text-indigo-400 font-mono">POST /api/4.0/agents</code>):
+        <!-- SLIDE 9: STEP 0 & STEP 1 - CREATING THE AGENT, GOLDEN QUERIES & CHAT API -->
+        <div class="slide flex-col justify-between flex-1" data-title="Step 0 & 1: Agent, Golden Query & Chat API" data-notes="Walk through Step 0 credentials and Step 1 agent creation, golden query example, conversation session using agent id, and chat API testing before showing the UI.">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Hands-On Phase 1 &bull; Video Companion</span>
+              <span class="text-indigo-400 font-bold text-xs bg-indigo-950/60 border border-indigo-800/40 px-2.5 py-0.5 rounded-full">+25 Pts (Task 1)</span>
+            </div>
+            <h2 class="text-xl md:text-3xl font-bold text-white">Task 1: End-to-End CA API Journey & Python SDK</h2>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Follow the complete sequence from the video: Create Agent &rarr; Golden Query &rarr; Create Conversation &rarr; Test Chat API.
             </p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-3 text-xs">
-            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
-              <h4 class="font-bold text-cyan-400">Typical Conversational Analytics Lifecycle</h4>
-              <ol class="list-decimal pl-4 space-y-1 text-slate-300">
-                <li><strong>Create Agent (`create_agent`):</strong> Define model (<code class="text-slate-400 font-mono">cymbal_gadgets_boris</code>), explore (<code class="text-slate-400 font-mono">transactions</code>), and instructions.</li>
-                <li><strong>Create Conversation (`POST /conversations`):</strong> Server allocates stateful session ID.</li>
-                <li><strong>Pass Prompt & Tracing (`POST /chat`):</strong> Generates LookML query, executes BigQuery SQL, and streams 5-part trace.</li>
-              </ol>
-              <div class="p-2 bg-slate-950 rounded font-mono text-[10px] text-slate-400">
-                show_analytical_details: true &rarr; tracing enabled!
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-2 text-xs">
+            <!-- 1. Create Agent -->
+            <div class="bg-slate-900/80 border border-blue-900/40 p-3 rounded-xl space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-blue-400 flex items-center space-x-1.5">
+                  <span class="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[9px]">1</span>
+                  <span>Create Agent (POST /agents)</span>
+                </span>
+                <span class="font-mono text-[10px] text-blue-300">create_agent</span>
               </div>
+              <p class="text-[11px] text-slate-300">Define model (<code class="font-mono text-slate-400">cymbal_gadgets_boris</code>), explore (<code class="font-mono text-slate-400">transactions</code>), and guardrails.</p>
+              <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-blue-300 overflow-x-auto"># Python SDK
+agent = sdk.create_agent(body=models40.WriteAgent(
+    name="Cymbal Agent", sources=[...], context=...
+))
+# LookerClient: client.create_agent(...)</pre>
             </div>
 
-            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
-              <h4 class="font-bold text-emerald-400">Step-by-Step in API Explorer</h4>
-              <ul class="space-y-1 text-slate-300">
-                <li>1. Open <code class="text-cyan-300 font-mono">create_agent</code> &rarr; click <strong>"Run It"</strong> tab.</li>
-                <li>2. Paste JSON payload into <strong>Request Body (`body`)</strong> textarea.</li>
-                <li>3. Click blue <strong>"Run Request"</strong> button.</li>
-                <li>4. Expected output: <code class="text-emerald-300 font-mono">POST /agents (200: OK)</code>.</li>
-                <li>5. Locate top-level <code class="text-indigo-300 font-mono">"id"</code> on first line of response JSON and copy it!</li>
-              </ul>
+            <!-- 2. Golden Query -->
+            <div class="bg-slate-900/80 border border-amber-900/40 p-3 rounded-xl space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-amber-400 flex items-center space-x-1.5">
+                  <span class="w-4 h-4 rounded-full bg-amber-600 text-white flex items-center justify-center text-[9px]">2</span>
+                  <span>Supply Golden Query (POST /golden_queries)</span>
+                </span>
+                <span class="font-mono text-[10px] text-amber-300">create_golden_query</span>
+              </div>
+              <p class="text-[11px] text-slate-300">Anchor natural questions to verified Looker Explore answer URL to prevent hallucinations.</p>
+              <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-amber-300 overflow-x-auto">gq = client.create_golden_query(
+    questions=["What is our total sales amount?"],
+    answer="https://.../explore/...?fields=total_sale_price"
+)
+client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})</pre>
+            </div>
+
+            <!-- 3. Create Conversation -->
+            <div class="bg-slate-900/80 border border-purple-900/40 p-3 rounded-xl space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-purple-400 flex items-center space-x-1.5">
+                  <span class="w-4 h-4 rounded-full bg-purple-600 text-white flex items-center justify-center text-[9px]">3</span>
+                  <span>Create Conversation (POST /conversations)</span>
+                </span>
+                <span class="font-mono text-[10px] text-purple-300">create_conversation</span>
+              </div>
+              <p class="text-[11px] text-slate-300">Pass the newly created <code class="font-mono text-purple-300">agent_id</code> to allocate a server-side stateful thread.</p>
+              <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-purple-300 overflow-x-auto">conv = client.create_conversation(
+    agent_id=agent_id,
+    name="Cymbal Retail Session"
+)
+print("Conversation ID:", conv["id"])</pre>
+            </div>
+
+            <!-- 4. Test Chat API -->
+            <div class="bg-slate-900/80 border border-emerald-900/40 p-3 rounded-xl space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-emerald-400 flex items-center space-x-1.5">
+                  <span class="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[9px]">4</span>
+                  <span>Test Chat API Before UI (POST /chat)</span>
+                </span>
+                <span class="font-mono text-[10px] text-emerald-300">conversational_analytics_chat</span>
+              </div>
+              <p class="text-[11px] text-slate-300">Inspect the 5-part stream: <code class="font-mono text-emerald-300">THOUGHT</code>, <code class="font-mono text-emerald-300">SCHEMA</code>, <code class="font-mono text-emerald-300">QUERY</code>, <code class="font-mono text-emerald-300">DATA</code>, <code class="font-mono text-emerald-300">FINAL_RESPONSE</code>.</p>
+              <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-emerald-300 overflow-x-auto">res = client.chat(conversation_id=conv["id"], user_message="...")
+print("Thoughts:", res["thoughts"])
+print("Query Spec:", res["query"], "Data:", res["data"])</pre>
             </div>
           </div>
 
-          <div class="bg-indigo-950/20 border border-indigo-800/40 p-3 rounded-xl text-xs text-slate-300 flex items-center justify-between">
-            <span>💡 <strong>Real-Time Tracing:</strong> Full reasoning tracing will be available directly in the web app when prompts run!</span>
-            <span class="text-indigo-400 font-bold">+25 Pts (Task 1)</span>
+          <div class="bg-indigo-950/20 border border-indigo-800/40 p-2.5 rounded-xl text-xs text-slate-300 flex items-center justify-between">
+            <span>💡 <strong>Checkpoint 1:</strong> Confirm agent exists by pasting its Agent ID into Checkpoint 1 on the portal.</span>
+            <span class="text-indigo-400 font-bold">+25 Points</span>
           </div>
         </div>
 
@@ -663,6 +721,17 @@
                 <li>• <strong class="text-white">4. Output Formatting:</strong> Prefix <code class="text-amber-300 font-mono">'🌟 Cymbal Executive Summary:'</code> & EUR currency.</li>
               </ul>
             </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-xs space-y-1">
+            <span class="font-bold text-rose-300 flex items-center space-x-1.5">
+              <i class="fa-brands fa-python"></i>
+              <span>Python Code Snippet (Dynamic Tuning via PATCH /agents/{agent_id}):</span>
+            </span>
+            <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-slate-300 overflow-x-auto"># looker_sdk
+sdk.update_agent(agent_id=agent_id, body=models40.WriteAgent(context=models40.AgentContext(instructions="...", show_analytical_details=True)))
+# LookerClient
+client.update_agent(agent_id, {"context": {"instructions": "...", "show_analytical_details": True}})</pre>
           </div>
 
           <div class="bg-rose-950/20 border border-rose-800/40 p-3 rounded-xl text-xs text-slate-300 flex items-center justify-between">

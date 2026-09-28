@@ -404,6 +404,22 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 self._send_json(500, {"error": str(e)})
             return
 
+        elif path == "/api/golden_queries":
+            if not is_credentials_configured():
+                self._send_json(400, {"error": "Credentials not configured. Please specify your own user id / secret."})
+                return
+            questions = data.get("questions", [])
+            answer = data.get("answer", "")
+            if not questions or not answer:
+                self._send_json(400, {"error": "Fields 'questions' (list) and 'answer' (Explore URL string) are required."})
+                return
+            try:
+                gq = client.create_golden_query(questions, answer)
+                self._send_json(201, gq)
+            except Exception as e:
+                self._send_json(500, {"error": str(e)})
+            return
+
         elif path == "/api/conversations":
             if not is_credentials_configured():
                 self._send_json(400, {"error": "Credentials not configured. Please specify your own user id / secret."})

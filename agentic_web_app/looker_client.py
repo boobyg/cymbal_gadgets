@@ -167,6 +167,23 @@ class LookerClient:
         }
         return self._request("POST", "/agents", payload=payload)
 
+    def create_golden_query(self, questions: list, answer: str) -> dict:
+        """
+        Create a Golden Query (verified question-answer exemplar) in Looker.
+        Golden queries anchor the conversational agent to known LookML query answers.
+        """
+        payload = {
+            "questions": questions,
+            "answer": answer
+        }
+        return self._request("POST", "/golden_queries", payload=payload)
+
+    def update_agent(self, agent_id: str, payload: dict) -> dict:
+        """
+        Update an existing agent configuration, instructions, or linked golden query IDs.
+        """
+        return self._request("PATCH", f"/agents/{agent_id}", payload=payload)
+
     def create_conversation(self, agent_id: str, name: str = "Agentic Lab Session") -> dict:
         """Create a new conversation session associated with the target agent."""
         payload = {

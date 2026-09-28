@@ -326,64 +326,73 @@ nano .env</pre>
         <article id="section-step1" class="space-y-4 pt-4 border-t border-slate-200">
           <div class="border-b border-slate-200 pb-2">
             <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Task 1</span>
-            <h2 class="text-lg font-bold text-slate-900 mt-1">Conversational Analytics API & Creating Your Custom Agent</h2>
+            <h2 class="text-lg font-bold text-slate-900 mt-1">Conversational Analytics API & Core Lifecycle (Video Walkthrough)</h2>
+          </div>
+
+          <!-- Video Companion Banner -->
+          <div class="bg-gradient-to-r from-red-50 to-blue-50 border border-red-200 rounded-xl p-3 flex items-center justify-between text-xs">
+            <div class="flex items-center space-x-2 text-slate-800">
+              <i class="fa-brands fa-youtube text-red-600 text-lg"></i>
+              <div>
+                <span class="font-bold text-slate-900">Companion Video:</span>
+                <span class="text-slate-600">Follows the official Looker EMEA CE team walkthrough</span>
+              </div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=XyU90O49p8o" target="_blank" rel="noopener noreferrer" class="bg-red-600 hover:bg-red-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm inline-flex items-center space-x-1.5 shrink-0">
+              <i class="fa-solid fa-play text-[10px]"></i>
+              <span>Watch Video</span>
+            </a>
           </div>
 
           <!-- Typical Lifecycle Scenario Box -->
           <div class="bg-indigo-50/70 border border-indigo-200 rounded-xl p-3.5 space-y-2">
             <span class="text-xs font-bold text-indigo-900 flex items-center space-x-1.5">
               <i class="fa-solid fa-arrows-spin text-indigo-600"></i>
-              <span>Typical Conversational Analytics Lifecycle Scenario</span>
+              <span>Complete Conversational Analytics Lifecycle</span>
             </span>
             <p class="text-xs text-indigo-950 leading-relaxed">
-              When building AI data applications with Looker, your application executes a 3-step sequence:
+              As demonstrated in the video walkthrough, enterprise conversational analytics follows an auditable 6-stage lifecycle:
             </p>
             <ol class="list-decimal pl-5 text-xs text-slate-700 space-y-1">
-              <li><strong>Create Agent (<code class="font-mono text-indigo-700">CreateAgent</code> / <code class="font-mono text-indigo-700">POST /agents</code>):</strong> Ground the agent in LookML model (<code class="font-mono text-slate-600">cymbal_gadgets_boris</code>), explore (<code class="font-mono text-slate-600">transactions</code>), domain guardrails, and enable analytical details (<code class="font-mono text-indigo-700">show_analytical_details: true</code>).</li>
-              <li><strong>Create Conversation Session (<code class="font-mono text-indigo-700">POST /conversations</code>):</strong> Looker allocates a stateful server-side thread, managing conversation history and token limits automatically.</li>
-              <li><strong>Pass Prompt & Query (<code class="font-mono text-indigo-700">POST /conversational_analytics/chat</code>):</strong> The API generates deterministic BigQuery SQL, executes it, and streams back governed data with a 5-part execution trace.</li>
+              <li><strong>Create Agent (<code class="font-mono text-indigo-700">POST /agents</code>):</strong> Ground the agent in LookML model (<code class="font-mono text-slate-600">cymbal_gadgets_boris</code>), explore (<code class="font-mono text-slate-600">transactions</code>), domain guardrails, and enable analytical details (<code class="font-mono text-indigo-700">show_analytical_details: true</code>).</li>
+              <li><strong>Ground with Golden Queries (<code class="font-mono text-indigo-700">POST /golden_queries</code>):</strong> Anchor the agent with verified query exemplars to prevent LLM hallucinations.</li>
+              <li><strong>Create Conversation Session (<code class="font-mono text-indigo-700">POST /conversations</code>):</strong> Initialize a stateful thread using the newly created <code class="font-mono text-indigo-700">agent_id</code>.</li>
+              <li><strong>Submit Query via Chat API Method (<code class="font-mono text-indigo-700">POST /conversational_analytics/chat</code>):</strong> Test the raw API method in API Explorer and inspect the 5-stage stream (<code class="font-mono text-indigo-700">THOUGHT</code>, <code class="font-mono text-indigo-700">SCHEMA</code>, <code class="font-mono text-indigo-700">QUERY</code>, <code class="font-mono text-indigo-700">DATA</code>, <code class="font-mono text-indigo-700">FINAL_RESPONSE</code>).</li>
+              <li><strong>Interactive UI Chat:</strong> Launch the web application and audit traces in real time.</li>
+              <li><strong>Dynamic Tuning (<code class="font-mono text-indigo-700">PATCH /agents/{id}</code>):</strong> Patch guardrails and persona without code redeployment.</li>
             </ol>
-            <div class="bg-white/80 border border-indigo-100 rounded-lg p-2.5 text-xs text-indigo-900 flex items-center space-x-2">
-              <i class="fa-solid fa-lightbulb text-amber-500 shrink-0"></i>
-              <span><strong>What We Are Doing & Tracing in the App:</strong> In this step, you create your custom agent with <code class="font-mono bg-indigo-100 px-1 py-0.5 rounded text-indigo-800">show_analytical_details: true</code>. This setting ensures that <strong>full execution tracing will be available in the application when prompts are run</strong> during Step 3!</span>
-            </div>
           </div>
 
-          <!-- Step-by-Step API Explorer Instructions -->
+          <!-- Step 1.1: Create Agent in API Explorer -->
           <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 space-y-3">
             <div class="flex items-center justify-between">
               <span class="text-xs font-bold text-blue-900 flex items-center space-x-1.5">
-                <i class="fa-solid fa-compass text-blue-600"></i>
-                <span>Direct Access: CreateAgent Method in Looker API Explorer</span>
+                <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold">1</span>
+                <span>1. CreateAgent Method in API Explorer</span>
               </span>
               <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                <span>Open CreateAgent Method</span>
+                <span>Open create_agent</span>
               </a>
             </div>
 
             <div class="space-y-1 text-xs text-blue-950">
-              <p class="font-semibold text-slate-800">Step-by-Step: How to Run CreateAgent in Conversational Analytics API</p>
+              <p class="font-semibold text-slate-800">Step-by-Step Instructions:</p>
               <ol class="list-decimal pl-5 space-y-1 text-slate-700">
-                <li>Click the <strong>Open CreateAgent Method</strong> button above (or navigate to <code class="font-mono text-slate-700">ConversationalAnalytics &gt; create_agent</code>).</li>
-                <li>In the top right, click the <strong>Run It</strong> tab.</li>
-                <li><strong>Where to paste the JSON payload:</strong> Scroll down to the <strong>Request Body</strong> editor field labeled <code class="font-mono text-indigo-700">body</code>. Clear any placeholder text and paste the JSON payload below into the <code class="font-mono text-indigo-700">body</code> editor.</li>
-                <li>Click the blue <strong>Run Request</strong> button.</li>
-                <li><strong>What to expect as an output:</strong> The response status will display <strong><code class="font-mono bg-emerald-100 text-emerald-800 px-1 rounded">POST /agents (200: OK)</code></strong> (or <code class="font-mono text-emerald-800">201: Created</code>).</li>
-                <li><strong>Where to find the newly created agent id:</strong> Look at the very top line of the response JSON for the <strong><code class="font-mono bg-slate-200 text-slate-900 px-1 rounded">"id"</code></strong> property (e.g., <code class="font-mono text-slate-600">"id": "a9b6933c..."</code>). Copy this 32-character ID!</li>
+                <li>Click <strong>Open create_agent</strong> above, then click the <strong>Run It</strong> tab.</li>
+                <li>Paste the JSON payload below into the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>.</li>
+                <li>Click the blue <strong>Run Request</strong> button. Look for status <code class="font-mono bg-emerald-100 text-emerald-800 px-1 rounded">200: OK</code>.</li>
+                <li>Copy the 32-character <code class="font-mono bg-slate-200 text-slate-900 px-1 rounded">"id"</code> property from the response!</li>
               </ol>
             </div>
-          </div>
 
-          <div class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-xs text-amber-900 flex items-center space-x-2">
-            <i class="fa-solid fa-users text-amber-600 shrink-0"></i>
-            <span><strong>Multi-Student Naming Rule:</strong> Give your agent a unique name (e.g., <code class="font-mono text-amber-800">Cymbal Retail Analytics Agent - Student 42</code>) so you can easily identify your agent among peers on this shared Looker instance.</span>
-          </div>
-
-          <div class="space-y-2 text-xs">
-            <h4 class="font-bold text-slate-800">JSON Payload to Paste into Request Body (<code class="font-mono text-indigo-600">body</code>):</h4>
-            <div class="relative group">
-              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
+            <div class="space-y-1.5 text-xs">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-800">Request Body Payload:</span>
+                <span class="text-[11px] text-amber-700 font-medium">⚠️ Provide a unique name!</span>
+              </div>
+              <div class="relative group">
+                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
   "name": "Cymbal Retail Analytics Agent - Student &lt;YOUR_NAME_OR_ID&gt;",
   "description": "Conversational agent for Cymbal Gadgets retail sales & transactions",
   "sources": [
@@ -398,18 +407,209 @@ nano .env</pre>
     "show_debug": false
   }
 }</pre>
-              <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy JSON</button>
+                <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy JSON</button>
+              </div>
+            </div>
+
+            <!-- Python Snippet for Create Agent -->
+            <div class="space-y-1.5 text-xs pt-2 border-t border-blue-200">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-800 flex items-center space-x-1.5">
+                  <i class="fa-brands fa-python text-blue-600"></i>
+                  <span>Python Code Snippet (Looker Python SDK & Zero-Dependency Client):</span>
+                </span>
+              </div>
+              <div class="relative group">
+                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
+import looker_sdk
+from looker_sdk import models40
+sdk = looker_sdk.init40()
+new_agent = sdk.create_agent(
+    body=models40.WriteAgent(
+        name="Cymbal Retail Analytics Agent - Student 42",
+        sources=[models40.AgentSource(model="cymbal_gadgets_boris", explore="transactions")],
+        context=models40.AgentContext(instructions="...", show_analytical_details=True)
+    )
+)
+print("Agent ID:", new_agent.id)
+
+# Option B: Zero-Dependency LookerClient
+from looker_client import LookerClient
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+agent = client.create_agent(name="Cymbal Agent", model="cymbal_gadgets_boris", explore="transactions")
+print("Agent ID:", agent["id"])</pre>
+                <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
+              </div>
             </div>
           </div>
 
-          <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-900 flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-              <i class="fa-solid fa-wand-magic-sparkles text-blue-600"></i>
-              <span>Quick UI Alternative: Create an agent directly within this training console!</span>
+          <!-- Step 1.2: Golden Query Example -->
+          <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-3.5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-900 flex items-center space-x-1.5">
+                <span class="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-bold">2</span>
+                <span>2. Supplying a Golden Query Example (Verified Query)</span>
+              </span>
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-amber-600 hover:bg-amber-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                <span>Open create_golden_query</span>
+              </a>
             </div>
-            <button onclick="openCreateAgentModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs transition shrink-0">
-              + Quick Create Agent
-            </button>
+
+            <p class="text-xs text-amber-950 leading-relaxed">
+              <strong>Why Golden Queries Matter:</strong> A Golden Query pairs user question variations with an explicit Looker Explore answer URL. This provides ground-truth few-shot examples to eliminate metric hallucinations and join ambiguity.
+            </p>
+
+            <div class="space-y-1.5 text-xs">
+              <span class="font-bold text-slate-800">Golden Query Request Body (<code class="font-mono text-indigo-700">body</code>):</span>
+              <div class="relative group">
+                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
+  "questions": [
+    "What is our total sales amount across all transactions?",
+    "Total sales across all stores",
+    "What is our overall sales revenue?"
+  ],
+  "answer": "https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
+}</pre>
+                <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy JSON</button>
+              </div>
+            </div>
+
+            <!-- Python Snippet for Golden Query -->
+            <div class="space-y-1.5 text-xs pt-2 border-t border-amber-200">
+              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
+                <i class="fa-brands fa-python text-amber-600"></i>
+                <span>Python Code Snippet (Create & Link Golden Query):</span>
+              </span>
+              <div class="relative group">
+                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
+golden_query = sdk.create_golden_query(
+    body=models40.WriteGoldenQuery(
+        questions=["What is our total sales amount across all transactions?"],
+        answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
+    )
+)
+sdk.update_agent(agent_id=new_agent.id, body=models40.WriteAgent(golden_query_ids=[golden_query.id]))
+print("Created & Linked Golden Query ID:", golden_query.id)
+
+# Option B: Zero-Dependency LookerClient
+gq = client.create_golden_query(
+    questions=["What is our total sales amount across all transactions?"],
+    answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
+)
+client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})</pre>
+                <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 1.3: Create Conversation using Agent ID -->
+          <div class="bg-purple-50/70 border border-purple-200 rounded-xl p-3.5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-purple-900 flex items-center space-x-1.5">
+                <span class="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px] font-bold">3</span>
+                <span>3. Create Conversation Session Using Your Agent ID</span>
+              </span>
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_conversation" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-purple-600 hover:bg-purple-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                <span>Open create_conversation</span>
+              </a>
+            </div>
+
+            <p class="text-xs text-purple-950 leading-relaxed">
+              <strong>Server-Side Memory:</strong> Looker manages conversational state and token budgeting on the server. Call <code class="font-mono text-purple-700">POST /conversations</code> with the <strong>Agent ID you created in Step 1.1</strong> to receive a persistent <code class="font-mono text-purple-700">conversation_id</code>.
+            </p>
+
+            <div class="space-y-1.5 text-xs">
+              <span class="font-bold text-slate-800">Request Body (<code class="font-mono text-indigo-700">body</code>):</span>
+              <div class="relative group">
+                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
+  "agent_id": "&lt;YOUR_AGENT_ID_FROM_STEP_1.1&gt;",
+  "name": "Cymbal Retail Session - Student &lt;YOUR_NAME_OR_ID&gt;"
+}</pre>
+                <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy JSON</button>
+              </div>
+            </div>
+
+            <!-- Python Snippet for Create Conversation -->
+            <div class="space-y-1.5 text-xs pt-2 border-t border-purple-200">
+              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
+                <i class="fa-brands fa-python text-purple-600"></i>
+                <span>Python Code Snippet (Create Conversation):</span>
+              </span>
+              <div class="relative group">
+                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
+conversation = sdk.create_conversation(
+    body=models40.WriteConversation(
+        agent_id=new_agent.id,
+        name="Cymbal Analysis Session"
+    )
+)
+print("Conversation ID:", conversation.id)
+
+# Option B: Zero-Dependency LookerClient
+conv = client.create_conversation(agent_id=agent_id, name="Cymbal Analysis Session")
+print("Conversation ID:", conv["id"])</pre>
+                <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 1.4: Test Chat API Method Before Showing Chat UI -->
+          <div class="bg-emerald-50/70 border border-emerald-200 rounded-xl p-3.5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-900 flex items-center space-x-1.5">
+                <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold">4</span>
+                <span>4. Test Chat API Method Before Showing Chat UI</span>
+              </span>
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/conversational_analytics_chat" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                <span>Open conversational_analytics_chat</span>
+              </a>
+            </div>
+
+            <p class="text-xs text-emerald-950 leading-relaxed">
+              <strong>Inspect the HTTP Stream Contract:</strong> Before launching the web UI, test the Chat API directly with your <code class="font-mono text-emerald-700">conversation_id</code> from Step 1.3. Observe how Looker returns the 5 stages: <code class="font-mono text-slate-700">THOUGHT</code>, <code class="font-mono text-slate-700">SCHEMA</code>, <code class="font-mono text-slate-700">QUERY</code>, <code class="font-mono text-slate-700">DATA</code>, and <code class="font-mono text-slate-700">FINAL_RESPONSE</code>.
+            </p>
+
+            <div class="space-y-1.5 text-xs">
+              <span class="font-bold text-slate-800">Request Body (<code class="font-mono text-indigo-700">body</code>):</span>
+              <div class="relative group">
+                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
+  "conversation_id": "&lt;YOUR_CONVERSATION_ID_FROM_STEP_1.3&gt;",
+  "user_message": "What is our total sales amount across all transactions?"
+}</pre>
+                <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy JSON</button>
+              </div>
+            </div>
+
+            <!-- Python Snippet for Chat API -->
+            <div class="space-y-1.5 text-xs pt-2 border-t border-emerald-200">
+              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
+                <i class="fa-brands fa-python text-emerald-600"></i>
+                <span>Python Code Snippet (Execute Query & Parse Response Stream):</span>
+              </span>
+              <div class="relative group">
+                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
+response_stream = sdk.conversational_analytics_chat(
+    body=models40.ConversationalAnalyticsChatRequest(
+        conversation_id=conversation.id,
+        user_message="What is our total sales amount across all transactions?"
+    )
+)
+for msg in response_stream:
+    if msg.system_message and msg.system_message.text:
+        print(f"[{msg.system_message.text.text_type}]:", msg.system_message.text.parts)
+
+# Option B: Zero-Dependency LookerClient
+result = client.chat(conversation_id=conv["id"], user_message="What is our total sales amount?")
+print("🧠 Thoughts:", result["thoughts"])
+print("💻 Query Spec:", result["query"])
+print("📊 Data:", result["data"])
+print("📝 Summary:", result["final_response"])</pre>
+                <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
+              </div>
+            </div>
           </div>
 
           <!-- CHECKPOINT 1 INTERACTIVE CARD -->
@@ -734,6 +934,40 @@ nano .env</pre>
                   </li>
                 </ul>
               </div>
+            </div>
+          </div>
+
+          <!-- Python Snippet for Update Agent -->
+          <div class="bg-rose-50/70 border border-rose-200 rounded-xl p-3.5 space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-rose-950 flex items-center space-x-1.5">
+                <i class="fa-brands fa-python text-rose-600"></i>
+                <span>Python Code Snippet: Dynamic Instruction Tuning (PATCH /agents/{id}):</span>
+              </span>
+            </div>
+            <div class="relative group">
+              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
+import looker_sdk
+from looker_sdk import models40
+sdk = looker_sdk.init40()
+sdk.update_agent(
+    agent_id=agent_id,
+    body=models40.WriteAgent(
+        context=models40.AgentContext(
+            instructions="- Always begin your answer with '🌟 Cymbal Executive Summary:'\n- Format all currency in EUR...",
+            show_analytical_details=True
+        )
+    )
+)
+
+# Option B: Zero-Dependency LookerClient
+client.update_agent(agent_id, {
+    "context": {
+        "instructions": "- Always begin your answer with '🌟 Cymbal Executive Summary:'...",
+        "show_analytical_details": True
+    }
+})</pre>
+              <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
             </div>
           </div>
 

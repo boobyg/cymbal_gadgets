@@ -142,34 +142,38 @@ In the opened web portal:
 
 ---
 
-## 🤖 Task 1: Creating Your Custom Agent via Conversational Analytics API
+## 🤖 Task 1: Conversational Analytics API & Core Lifecycle (Video Walkthrough)
 
-### The Typical Conversational Analytics Lifecycle Scenario
-In enterprise applications, interacting with Looker's Conversational Analytics API follows a consistent, 3-stage lifecycle:
-1. **Agent Creation (`create_agent` / `POST /api/4.0/agents`):**  
-   You define an AI agent bounded to Looker's semantic layer (specifying the model `cymbal_gadgets_boris` and explore `transactions`), along with persona guardrails and business rules (e.g., "profitability = Gross Margin Percentage").
-2. **Conversation Initialization (`POST /api/4.0/conversations`):**  
-   The application creates a dedicated, stateful conversation thread bound to the agent ID. Looker handles conversation state, token budgeting, and message history automatically on the server.
-3. **Prompt Execution & Tracing (`POST /api/4.0/conversational_analytics/chat`):**  
-   The user submits a natural language question (e.g., *"What is total sales amount by store country?"*). The API introspects the Explore, compiles BigQuery SQL, executes it, and returns the verified numbers along with the **full 5-stage reasoning trace** (`THOUGHT`, `SCHEMA`, `QUERY`, `DATA`, `FINAL_RESPONSE`).  
-   *Note: This complete tracing will be available directly in the web application's Transparency Hub when the prompt is run!*
+> [!NOTE]
+> **Companion Video Walkthrough:**  
+> This task follows the official Looker EMEA CE team enablement video: **[Looker Conversational Analytics API Walkthrough](https://www.youtube.com/watch?v=XyU90O49p8o)**.  
+> It guides you through the end-to-end lifecycle: Grounded Semantic Model &rarr; API Explorer &rarr; `create_agent` &rarr; `create_golden_query` &rarr; `create_conversation` &rarr; `conversational_analytics_chat` &rarr; Python client integration.
 
-### Step-by-Step: Run `create_agent` in Looker API Explorer
+### The Complete Conversational Analytics Lifecycle
+In enterprise applications, interacting with Looker's Conversational Analytics API follows an auditable 6-stage lifecycle:
+1. **Agent Creation (`POST /api/4.0/agents` / `create_agent`):**  
+   Define an AI agent bounded to Looker's semantic layer (model `cymbal_gadgets_boris`, explore `transactions`), persona guardrails, and analytical tracing enabled (`show_analytical_details: true`).
+2. **Ground with Golden Queries (`POST /api/4.0/golden_queries` / `create_golden_query`):**  
+   Anchor user question variations with verified Looker Explore answer URLs. This eliminates metric hallucinations and join ambiguity.
+3. **Conversation Initialization (`POST /api/4.0/conversations` / `create_conversation`):**  
+   Using the `agent_id` created in Step 1, allocate a stateful conversation thread. Looker manages multi-turn history and token budgeting on the server.
+4. **Chat API Verification (`POST /api/4.0/conversational_analytics/chat` / `conversational_analytics_chat`):**  
+   Test the raw Chat API method in API Explorer *before* launching the web UI. Inspect the 5-stage stream (`THOUGHT`, `SCHEMA`, `QUERY`, `DATA`, `FINAL_RESPONSE`).
+5. **Interactive UI Chat & Tracing:**  
+   Launch the web app, select your agent, run natural language questions, and audit the 3 execution accordions in real time.
+6. **Dynamic Instruction Tuning (`PATCH /api/4.0/agents/{id}` / `update_agent`):**  
+   Update persona rules and formatting without redeploying code.
 
-1. **Open the `create_agent` Method Directly:**  
-   👉 Navigate to: **[CreateAgent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)**  
-   *(Ensure you are logged into Looker with API 4.0 selected).*
+---
 
-2. **Open the "Run It" Tab:**  
-   In the API Explorer method view for `create_agent`, click on the **Run It** tab in the right panel.
-
-3. **Where to Paste the JSON Payload:**  
-   Locate the **Request Body** editor field (labeled `body`). Clear any placeholder text and paste the following JSON payload:
-
+### Step 1.1: Run `create_agent` in API Explorer
+1. **Open Method:** 👉 **[CreateAgent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)**
+2. Click **Run It** tab &rarr; scroll to **Request Body (`body`)**.
+3. Paste JSON Payload:
 ```json
 {
   "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
-  "description": "Conversational BI agent providing governed retail insights for Cymbal Gadgets",
+  "description": "Conversational agent for Cymbal Gadgets retail sales & transactions",
   "sources": [
     {
       "model": "cymbal_gadgets_boris",
@@ -183,25 +187,101 @@ In enterprise applications, interacting with Looker's Conversational Analytics A
   }
 }
 ```
-*(Make sure to replace `<YOUR_NAME_OR_ID>` with your unique identifier, e.g., `Student 42`, so you can identify your agent on the shared instance).*
+4. Click blue **Run Request** button. Look for status `POST /agents (200: OK)`.
+5. Copy the 32-character `"id"` from the top of the JSON response.
 
-4. **Execute the Request:**  
-   Click the blue **Run Request** button.
+**🐍 Python Snippets for Create Agent:**
+```python
+# Option A: Looker Python SDK (looker_sdk)
+import looker_sdk
+from looker_sdk import models40
+sdk = looker_sdk.init40()
+new_agent = sdk.create_agent(
+    body=models40.WriteAgent(
+        name="Cymbal Retail Analytics Agent - Student 42",
+        sources=[models40.AgentSource(model="cymbal_gadgets_boris", explore="transactions")],
+        context=models40.AgentContext(instructions="...", show_analytical_details=True)
+    )
+)
+print("Agent ID:", new_agent.id)
 
-5. **What to Expect as an Output:**  
-   In the **Response** section below the button, verify the status code:  
-   **`POST /agents (200: OK)`** (or `201: Created`).
+# Option B: Zero-Dependency LookerClient
+from looker_client import LookerClient
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+agent = client.create_agent(name="Cymbal Agent", model="cymbal_gadgets_boris", explore="transactions")
+print("Agent ID:", agent["id"])
+```
 
-6. **Where to Find the Newly Created Agent ID:**  
-   In the response JSON output, locate the top-level **`"id"`** field on the very first line:
-   ```json
-   {
-     "id": "a9b6933c74a045de9ed130ad024cca62",
-     "name": "Cymbal Retail Analytics Agent - Student 42",
-     "sources": [ ... ]
-   }
-   ```
-   **Copy this 32-character Agent ID.** You will paste this ID into Checkpoint 1 and Checkpoint 3 in the web portal to verify your agent and earn points.
+---
+
+### Step 1.2: Supplying a Golden Query Example (`POST /golden_queries`)
+1. **Open Method:** 👉 **[CreateGoldenQuery in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query)**
+2. Click **Run It** &rarr; paste into **Request Body (`body`)**:
+```json
+{
+  "questions": [
+    "What is our total sales amount across all transactions?",
+    "Total sales across all stores",
+    "What is our overall sales revenue?"
+  ],
+  "answer": "https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
+}
+```
+3. Click **Run Request** and copy the returned `"id"`.
+
+**🐍 Python Snippets for Golden Query:**
+```python
+# Create and link golden query to your agent
+gq = client.create_golden_query(
+    questions=["What is our total sales amount across all transactions?"],
+    answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
+)
+client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})
+```
+
+---
+
+### Step 1.3: Create Conversation Using Your Agent ID (`POST /conversations`)
+1. **Open Method:** 👉 **[CreateConversation in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_conversation)**
+2. Click **Run It** &rarr; paste into **Request Body (`body`)**:
+```json
+{
+  "agent_id": "<YOUR_AGENT_ID_FROM_STEP_1.1>",
+  "name": "Cymbal Retail Session - Student <YOUR_NAME_OR_ID>"
+}
+```
+3. Click **Run Request** and copy the returned `"id"` (`conversation_id`).
+
+**🐍 Python Snippets for Create Conversation:**
+```python
+conv = client.create_conversation(agent_id=agent_id, name="Cymbal Analysis Session")
+print("Conversation ID:", conv["id"])
+```
+
+---
+
+### Step 1.4: Test Chat API Method Before Showing Chat UI (`POST /conversational_analytics/chat`)
+1. **Open Method:** 👉 **[ConversationalAnalyticsChat in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/conversational_analytics_chat)**
+2. Click **Run It** &rarr; paste into **Request Body (`body`)**:
+```json
+{
+  "conversation_id": "<YOUR_CONVERSATION_ID_FROM_STEP_1.3>",
+  "user_message": "What is our total sales amount across all transactions?"
+}
+```
+3. Click **Run Request** and observe the 5-stage stream (`THOUGHT`, `SCHEMA`, `QUERY`, `DATA`, `FINAL_RESPONSE`).
+
+**🐍 Python Snippets for Chat API:**
+```python
+# Execute query and parse 5-stage stream
+result = client.chat(conversation_id=conv["id"], user_message="What is our total sales amount?")
+print("🧠 Thoughts:", result["thoughts"])
+print("💻 Query Spec:", result["query"])
+print("📊 Data:", result["data"])
+print("📝 Summary:", result["final_response"])
+```
+
+**🚩 Checkpoint 1:** Paste your Agent ID into the **Assessment Checkpoint 1** field on the portal (`http://localhost:8080`) and click **Check my progress** (+25 Points).
 
 ---
 
