@@ -97,6 +97,13 @@
         <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70"></i>
       </a>
 
+      <!-- Argolis Setup Quickstart Button -->
+      <button id="openArgolisBtn" onclick="openArgolisModal()" class="flex items-center space-x-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl border border-sky-200 bg-sky-50 text-sky-800 hover:bg-sky-100 transition shadow-sm" title="Argolis Setup & Git Quickstart instructions">
+        <i class="fa-solid fa-cloud text-sky-600"></i>
+        <span class="hidden md:inline">Argolis Quickstart</span>
+        <span class="md:hidden">Argolis</span>
+      </button>
+
       <!-- Student Credentials Button -->
       <button id="openCredentialsBtn" class="flex items-center space-x-2 text-xs font-semibold px-3 py-1.5 rounded-xl border transition shadow-sm bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100">
         <i class="fa-solid fa-key text-amber-600"></i>
@@ -134,6 +141,9 @@
       <nav class="h-11 bg-slate-50 border-b border-slate-200 px-4 flex items-center space-x-1 overflow-x-auto text-xs shrink-0 custom-scrollbar">
         <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-semibold bg-white text-indigo-700 shadow-sm whitespace-nowrap border border-slate-200" data-target="section-overview">
           <i class="fa-solid fa-compass mr-1.5 text-indigo-500"></i>Overview
+        </button>
+        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-argolis">
+          <i class="fa-solid fa-cloud mr-1.5 text-sky-500"></i>Argolis Setup
         </button>
         <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-step0">
           <i class="fa-solid fa-key mr-1.5 text-amber-500"></i>Step 0: Credentials
@@ -192,6 +202,40 @@
                 <span>Launch Interactive Slides</span>
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
               </a>
+            </div>
+          </div>
+
+          <!-- Argolis Setup Quickstart Callout -->
+          <div class="bg-gradient-to-r from-sky-50 via-white to-blue-50 border-2 border-sky-300 rounded-xl p-3.5 text-xs space-y-2.5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2 text-sky-950 font-bold">
+                <i class="fa-solid fa-cloud text-sky-600 text-base"></i>
+                <span>Argolis Environment &amp; Git Quickstart</span>
+              </div>
+              <span class="text-[11px] font-semibold text-sky-800 bg-sky-100 px-2 py-0.5 rounded-full border border-sky-200">Mandatory Setup</span>
+            </div>
+            <p class="text-slate-600 text-xs leading-relaxed">
+              Every student runs in their own Google Cloud Argolis project sandbox via <strong>Google Cloud Shell</strong>. This ensures total isolation, zero port collisions on <code class="font-mono text-indigo-700">8080</code>, and secure credential handling.
+            </p>
+            <div class="relative group">
+              <pre class="bg-slate-900 text-emerald-400 p-2.5 rounded-lg text-xs font-mono select-all">git clone https://github.com/boobyg/cymbal_gadgets.git &amp;&amp; cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh</pre>
+              <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git &amp;&amp; cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh', this)" class="absolute top-1.5 right-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded-md text-[11px] border border-slate-700 transition flex items-center space-x-1 shadow-sm">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy 1-Liner</span>
+              </button>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-[11px]">
+              <span class="text-slate-500">Run in Cloud Shell &rarr; Web Preview &rarr; Preview on port 8080</span>
+              <div class="flex items-center space-x-2">
+                <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git', this)" class="text-sky-700 hover:text-sky-900 font-medium underline flex items-center space-x-1">
+                  <i class="fa-regular fa-copy text-[10px]"></i>
+                  <span>Copy Git Clone</span>
+                </button>
+                <button onclick="openArgolisModal()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold px-2.5 py-1 rounded-lg transition shadow-sm flex items-center space-x-1">
+                  <span>Full Instructions</span>
+                  <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -280,6 +324,172 @@
                   <tr><td class="py-1.5 font-semibold">Step 4</td><td>Prompt Tuning & Cloud Run</td><td>5 mins</td><td>25 pts</td></tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+        </article>
+
+        <!-- SECTION: ARGOLIS SETUP & GIT QUICKSTART -->
+        <article id="section-argolis" class="space-y-4 pt-4 border-t border-slate-200">
+          <div class="border-b border-slate-200 pb-3 flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold text-sky-600 uppercase tracking-wider">Environment Preparation</span>
+              <h2 class="text-xl font-bold text-slate-900 mt-1">🛠️ Argolis Lab Setup &amp; Git Quickstart</h2>
+              <p class="text-xs text-slate-600 mt-1">Deploy the lab portal and backend inside your private Google Cloud Argolis project sandbox</p>
+            </div>
+            <button onclick="openArgolisModal()" class="hidden sm:flex items-center space-x-1.5 bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-300 font-semibold px-3 py-1.5 rounded-xl text-xs transition shadow-sm">
+              <i class="fa-solid fa-window-restore text-sky-600"></i>
+              <span>Popup Modal</span>
+            </button>
+          </div>
+
+          <!-- Why Argolis Box -->
+          <div class="bg-sky-50/70 border-2 border-sky-200 rounded-2xl p-4 text-xs text-slate-700 space-y-2.5">
+            <div class="flex items-center space-x-2 font-bold text-sky-900">
+              <i class="fa-solid fa-shield-halved text-sky-600 text-sm"></i>
+              <span>Mandatory Sandbox Architecture: Why Argolis &amp; Google Cloud Shell?</span>
+            </div>
+            <p class="text-xs text-slate-700 leading-relaxed">
+              Every student <strong>must install and run this lab inside their own dedicated Google Cloud Argolis environment</strong> using Google Cloud Shell.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-1 text-xs">
+              <div class="bg-white p-3 rounded-xl border border-sky-200 shadow-sm space-y-1">
+                <div class="font-bold text-sky-950 flex items-center space-x-1.5">
+                  <i class="fa-solid fa-network-wired text-sky-600"></i>
+                  <span>Zero Port Collisions</span>
+                </div>
+                <p class="text-slate-600 text-[11px] leading-relaxed">
+                  Avoids port <code class="font-mono text-indigo-700">8080</code> conflicts between concurrent students on shared hosts.
+                </p>
+              </div>
+              <div class="bg-white p-3 rounded-xl border border-sky-200 shadow-sm space-y-1">
+                <div class="font-bold text-sky-950 flex items-center space-x-1.5">
+                  <i class="fa-solid fa-lock text-sky-600"></i>
+                  <span>Credential Privacy</span>
+                </div>
+                <p class="text-slate-600 text-[11px] leading-relaxed">
+                  Your Looker API credentials remain securely sandboxed in your individual GCP account.
+                </p>
+              </div>
+              <div class="bg-white p-3 rounded-xl border border-sky-200 shadow-sm space-y-1">
+                <div class="font-bold text-sky-950 flex items-center space-x-1.5">
+                  <i class="fa-solid fa-globe text-sky-600"></i>
+                  <span>Secure Web Preview</span>
+                </div>
+                <p class="text-slate-600 text-[11px] leading-relaxed">
+                  Cloud Shell provides instant, secure HTTPS proxying to port 8080 without firewall rules or SSH tunneling.
+                </p>
+              </div>
+              <div class="bg-white p-3 rounded-xl border border-sky-200 shadow-sm space-y-1">
+                <div class="font-bold text-sky-950 flex items-center space-x-1.5">
+                  <i class="fa-solid fa-screwdriver-wrench text-sky-600"></i>
+                  <span>Zero Local Prerequisites</span>
+                </div>
+                <p class="text-slate-600 text-[11px] leading-relaxed">
+                  Debian Linux container with Python 3, Git, and curl pre-installed and ready out of the box.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- One-Shot Fast Track Box -->
+          <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 border border-slate-700 rounded-2xl p-4 text-xs text-white space-y-2 shadow-md">
+            <div class="flex items-center justify-between">
+              <span class="font-bold flex items-center space-x-2 text-amber-300">
+                <i class="fa-solid fa-bolt text-amber-400"></i>
+                <span>Fast Track: Copy One-Shot Setup Command</span>
+              </span>
+              <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded-full border border-slate-600">One-Line Execution</span>
+            </div>
+            <p class="text-[11px] text-slate-300">
+              Paste this entire line into Google Cloud Shell to clone the repo, install dependencies, and start the web server:
+            </p>
+            <div class="relative group mt-1">
+              <pre class="bg-black/60 text-emerald-400 p-3 rounded-xl text-xs font-mono select-all overflow-x-auto">git clone https://github.com/boobyg/cymbal_gadgets.git &amp;&amp; cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh</pre>
+              <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git &amp;&amp; cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh', this)" class="absolute top-2 right-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 shadow">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy Command</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Detailed Step-by-Step Instructions -->
+          <div class="space-y-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Detailed Step-by-Step Installation:</h3>
+
+            <!-- Step A -->
+            <div class="bg-white border border-slate-200 rounded-xl p-3.5 space-y-2">
+              <div class="flex items-center space-x-2 font-bold text-slate-900 text-xs">
+                <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px]">A</span>
+                <span>Open Google Cloud Shell in your Argolis Project</span>
+              </div>
+              <ol class="list-decimal pl-6 text-xs text-slate-600 space-y-1">
+                <li>Open Google Cloud Console: <a href="https://console.cloud.google.com" target="_blank" rel="noopener noreferrer" class="text-sky-600 underline font-medium">console.cloud.google.com</a>.</li>
+                <li>Verify your project selector shows your assigned <strong>Argolis sandbox project</strong>.</li>
+                <li>Click the <strong>Activate Cloud Shell</strong> icon (<code class="font-mono bg-slate-100 text-slate-800 px-1 rounded">&gt;_</code>) in the top-right toolbar.</li>
+              </ol>
+            </div>
+
+            <!-- Step B -->
+            <div class="bg-white border border-slate-200 rounded-xl p-3.5 space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2 font-bold text-slate-900 text-xs">
+                  <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px]">B</span>
+                  <span>Clone Git Repository to Cloud Shell</span>
+                </div>
+                <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git', this)" class="text-xs text-sky-700 hover:text-sky-900 font-semibold flex items-center space-x-1 bg-sky-50 hover:bg-sky-100 border border-sky-200 px-2.5 py-1 rounded-lg transition shadow-sm">
+                  <i class="fa-regular fa-copy"></i>
+                  <span>Copy Git Clone</span>
+                </button>
+              </div>
+              <p class="text-xs text-slate-600">In your Cloud Shell terminal, clone the public repository:</p>
+              <div class="relative group">
+                <pre class="bg-slate-900 text-slate-100 p-2.5 rounded-lg text-xs font-mono select-all">git clone https://github.com/boobyg/cymbal_gadgets.git</pre>
+                <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git', this)" class="absolute top-1.5 right-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px] border border-slate-700">Copy</button>
+              </div>
+            </div>
+
+            <!-- Step C -->
+            <div class="bg-white border border-slate-200 rounded-xl p-3.5 space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2 font-bold text-slate-900 text-xs">
+                  <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px]">C</span>
+                  <span>Navigate and Launch Application Server</span>
+                </div>
+                <button onclick="copyText('cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh', this)" class="text-xs text-sky-700 hover:text-sky-900 font-semibold flex items-center space-x-1 bg-sky-50 hover:bg-sky-100 border border-sky-200 px-2.5 py-1 rounded-lg transition shadow-sm">
+                  <i class="fa-regular fa-copy"></i>
+                  <span>Copy Launch Command</span>
+                </button>
+              </div>
+              <div class="relative group">
+                <pre class="bg-slate-900 text-slate-100 p-2.5 rounded-lg text-xs font-mono select-all">cd cymbal_gadgets/agentic_web_app
+./run.sh</pre>
+                <button onclick="copyText('cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh', this)" class="absolute top-1.5 right-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px] border border-slate-700">Copy</button>
+              </div>
+              <p class="text-[11px] text-slate-500">The script creates a Python virtual environment, installs dependencies, and binds the web server to port <code class="font-mono text-indigo-700">8080</code>.</p>
+            </div>
+
+            <!-- Step D -->
+            <div class="bg-white border border-slate-200 rounded-xl p-3.5 space-y-2">
+              <div class="flex items-center space-x-2 font-bold text-slate-900 text-xs">
+                <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px]">D</span>
+                <span>Open Cloud Shell Web Preview on Port 8080</span>
+              </div>
+              <ol class="list-decimal pl-6 text-xs text-slate-600 space-y-1">
+                <li>In the Google Cloud Shell toolbar (top-right), click the <strong>Web Preview</strong> icon (<i class="fa-solid fa-window-maximize text-slate-500"></i>).</li>
+                <li>Select <strong>Preview on port 8080</strong> from the dropdown menu.</li>
+                <li>Your browser opens the full interactive training portal via an authorized proxy!</li>
+              </ol>
+            </div>
+
+            <!-- Step E -->
+            <div class="bg-white border border-slate-200 rounded-xl p-3.5 space-y-2">
+              <div class="flex items-center space-x-2 font-bold text-slate-900 text-xs">
+                <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px]">E</span>
+                <span>Enter Your Looker API Credentials in the Portal</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                When the portal loads, click the yellow <strong>"Specify your own user id / secret"</strong> button in the top navigation bar (or configure <code class="font-mono text-slate-700">.env</code> directly in terminal) to enter your assigned Looker Client ID and Secret.
+              </p>
             </div>
           </div>
         </article>
@@ -1329,6 +1539,109 @@ client.update_agent(agent_id, {
 
     </section>
 
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL 0: ARGOLIS SETUP & GIT QUICKSTART                      -->
+  <!-- ============================================================ -->
+  <div id="argolisModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden transform transition-all flex flex-col max-h-[90vh]">
+      <div class="bg-gradient-to-r from-sky-600 to-indigo-700 px-6 py-4 text-white flex items-center justify-between shrink-0">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-cloud text-sky-200"></i>
+          <h3 class="font-bold text-sm">Argolis Environment Setup &amp; Git Quickstart</h3>
+        </div>
+        <button onclick="closeArgolisModal()" class="text-white/80 hover:text-white text-sm">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-4 text-xs custom-scrollbar">
+        <!-- Callout Banner -->
+        <div class="bg-sky-50 border border-sky-200 text-sky-950 p-3.5 rounded-xl space-y-1.5">
+          <div class="font-bold flex items-center space-x-1.5 text-sky-900">
+            <i class="fa-solid fa-circle-info text-sky-600"></i>
+            <span>Why Argolis &amp; Google Cloud Shell?</span>
+          </div>
+          <p class="text-[11px] text-slate-700 leading-relaxed">
+            Every student runs their own isolated environment in their dedicated Argolis GCP sandbox. Google Cloud Shell provides a pre-configured Linux container with Python 3, Git, curl, and secure HTTPS Web Preview on port 8080—completely eliminating port collisions and credential leaks!
+          </p>
+        </div>
+
+        <!-- 1-Liner Quickstart with Copy Button -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-800 flex items-center space-x-1.5">
+              <i class="fa-solid fa-bolt text-amber-500"></i>
+              <span>One-Shot Command (Copy &amp; Paste into Cloud Shell):</span>
+            </span>
+            <span class="text-[10px] text-slate-500">Clones, sets up &amp; runs port 8080</span>
+          </div>
+          <div class="relative group">
+            <pre class="bg-slate-900 text-emerald-400 p-3 rounded-xl text-xs font-mono select-all overflow-x-auto">git clone https://github.com/boobyg/cymbal_gadgets.git &amp;&amp; cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh</pre>
+            <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git &amp;&amp; cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh', this)" class="absolute top-2 right-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-lg text-xs font-semibold transition flex items-center space-x-1 shadow">
+              <i class="fa-regular fa-copy"></i>
+              <span>Copy Command</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step-by-Step Breakdown -->
+        <div class="space-y-3 pt-2 border-t border-slate-200">
+          <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider">Step-by-Step Installation:</h4>
+          
+          <div class="space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <div class="font-semibold text-slate-800">1. Open Google Cloud Shell:</div>
+            <p class="text-slate-600 text-[11px]">
+              Navigate to <a href="https://console.cloud.google.com" target="_blank" rel="noopener noreferrer" class="text-sky-600 underline font-medium">console.cloud.google.com</a>, ensure your project selector shows your assigned Argolis project, and click the <strong>Activate Cloud Shell</strong> icon (<code class="font-mono bg-white text-slate-800 px-1 rounded">&gt;_</code>) in the top navbar.
+            </p>
+          </div>
+
+          <div class="space-y-1.5 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-800">2. Clone Git Repository:</span>
+              <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git', this)" class="text-xs text-sky-700 hover:text-sky-900 font-semibold flex items-center space-x-1 bg-white hover:bg-sky-50 border border-sky-200 px-2.5 py-1 rounded-lg transition shadow-sm">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy Git Clone</span>
+              </button>
+            </div>
+            <pre class="bg-slate-900 text-slate-100 p-2.5 rounded-lg text-xs font-mono select-all overflow-x-auto">git clone https://github.com/boobyg/cymbal_gadgets.git</pre>
+          </div>
+
+          <div class="space-y-1.5 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-800">3. Navigate and Launch Application:</span>
+              <button onclick="copyText('cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh', this)" class="text-xs text-sky-700 hover:text-sky-900 font-semibold flex items-center space-x-1 bg-white hover:bg-sky-50 border border-sky-200 px-2.5 py-1 rounded-lg transition shadow-sm">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy Launch</span>
+              </button>
+            </div>
+            <pre class="bg-slate-900 text-slate-100 p-2.5 rounded-lg text-xs font-mono select-all overflow-x-auto">cd cymbal_gadgets/agentic_web_app
+./run.sh</pre>
+          </div>
+
+          <div class="space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <div class="font-semibold text-slate-800">4. Open Cloud Shell Web Preview:</div>
+            <p class="text-slate-600 text-[11px]">
+              In the Cloud Shell toolbar, click the <strong>Web Preview</strong> icon and choose <strong>Preview on port 8080</strong>.
+            </p>
+          </div>
+
+          <div class="space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <div class="font-semibold text-slate-800">5. Enter Looker API Credentials:</div>
+            <p class="text-slate-600 text-[11px]">
+              Click the yellow <strong>"Specify your own user id / secret"</strong> button at the top of the portal to enter your assigned Client ID &amp; Secret.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex justify-end shrink-0">
+        <button type="button" onclick="closeArgolisModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium text-xs transition">
+          Close
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- ============================================================ -->
@@ -2688,15 +3001,69 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
       renderTimer();
     }
 
-    // Helper: Copy code block
+    // ----------------------------------------------------
+    // ARGOLIS MODAL & COPY HELPERS
+    // ----------------------------------------------------
+    function openArgolisModal() {
+      const modal = document.getElementById('argolisModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeArgolisModal() {
+      const modal = document.getElementById('argolisModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function copyText(text, btn) {
+      copyToClipboard(text, btn);
+    }
+
     function copyCode(btn) {
       const pre = btn.parentElement.querySelector('pre');
       if (pre) {
-        navigator.clipboard.writeText(pre.textContent);
-        const oldText = btn.textContent;
-        btn.textContent = 'Copied!';
-        setTimeout(() => btn.textContent = oldText, 2000);
+        copyToClipboard(pre.textContent.trim(), btn);
       }
+    }
+
+    function copyToClipboard(text, btn) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          showCopyFeedback(btn);
+        }).catch(() => {
+          fallbackCopyText(text, btn);
+        });
+      } else {
+        fallbackCopyText(text, btn);
+      }
+    }
+
+    function fallbackCopyText(text, btn) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showCopyFeedback(btn);
+      } catch (err) {
+        console.error('Fallback copy failed:', err);
+      }
+      document.body.removeChild(textArea);
+    }
+
+    function showCopyFeedback(btn) {
+      if (!btn) return;
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400 mr-1"></i> Copied!';
+      btn.classList.add('bg-emerald-800', 'text-white');
+      setTimeout(() => {
+        btn.innerHTML = originalHtml;
+        btn.classList.remove('bg-emerald-800', 'text-white');
+      }, 2000);
     }
 
     function escapeHtml(str) {
