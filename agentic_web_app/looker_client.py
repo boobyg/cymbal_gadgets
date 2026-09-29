@@ -171,7 +171,19 @@ class LookerClient:
         """
         Create a Golden Query (verified question-answer exemplar) in Looker.
         Golden queries anchor the conversational agent to known LookML query answers.
+        
+        Note: Looker API 4.0 strictly allows only ONE question per golden query record.
+        Passing multiple questions causes HTTP 422: 'only one question is supported per golden query'.
         """
+        if isinstance(questions, str):
+            questions = [questions]
+        elif isinstance(questions, list) and len(questions) > 1:
+            logger.warning(
+                f"Looker API 4.0 supports only one question per golden query. "
+                f"Using the first question: '{questions[0]}' (prevents HTTP 422)"
+            )
+            questions = [questions[0]]
+
         payload = {
             "questions": questions,
             "answer": answer

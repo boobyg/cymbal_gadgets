@@ -51,7 +51,7 @@
       <span class="text-slate-400 font-medium">Slide</span>
       <span id="currentSlideNum" class="font-bold text-indigo-400">1</span>
       <span class="text-slate-500">/</span>
-      <span id="totalSlidesNum" class="text-slate-400 font-medium">14</span>
+      <span id="totalSlidesNum" class="text-slate-400 font-medium">15</span>
     </div>
 
     <!-- Action Controls -->
@@ -122,7 +122,64 @@
           </div>
         </div>
 
-        <!-- SLIDE 2: THE PROBLEM WITH RAW TEXT-TO-SQL -->
+        <!-- SLIDE 2: LAB SETUP & ARGOLIS QUICKSTART -->
+        <div class="slide flex-col justify-between flex-1" data-title="Argolis Git Quickstart" data-notes="Explain that each student deploys inside their assigned Argolis GCP project. Cloud Shell has Git, Python, and curl preinstalled, and Web Preview on port 8080 provides secure HTTPS access.">
+          <div class="space-y-4">
+            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-cloud-arrow-down mr-1"></i> Argolis Setup & Git Quickstart</span>
+            <h2 class="text-2xl md:text-3xl font-bold text-white">Installing the Lab from Git into Your Argolis Environment</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Every student runs their own isolated instance of the lab inside their assigned <strong>Argolis Google Cloud Project</strong> using <strong>Google Cloud Shell</strong>:
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 text-xs">
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-3">
+              <div class="flex items-center space-x-2 text-indigo-400 font-bold text-sm">
+                <i class="fa-solid fa-terminal"></i>
+                <span>1. Open Cloud Shell & Clone</span>
+              </div>
+              <p class="text-slate-400 text-[11px]">In your Argolis GCP project console, click <strong>Activate Cloud Shell</strong> (<code>&gt;_</code>) and run:</p>
+              <pre class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-[11px] text-indigo-300 font-mono overflow-x-auto">git clone https://github.com/boobyg/cymbal_gadgets.git
+cd cymbal_gadgets/agentic_web_app</pre>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-3">
+              <div class="flex items-center space-x-2 text-emerald-400 font-bold text-sm">
+                <i class="fa-solid fa-play"></i>
+                <span>2. Launch the Web Application</span>
+              </div>
+              <p class="text-slate-400 text-[11px]">Execute the automated startup script to bind port 8080:</p>
+              <pre class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-[11px] text-emerald-300 font-mono overflow-x-auto">chmod +x run.sh
+./run.sh</pre>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-3">
+              <div class="flex items-center space-x-2 text-blue-400 font-bold text-sm">
+                <i class="fa-solid fa-up-right-from-square"></i>
+                <span>3. Open Cloud Shell Web Preview</span>
+              </div>
+              <p class="text-slate-400 text-[11px]">Click <strong>Web Preview</strong> (top-right of Cloud Shell) &rarr; <strong>Preview on port 8080</strong> to open the dual-pane interactive portal in your browser.</p>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-3">
+              <div class="flex items-center space-x-2 text-amber-400 font-bold text-sm">
+                <i class="fa-solid fa-key"></i>
+                <span>4. Set Student Looker Credentials</span>
+              </div>
+              <p class="text-slate-400 text-[11px]">In the top bar, click <strong>Student Credentials</strong> (key icon) to authenticate with your assigned Looker Client ID & Secret (or edit <code>.env</code>).</p>
+            </div>
+          </div>
+
+          <div class="bg-indigo-950/30 border border-indigo-800/40 p-3 rounded-xl flex items-center justify-between text-xs text-indigo-300">
+            <div class="flex items-center space-x-2">
+              <i class="fa-solid fa-shield-halved text-indigo-400"></i>
+              <span>Argolis sandboxing guarantees 100% isolation for session state and credentials.</span>
+            </div>
+            <span class="text-slate-400 font-mono text-[11px]">Zero local software installation</span>
+          </div>
+        </div>
+
+        <!-- SLIDE 3: THE PROBLEM WITH RAW TEXT-TO-SQL -->
         <div class="slide flex-col justify-between flex-1" data-title="Why Raw Text-to-SQL Fails" data-notes="Explain the dilemma: Every stakeholder wants to chat with the warehouse. But raw SQL generation hallucinations result in bad joins, wrong metric formulas, and zero auditability.">
           <div class="space-y-4">
             <span class="text-xs font-bold text-rose-400 uppercase tracking-wider">The Enterprise Dilemma</span>
@@ -440,63 +497,66 @@
           </div>
         </div>
 
-        <!-- SLIDE 8: LOOKER API EXPLORER -->
-        <div class="slide flex-col justify-between flex-1" data-title="Developer Workbench: API Explorer" data-notes="Explain what Looker API Explorer is: Looker's built-in interactive REST workbench where developers discover and test endpoints live in the browser.">
-          <div class="space-y-4">
-            <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">Developer Workbench</span>
-            <h2 class="text-2xl md:text-4xl font-bold text-white">Looker API Explorer: Built-in Developer Workbench</h2>
-            <p class="text-sm text-slate-400 leading-relaxed">
-              Data engineers don't need Postman or curl scripts to get started. Looker includes a native, interactive API Explorer:
+        <!-- SLIDE 9: LOOKER API EXPLORER & DUAL PATHWAYS -->
+        <div class="slide flex-col justify-between flex-1" data-title="API Explorer & Dual Pathways" data-notes="Explain the two pathways for Task 1: 1) API Explorer (GUI / zero setup) and 2) Python Code Snippets. Explain where to paste Python code: in Cloud Shell interactive Python terminal (python3) or script file.">
+          <div class="space-y-3">
+            <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">Developer Workbench & Execution Paths</span>
+            <h2 class="text-xl md:text-3xl font-bold text-white">Looker API Explorer & Dual Pathways for Task 1</h2>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Students can complete every step of Task 1 using either of <strong>two equivalent pathways</strong>:
             </p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 text-xs">
-            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-2 text-xs">
+            <div class="bg-slate-900/80 border border-blue-900/40 p-3.5 rounded-xl space-y-2">
               <div class="text-white font-bold flex items-center space-x-2">
-                <i class="fa-solid fa-list-check text-blue-400"></i>
-                <span>All 400+ REST Endpoints</span>
+                <i class="fa-solid fa-globe text-cyan-400"></i>
+                <span class="text-cyan-300">Pathway 1: API Explorer (Interactive GUI)</span>
               </div>
-              <p class="text-slate-300 leading-relaxed">
-                Browse complete schemas, parameter descriptions, required headers, and response status codes for API 4.0.
+              <p class="text-slate-300 leading-relaxed text-[11px]">
+                Built-in workbench in Looker. Click direct links, click the <strong>Run It</strong> tab, paste JSON payload, and click <strong>Run Request</strong>. Zero local coding required!
               </p>
+              <div class="pt-1">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" target="_blank" class="font-mono text-cyan-300 hover:underline text-[10px] break-all">
+                  🔗 Open create_agent in API Explorer
+                </a>
+              </div>
             </div>
-            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
+
+            <div class="bg-slate-900/80 border border-emerald-900/40 p-3.5 rounded-xl space-y-2">
               <div class="text-white font-bold flex items-center space-x-2">
-                <i class="fa-solid fa-play text-emerald-400"></i>
-                <span>In-Browser Live Execution ("Run It")</span>
+                <i class="fa-brands fa-python text-emerald-400"></i>
+                <span class="text-emerald-300">Pathway 2: Python Code Snippets</span>
               </div>
-              <p class="text-slate-300 leading-relaxed">
-                Test payloads directly against your live instance. Automatically uses your active browser SSO session!
+              <p class="text-slate-300 leading-relaxed text-[11px]">
+                Programmatic execution using official <code class="text-emerald-300 font-mono">looker_sdk</code> or zero-dependency <code class="text-emerald-300 font-mono">LookerClient</code>.
               </p>
-            </div>
-            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
-              <div class="text-white font-bold flex items-center space-x-2">
-                <i class="fa-solid fa-code text-indigo-400"></i>
-                <span>Multi-Language SDK Code Generation</span>
+              <div class="text-slate-400 text-[10px]">
+                Pre-configured client available in <code class="text-slate-300 font-mono">agentic_web_app</code>.
               </div>
-              <p class="text-slate-300 leading-relaxed">
-                Instantly view and copy runnable client code in Python, TypeScript, Kotlin, Swift, and C#.
-              </p>
-            </div>
-            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl space-y-2">
-              <div class="text-white font-bold flex items-center space-x-2">
-                <i class="fa-solid fa-compass text-amber-400"></i>
-                <span>Direct Method Link</span>
-              </div>
-              <p class="text-slate-300 leading-relaxed">
-                Open <code class="text-indigo-300 font-mono">ConversationalAnalytics / create_agent</code> directly in Looker API Explorer.
-              </p>
             </div>
           </div>
 
-          <div class="bg-blue-950/20 border border-blue-800/40 p-3 rounded-xl text-xs text-blue-300 flex items-center justify-between">
-            <span>Direct CreateAgent Link:</span>
-            <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" target="_blank" class="font-mono text-cyan-300 hover:underline text-[11px]">https://ceworkshops.cloud.looker.com/.../ConversationalAnalytics/create_agent</a>
+          <div class="bg-slate-900/90 border border-amber-900/40 p-3 rounded-xl text-xs space-y-1.5">
+            <div class="text-amber-300 font-bold flex items-center space-x-2">
+              <i class="fa-solid fa-terminal"></i>
+              <span>📌 Where to Paste & Execute the Python Code:</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px] text-slate-300">
+              <div class="bg-slate-950/70 p-2 rounded border border-slate-800">
+                <strong class="text-white">Option A: Cloud Shell REPL (Fastest)</strong>
+                <p class="text-slate-400 mt-0.5">In Cloud Shell terminal run <code class="text-amber-300 font-mono">python3</code> and paste snippet directly into the interactive session.</p>
+              </div>
+              <div class="bg-slate-950/70 p-2 rounded border border-slate-800">
+                <strong class="text-white">Option B: Script File / Notebook</strong>
+                <p class="text-slate-400 mt-0.5">Create a script in <code class="text-amber-300 font-mono">agentic_web_app/</code> or paste into a Jupyter / Vertex AI Workbench notebook cell.</p>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- SLIDE 9: STEP 0 & STEP 1 - CREATING THE AGENT, GOLDEN QUERIES & CHAT API -->
-        <div class="slide flex-col justify-between flex-1" data-title="Step 0 & 1: Agent, Golden Query & Chat API" data-notes="Walk through Step 0 credentials and Step 1 agent creation, golden query example, conversation session using agent id, and chat API testing before showing the UI.">
+        <!-- SLIDE 10: STEP 0 & STEP 1 - CREATING THE AGENT, GOLDEN QUERIES & CHAT API -->
+        <div class="slide flex-col justify-between flex-1" data-title="Step 0 & 1: Agent, Golden Query & Chat API" data-notes="Walk through Step 0 credentials and Step 1 agent creation, golden query creation & linking via API Explorer update_agent, conversation session using agent id, and chat API testing before showing the UI.">
           <div class="space-y-3">
             <div class="flex items-center justify-between">
               <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Hands-On Phase 1 &bull; Video Companion</span>
@@ -504,7 +564,7 @@
             </div>
             <h2 class="text-xl md:text-3xl font-bold text-white">Task 1: End-to-End CA API Journey & Python SDK</h2>
             <p class="text-xs text-slate-400 leading-relaxed">
-              Follow the complete sequence from the video: Create Agent &rarr; Golden Query &rarr; Create Conversation &rarr; Test Chat API.
+              Follow the complete sequence from the video: Create Agent &rarr; Golden Query & Link &rarr; Create Conversation &rarr; Test Chat API.
             </p>
           </div>
 
@@ -519,7 +579,7 @@
                 <span class="font-mono text-[10px] text-blue-300">create_agent</span>
               </div>
               <p class="text-[11px] text-slate-300">Define model (<code class="font-mono text-slate-400">cymbal_gadgets_boris</code>), explore (<code class="font-mono text-slate-400">transactions</code>), and guardrails.</p>
-              <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-blue-300 overflow-x-auto"># Python SDK
+              <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-blue-300 overflow-x-auto"># Python SDK:
 agent = sdk.create_agent(body=models40.WriteAgent(
     name="Cymbal Agent", sources=[...], context=...
 ))
@@ -531,16 +591,15 @@ agent = sdk.create_agent(body=models40.WriteAgent(
               <div class="flex items-center justify-between">
                 <span class="font-bold text-amber-400 flex items-center space-x-1.5">
                   <span class="w-4 h-4 rounded-full bg-amber-600 text-white flex items-center justify-center text-[9px]">2</span>
-                  <span>Supply Golden Query (POST /golden_queries)</span>
+                  <span>Golden Query & API Explorer Linking</span>
                 </span>
                 <span class="font-mono text-[10px] text-amber-300">create_golden_query</span>
               </div>
-              <p class="text-[11px] text-slate-300">Anchor natural questions to verified Looker Explore answer URL to prevent hallucinations.</p>
-              <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-amber-300 overflow-x-auto">gq = client.create_golden_query(
-    questions=["What is our total sales amount?"],
-    answer="https://.../explore/...?fields=total_sale_price"
-)
-client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})</pre>
+              <p class="text-[11px] text-slate-300">
+                1. Run <code class="text-amber-300 font-mono">POST /golden_queries</code> (single question required to avoid HTTP 422).<br>
+                2. In API Explorer, open <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="_blank" class="text-cyan-300 underline font-semibold">update_agent</a>, set <code class="text-amber-300 font-mono">agent_id</code>, and send body:
+              </p>
+              <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-amber-300 overflow-x-auto">{"golden_query_ids": [101]}  # Status 200 OK links it!</pre>
             </div>
 
             <!-- 3. Create Conversation -->

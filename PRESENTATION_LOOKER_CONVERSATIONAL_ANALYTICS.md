@@ -25,7 +25,42 @@
 ---
 
 <!-- slide -->
-# Slide 2: The Enterprise Challenge: Why Raw "Text-to-SQL" Fails
+# Slide 2: Lab Setup & Argolis Quickstart (Install from Git)
+
+### How to Clone, Configure, and Launch the Lab in Google Cloud Shell
+
+Every student deploys and runs this lab within their own dedicated **Argolis Google Cloud environment**:
+
+1. **Open Google Cloud Shell:**
+   * In your Argolis GCP Console ([console.cloud.google.com](https://console.cloud.google.com)), activate Cloud Shell (`>_`).
+
+2. **Clone the Git Repository:**
+   ```bash
+   git clone https://github.com/boobyg/cymbal_gadgets.git
+   cd cymbal_gadgets/agentic_web_app
+   ```
+
+3. **Launch the Interactive Web Application:**
+   ```bash
+   chmod +x run.sh
+   ./run.sh
+   # (Or run: python3 server.py)
+   ```
+
+4. **Access the Dual-Pane Lab Portal:**
+   * Click **Web Preview** (top-right of Cloud Shell) &rarr; **Preview on port 8080**.
+   * The interactive portal opens in a new browser tab.
+
+5. **Authenticate Looker API Credentials:**
+   * Click **Student Credentials** (key icon in top header) and input your assigned Looker Client ID & Secret.
+
+> **Speaker Notes:**  
+> Cloud Shell provides an isolated Linux sandbox with Python 3.12, Git, and curl pre-installed. Web Preview on port 8080 provides a secure HTTPS proxy to the web application without requiring firewall or SSH configuration.
+
+---
+
+<!-- slide -->
+# Slide 3: The Enterprise Challenge: Why Raw "Text-to-SQL" Fails
 
 ### Pointing LLMs Directly at Raw Database Tables Consistently Fails in Production
 
@@ -52,7 +87,7 @@
 ---
 
 <!-- slide -->
-# Slide 3: The Architectural Solution: Looker's Governed Semantic Layer
+# Slide 4: The Architectural Solution: Looker's Governed Semantic Layer
 
 ### Looker as the Ground Truth Between AI Intent and Database Execution
 
@@ -78,7 +113,7 @@ Natural Language Prompt  ──►  Looker CA API  ──►  LookML Semantic La
 ---
 
 <!-- slide -->
-# Slide 4: Looker 101 for Data Engineers
+# Slide 5: Looker 101 for Data Engineers
 
 ### Mapping Looker Concepts to Familiar Data Warehouse & SQL Terms
 
@@ -97,7 +132,7 @@ Natural Language Prompt  ──►  Looker CA API  ──►  LookML Semantic La
 ---
 
 <!-- slide -->
-# Slide 5: The Looker Conversational Analytics (CA) API Family
+# Slide 6: The Looker Conversational Analytics (CA) API Family
 
 ### Core REST Endpoints in Looker API 4.0
 *(Follows the official Looker EMEA CE walkthrough video: [youtube.com/watch?v=XyU90O49p8o](https://www.youtube.com/watch?v=XyU90O49p8o))*
@@ -129,7 +164,7 @@ Natural Language Prompt  ──►  Looker CA API  ──►  LookML Semantic La
 ---
 
 <!-- slide -->
-# Slide 6: Anatomy of the 5-Stage CA Response Stream
+# Slide 7: Anatomy of the 5-Stage CA Response Stream
 
 ### Complete Auditability Inside `POST /conversational_analytics/chat`
 
@@ -156,7 +191,7 @@ When you call `/chat`, Looker returns a multi-part payload containing 5 distinct
 ---
 
 <!-- slide -->
-# Slide 7: End-to-End Chronological Execution Flow
+# Slide 8: End-to-End Chronological Execution Flow
 
 ### How a Natural Language Question Travels Through the System
 
@@ -176,35 +211,54 @@ When you call `/chat`, Looker returns a multi-part payload containing 5 distinct
 ---
 
 <!-- slide -->
-# Slide 8: Looker API Explorer: Built-in Developer Workbench
+# Slide 9: Looker API Explorer & Dual Pathways for Task 1
 
-### Interactive API Discovery & In-Browser Execution
+### Choose Your Preferred Journey: Interactive GUI or Python Code
 
-* **What is API Explorer?**
-  * Looker's built-in developer workbench (similar to Swagger/OpenAPI).
-  * Direct method link: [`ConversationalAnalytics / create_agent`](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)
+Students can complete every step of Task 1 using either of **two dual pathways**:
 
-* **Key Features for Data Engineers:**
-  * **Interactive Testing ("Run It"):** Test requests directly in your browser without writing curl or Python scripts.
-  * **Zero-Setup Authentication:** Uses your active browser session automatically.
-  * **Multi-Language Code Generation:** Automatically generates client code snippets in Python, TypeScript, Kotlin, and Swift.
-  * **Looker API 4.0 Selection:** Switch between API versions and search endpoints instantly.
+1. 🌐 **Pathway 1: Looker API Explorer (Interactive GUI / Zero Coding)**
+   * Built-in developer workbench in Looker: [`ConversationalAnalytics / create_agent`](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)
+   * Open the method, click the **Run It** tab, paste the JSON payload, and click **Run Request**.
+   * Instant visual feedback using your active Looker browser session!
+
+2. 🐍 **Pathway 2: Python Code Snippets (Programmatic / SDK)**
+   * Ready-to-run copy-paste snippets using official `looker_sdk` or zero-dependency `LookerClient`.
+
+### 📌 Where to Paste and Run the Python Code
+* **Option A (Fastest & Recommended):** Open an interactive Python terminal in Google Cloud Shell:
+  ```bash
+  python3
+  ```
+  Paste the code snippet directly into the Python REPL!
+* **Option B (Script File):** Save into a test script inside `cymbal_gadgets/agentic_web_app/` (which already has `config.py` and `looker_client.py`):
+  ```bash
+  cd ~/cymbal_gadgets/agentic_web_app
+  python3 -c "
+  import config
+  from looker_client import LookerClient
+  client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+  # Paste your snippet here
+  "
+  ```
+* **Option C (Jupyter Notebook):** In any Vertex AI Workbench or Jupyter cell, paste the snippet and press `Shift+Enter`.
 
 > **Speaker Notes:**  
-> In Task 1, students navigate directly to the `create_agent` method in API Explorer. It provides an immediate visual feedback loop for testing the API contract before touching code.
+> Emphasize to students that both pathways are 100% equivalent. Data engineers who prefer GUI can use API Explorer, while Python developers can paste snippets into Cloud Shell.
 
 ---
 
 <!-- slide -->
-# Slide 9: Step 0 & Step 1: Agent Creation, Golden Queries & Chat API Flow
+# Slide 10: Step 0 & Step 1: Agent Creation, Golden Queries & Chat API Flow
 
 ### Complete Video Walkthrough Sequence (Looker EMEA CE)
 *(Video Companion: [youtube.com/watch?v=XyU90O49p8o](https://www.youtube.com/watch?v=XyU90O49p8o))*
 
 1. **Create Agent (`POST /agents`):** Define semantic grounding (`cymbal_gadgets_boris/transactions`) and instructions.
 2. **Golden Query Grounding (`POST /golden_queries`):** Ground agent with verified question-to-Explore URL pairs.
-3. **Create Conversation (`POST /conversations`):** Use the new `agent_id` to allocate a stateful conversation thread.
-4. **Test Chat API Method (`POST /conversational_analytics/chat`):** Validate the 5-stage stream contract before opening UI.
+3. **Link Golden Query to Agent (`PATCH /agents/{id}`):** Associate golden query IDs with the agent.
+4. **Create Conversation (`POST /conversations`):** Use the new `agent_id` to allocate a stateful conversation thread.
+5. **Test Chat API Method (`POST /conversational_analytics/chat`):** Validate the 5-stage stream contract before opening UI.
 
 ---
 
@@ -221,19 +275,34 @@ When you call `/chat`, Looker returns a multi-part payload containing 5 distinct
 
 ---
 
-### 2. Supply Golden Query Example (`POST /api/4.0/golden_queries`)
+### 2. Supply Golden Query & Link to Agent (`POST /golden_queries` & `PATCH /agents/{id}`)
+
+#### Step 2A: Create Golden Query (`POST /api/4.0/golden_queries`)
 * 🔗 [Open create_golden_query in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query)
-* **Payload:**
+* **Payload (Single question strictly required by Looker 4.0 to prevent HTTP 422):**
   ```json
   {
     "questions": ["What is our total sales amount across all transactions?"],
     "answer": "https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
   }
   ```
-* **Python Snippet:**
+* Click **Run Request** & copy the returned integer `"id"` (e.g. `101`).
+
+#### Step 2B: How to Link Golden Query in API Explorer (`PATCH /api/4.0/agents/{agent_id}`)
+* 🔗 [Open update_agent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)
+* **`agent_id` (Path Parameter):** Paste your 32-character Agent ID from Step 1.
+* **Request Body (`body`):**
+  ```json
+  {
+    "golden_query_ids": [101]
+  }
+  ```
+  *(replace `101` with your actual Golden Query ID)*
+* Click **Run Request** &rarr; returns `PATCH /agents/{id} (200 OK)` confirming linking!
+
+* **Python Equivalent (1-Step):**
   ```python
-  # Link golden query to your agent
-  gq = client.create_golden_query(questions=["What is our total sales?"], answer="https://.../explore/...")
+  gq = client.create_golden_query(questions=["What is our total sales amount across all transactions?"], answer="https://.../explore/...")
   client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})
   ```
 
@@ -261,12 +330,12 @@ When you call `/chat`, Looker returns a multi-part payload containing 5 distinct
   ```
 
 > **Speaker Notes:**  
-> This slide mirrors the exact video walkthrough: students create the agent, anchor it with a golden query example, initialize a stateful conversation thread, and test the raw Chat API method to inspect the 5-stage stream contract before launching the web UI.
+> This slide mirrors the exact video walkthrough: students create the agent, anchor it with a golden query example, link the query via update_agent, initialize a stateful conversation thread, and test the raw Chat API method to inspect the 5-stage stream contract before launching the web UI.
 
 ---
 
 <!-- slide -->
-# Slide 10: Step 2: Web Client Architecture & Health Check
+# Slide 11: Step 2: Web Client Architecture & Health Check
 
 ### Running the Python Client in Dedicated Argolis Cloud Shell
 
@@ -295,7 +364,7 @@ cd /home/user/cymbal_gadgets/agentic_web_app
 ---
 
 <!-- slide -->
-# Slide 11: Step 3: Interactive Prompting & Audit Real-Time Tracing
+# Slide 12: Step 3: Interactive Prompting & Audit Real-Time Tracing
 
 ### 🔍 Audit the Three Execution Tracing Accordions
 When prompts execute, the Looker Conversational Analytics API returns a rich multi-stage stream. **Students must expand and inspect each accordion below the agent's answer:**
@@ -315,7 +384,7 @@ When prompts execute, the Looker Conversational Analytics API returns a rich mul
 ---
 
 <!-- slide -->
-# Slide 12: Step 4: Where & How Guardrails Are Applied in Conversational Analytics (CA) APIs
+# Slide 13: Step 4: Where & How Guardrails Are Applied in Conversational Analytics (CA) APIs
 
 ### Enterprise AI Governance Architecture
 
@@ -369,7 +438,7 @@ client.update_agent(agent_id, {
 ---
 
 <!-- slide -->
-# Slide 13: Google Cloud Serverless Production Architecture
+# Slide 14: Google Cloud Serverless Production Architecture
 
 ### Production-Grade Enterprise Deployment Pattern
 
@@ -394,7 +463,7 @@ client.update_agent(agent_id, {
 ---
 
 <!-- slide -->
-# Slide 14: Key Takeaways & Best Practices for Data Engineers
+# Slide 15: Key Takeaways & Best Practices for Data Engineers
 
 ### Summary Checklist for Building Enterprise Conversational Data Platforms
 

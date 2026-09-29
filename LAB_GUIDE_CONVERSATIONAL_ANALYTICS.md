@@ -232,7 +232,39 @@ In production applications, building on Looker's Conversational Analytics API fo
 
 ---
 
-### 1.2 Accessing the `CreateAgent` Method in API Explorer
+### 1.2 Dual Pathways for Completing Task 1 & Where to Run Python Code
+
+Students have **two completely equivalent pathways** to execute every step of Task 1 (Create Agent, Golden Query, Conversation Session, Chat API Test):
+
+| Pathway | Interface | Description | Recommended For |
+| :--- | :--- | :--- | :--- |
+| **Pathway 1: Looker API Explorer** | Interactive GUI in Looker | Built-in browser workbench. Click direct links, open **Run It**, paste JSON, click **Run Request**. | Students who prefer an interactive visual walkthrough without writing code. |
+| **Pathway 2: Python Code Snippets** | Terminal / Script / Notebook | Programmatic execution using `looker_sdk` or zero-dependency `LookerClient`. | Students who want hands-on experience scripting against Looker CA APIs. |
+
+#### 📌 Where to Paste and Execute the Python Code:
+If you choose Pathway 2, you can run the provided Python snippets in any of these three places:
+1. **Google Cloud Shell Interactive REPL (Fastest):**
+   * In your Cloud Shell terminal, start an interactive Python 3 session:
+     ```bash
+     python3
+     ```
+   * Copy the snippet from the guide or portal and paste it directly into the Python REPL prompt (`>>>`).
+2. **Cloud Shell Script File:**
+   * In Cloud Shell, create a test script file:
+     ```bash
+     cd /home/user/cymbal_gadgets/agentic_web_app
+     nano test_task1.py
+     ```
+   * Paste the Python code, save (`Ctrl+O`, `Enter`, `Ctrl+X`), and execute:
+     ```bash
+     python3 test_task1.py
+     ```
+3. **Jupyter / Vertex AI Workbench Notebook:**
+   * Create a new Python 3 notebook cell, paste the code snippet, and run the cell (`Shift+Enter`).
+
+---
+
+### 1.3 Accessing the `CreateAgent` Method in API Explorer
 👉 **Direct Link:** **[CreateAgent Method in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)**
 
 Clicking the direct link takes you directly to the `create_agent` method under the `ConversationalAnalytics` namespace in Looker API Explorer.
@@ -241,7 +273,7 @@ Clicking the direct link takes you directly to the `create_agent` method under t
 
 ---
 
-### 1.3 Step-by-Step: How to Run `CreateAgent` in API Explorer
+### 1.4 Step-by-Step: How to Run `CreateAgent` in API Explorer
 
 > ⚡ **Multi-Student Naming Rule (500 Concurrent Students):**  
 > Because students share the workshop Looker instance, **you MUST provide a unique name** for your agent (e.g. appending your name, initials, or student ID, such as `Student 42`). This ensures you can easily find and query your agent!
@@ -286,7 +318,7 @@ Clicking the direct link takes you directly to the `create_agent` method under t
 
 ---
 
-### 1.4 🐍 Python Code Snippets: Create Agent
+### 1.5 🐍 Python Code Snippets: Create Agent
 
 After testing in API Explorer, here is how you perform `create_agent` programmatically in Python:
 
@@ -347,67 +379,82 @@ print(f"✅ Created Agent ID: {agent['id']}")
 
 ---
 
-### 1.5 🌟 Supplying a Golden Query Example (`POST /api/4.0/golden_queries`)
+### 1.6 🌟 Supplying a Golden Query & Linking to Your Agent (`POST /api/4.0/golden_queries` & `PATCH /api/4.0/agents/{agent_id}`)
 
 #### What is a Golden Query (Verified Query)?
-In Looker Conversational Analytics, a **Golden Query** (also officially known as a **Verified Query**) is an explicit pair of natural language question variations linked directly to a verified Looker Explore answer URL.
+In Looker Conversational Analytics, a **Golden Query** (also officially known as a **Verified Query**) is an explicit pair of a natural language question linked directly to a verified Looker Explore answer URL.
 
 **Why Data Engineers Need Golden Queries:**
 * **Eliminate Semantic Ambiguity:** When users ask questions with business jargon (e.g. *"What was our total take last quarter?"* or *"Top line volume"*), Golden Queries instruct the agent exactly which measures (`transactions.total_sale_price`) and filters to use.
 * **Few-Shot Ground Truth:** Google recommends supplying verified query exemplars to anchor the LLM to known Explore configurations, avoiding guesswork and hallucinations.
 
+> [!WARNING]
+> **Looker API 4.0 Rule (Prevents HTTP 422 Error):**  
+> Looker API 4.0 strictly validates that **only one question is supported per golden query**. Providing multiple strings in the `questions` array returns `422: only one question is supported per golden query`. To ground multiple phrasing variations, create individual golden queries and link their integer IDs into the agent's `golden_query_ids` array!
+
 #### Golden Query Example for Cymbal Gadgets:
-* **Question Variations (`questions`):**
-  * *"What is our total sales amount across all transactions?"*
-  * *"Total sales across all stores"*
-  * *"What is our overall sales revenue?"*
+* **Question (`questions`):**
+  * `["What is our total sales amount across all transactions?"]`
 * **Explore Answer URL (`answer`):**  
   `https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price`
+
+---
 
 #### Step-by-Step: Run `create_golden_query` in API Explorer
 👉 **Direct Link:** **[CreateGoldenQuery Method in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query)**
 
 1. Navigate to `ConversationalAnalytics > create_golden_query` in Looker API Explorer.
 2. Click the **Run It** tab.
-3. In the **Request Body (`body`)** editor, paste:
+3. In the **Request Body (`body`)** editor, paste the single-question JSON payload:
 ```json
 {
   "questions": [
-    "What is our total sales amount across all transactions?",
-    "Total sales across all stores",
-    "What is our overall sales revenue?"
+    "What is our total sales amount across all transactions?"
   ],
   "answer": "https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 }
 ```
 4. Click **Run Request**.  
-   * **Status:** `POST /golden_queries (200: OK)`  
+   * **Status:** `POST /golden_queries (200: OK)` (or `201: Created`).  
    * **Response Body:** Returns the created golden query object with an integer `"id"` (e.g. `"id": 101`).
-5. *(Optional)* Link the Golden Query to your Agent using `PATCH /api/4.0/agents/{agent_id}`:
+   * **Copy this integer `"id"`!**
+
+---
+
+#### Step-by-Step: How to Link the Golden Query to Your Agent in API Explorer
+👉 **Direct Link:** **[UpdateAgent Method in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)**
+
+Once the Golden Query is created, you must link its integer ID to your agent:
+1. Open the **[UpdateAgent Method in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)** (under `ConversationalAnalytics > update_agent`).
+2. Click the **Run It** tab.
+3. In the **Parameters** section, locate the `agent_id` field and paste your **32-character Agent ID** from Step 1.4.
+4. In the **Request Body (`body`)** editor, paste:
 ```json
 {
   "golden_query_ids": [101]
 }
 ```
+*(Replace `101` with your actual integer Golden Query ID returned in the previous step).*
+5. Click **Run Request**.  
+   * **Status:** `PATCH /agents/{agent_id} (200: OK)`  
+   * **Response Body:** The response contains `"golden_query_ids": [101]`, confirming that your agent is now officially anchored by the verified golden query!
+
+---
 
 #### 🐍 Python Code Snippets: Create & Link Golden Query
 
 ##### Option A: Using Official Looker Python SDK (`looker_sdk`)
 ```python
-# Create Golden Query
+# 1. Create Golden Query (Single question strictly required by Looker 4.0)
 golden_query = sdk.create_golden_query(
     body=models40.WriteGoldenQuery(
-        questions=[
-            "What is our total sales amount across all transactions?",
-            "Total sales across all stores",
-            "What is our overall sales revenue?"
-        ],
+        questions=["What is our total sales amount across all transactions?"],
         answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
     )
 )
 print(f"✅ Created Golden Query ID: {golden_query.id}")
 
-# Link to Agent
+# 2. Link to Agent
 sdk.update_agent(
     agent_id=new_agent.id,
     body=models40.WriteAgent(golden_query_ids=[golden_query.id])
@@ -417,23 +464,21 @@ print(f"✅ Linked Golden Query {golden_query.id} to Agent {new_agent.id}")
 
 ##### Option B: Using Zero-Dependency LookerClient
 ```python
-# Create Golden Query
+# 1. Create Golden Query
 gq = client.create_golden_query(
-    questions=[
-        "What is our total sales amount across all transactions?",
-        "Total sales across all stores"
-    ],
+    questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 )
 print(f"✅ Created Golden Query ID: {gq.get('id')}")
 
-# Link to Agent
+# 2. Link to Agent
 client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})
+print(f"✅ Linked Golden Query {gq['id']} to Agent {agent_id}")
 ```
 
 ---
 
-### 1.6 💬 Create Conversation Session Using Your New Agent ID (`POST /api/4.0/conversations`)
+### 1.7 💬 Create Conversation Session Using Your New Agent ID (`POST /api/4.0/conversations`)
 
 #### Why Conversations Are Created:
 Looker manages stateful conversational threads on the server. Instead of forcing client applications to maintain chat arrays, calculate token windows, and re-transmit historical turns, Looker allocates a persistent `conversation_id`. All multi-turn context and follow-ups are preserved automatically!
@@ -444,14 +489,14 @@ Looker manages stateful conversational threads on the server. Instead of forcing
 #### Step-by-Step: Run `create_conversation` in API Explorer
 1. Navigate to the `create_conversation` method in API Explorer.
 2. Click the **Run It** tab.
-3. In the **Request Body (`body`)** editor, supply the **`agent_id` you created in Step 1.3**:
+3. In the **Request Body (`body`)** editor, supply the **`agent_id` you created in Step 1.4**:
 ```json
 {
   "agent_id": "<YOUR_AGENT_ID_FROM_STEP_1>",
   "name": "Cymbal Retail Session - Student <YOUR_NAME_OR_ID>"
 }
 ```
-*(Replace `<YOUR_AGENT_ID_FROM_STEP_1>` with your 32-character Agent ID from Step 1.3).*
+*(Replace `<YOUR_AGENT_ID_FROM_STEP_1>` with your 32-character Agent ID from Step 1.4).*
 
 4. Click **Run Request**.
 5. **What to Expect as an Output:**  
@@ -468,7 +513,7 @@ Looker manages stateful conversational threads on the server. Instead of forcing
 6. **Where to Find the Newly Created Conversation ID:**  
    Look at the top-level **`"id"`** property:  
    `"id": "c1f2e3d4-5678-90ab-cdef-1234567890ab"`  
-   **Copy this Conversation ID!** You will pass it directly to the Chat API method in Step 1.7.
+   **Copy this Conversation ID!** You will pass it directly to the Chat API method in Step 1.8.
 
 #### 🐍 Python Code Snippets: Create Conversation
 
@@ -494,7 +539,7 @@ print(f"✅ Created Conversation Session ID: {conv['id']}")
 
 ---
 
-### 1.7 ⚡ Testing the Chat API Method Before Showing the Chat UI (`POST /api/4.0/conversational_analytics/chat`)
+### 1.8 ⚡ Testing the Chat API Method Before Showing the Chat UI (`POST /api/4.0/conversational_analytics/chat`)
 
 Before displaying the interactive web application chat interface, data engineers inspect the core Chat API endpoint directly in API Explorer to understand the underlying HTTP contract and 5-stage stream payload.
 

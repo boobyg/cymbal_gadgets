@@ -410,12 +410,25 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 return
             questions = data.get("questions", [])
             answer = data.get("answer", "")
+            agent_id = data.get("agent_id", "").strip()
             if not questions or not answer:
                 self._send_json(400, {"error": "Fields 'questions' (list) and 'answer' (Explore URL string) are required."})
                 return
+            if isinstance(questions, str):
+                questions = [questions]
+            if len(questions) > 1:
+                logger.warning("Looker API 4.0 supports only one question per golden query. Trimming to first question to prevent 422.")
+                questions = [questions[0]]
             try:
                 gq = client.create_golden_query(questions, answer)
-                self._send_json(201, gq)
+                linked = False
+                if agent_id:
+                    try:
+                        client.update_agent(agent_id, {"golden_query_ids": [gq.get("id")]})
+                        linked = True
+                    except Exception as err:
+                        logger.warning(f"Could not link golden query to agent {agent_id}: {err}")
+                self._send_json(201, {"golden_query": gq, "id": gq.get("id"), "linked": linked, "agent_id": agent_id})
             except Exception as e:
                 self._send_json(500, {"error": str(e)})
             return
