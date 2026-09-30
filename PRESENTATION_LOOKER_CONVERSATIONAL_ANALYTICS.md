@@ -211,7 +211,28 @@ When you call `/chat`, Looker returns a multi-part payload containing 5 distinct
 ---
 
 <!-- slide -->
-# Slide 9: Looker API Explorer & Dual Pathways for Task 1
+# Slide 9: Section Divider: Lab: Hands-On Looker Conversational Analytics
+
+### Hands-On Implementation Phase (~30 Minutes)
+
+Put theory into practice: Build, ground, trace, and guard conversational BI agents directly on Looker's governed semantic layer.
+
+| Step | Topic | Core Activity |
+| :---: | :--- | :--- |
+| **Step 0** | **Student Credentials** | Open Student Credentials Dialog & configure API3 authentication |
+| **Step 1** | **API Explorer & Agents** | Create Agent, Golden Query, Conversation & test 5-stage Chat stream |
+| **Step 2** | **Web Application Setup** | Launch Python web application in Cloud Shell & verify health |
+| **Step 3** | **Trace Audit Logs** | Inspect thoughts, generated LookML query spec, and tabular rows |
+| **Step 4** | **Runtime Guardrails** | Dynamic instruction tuning via `PATCH /agents/{id}` |
+| **Step 5** | **Lab Teardown & Cleanup** | Revert patch, delete golden queries, conversations, and agent |
+
+> **Speaker Notes:**  
+> Welcome to the hands-on lab portion! In this phase, students will step through credentials setup, API Explorer agent creation, golden query grounding, web application integration, multi-stage thought tracing, runtime guardrail enforcement, and complete resource cleanup.
+
+---
+
+<!-- slide -->
+# Slide 10: Looker API Explorer & Dual Pathways for Task 1
 
 ### Choose Your Preferred Journey: Interactive GUI or Python Code
 
@@ -220,7 +241,7 @@ Students can complete every step of Task 1 using either of **two dual pathways**
 1. 🌐 **Pathway 1: Looker API Explorer (Interactive GUI / Zero Coding)**
    * Built-in developer workbench in Looker: [`ConversationalAnalytics / create_agent`](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)
    * Open the method, click the **Run It** tab, paste the JSON payload, and click **Run Request**.
-   * Instant visual feedback using your active Looker browser session!
+   * Instant visual feedback using your active Looker browser session! (Reuses existing API Explorer tab)
 
 2. 🐍 **Pathway 2: Python Code Snippets (Programmatic / SDK)**
    * Ready-to-run copy-paste snippets using official `looker_sdk` or zero-dependency `LookerClient`.
@@ -249,7 +270,7 @@ Students can complete every step of Task 1 using either of **two dual pathways**
 ---
 
 <!-- slide -->
-# Slide 10: Step 0 & Step 1: Agent Creation, Golden Queries & Chat API Flow
+# Slide 11: Step 0 & Step 1: Agent Creation, Golden Queries & Chat API Flow
 
 ### Complete Video Walkthrough Sequence (Looker EMEA CE)
 *(Video Companion: [youtube.com/watch?v=XyU90O49p8o](https://www.youtube.com/watch?v=XyU90O49p8o))*
@@ -265,7 +286,7 @@ Students can complete every step of Task 1 using either of **two dual pathways**
 ### 1. Create Agent (`POST /api/4.0/agents`)
 * 🔗 [Open create_agent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)
 * **Payload:** `{"name": "Cymbal Retail Agent - Student <ID>", "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}], "context": {"instructions": "...", "show_analytical_details": true}}`
-* **Python Snippet:**
+* **Alternatively use this Python Code Snippet:**
   ```python
   # looker_sdk
   agent = sdk.create_agent(body=models40.WriteAgent(name="Cymbal Agent", sources=[...], context=...))
@@ -300,7 +321,7 @@ Students can complete every step of Task 1 using either of **two dual pathways**
   *(replace `101` with your actual Golden Query ID)*
 * Click **Run Request** &rarr; returns `PATCH /agents/{id} (200 OK)` confirming linking!
 
-* **Python Equivalent (1-Step):**
+* **Alternatively use this Python Code Snippet (1-Step):**
   ```python
   gq = client.create_golden_query(questions=["What is our total sales amount across all transactions?"], answer="https://.../explore/...")
   client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})
@@ -311,7 +332,7 @@ Students can complete every step of Task 1 using either of **two dual pathways**
 ### 3. Create Conversation Session (`POST /api/4.0/conversations`)
 * 🔗 [Open create_conversation in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_conversation)
 * **Payload:** `{"agent_id": "<YOUR_AGENT_ID>", "name": "Cymbal Retail Session"}`
-* **Python Snippet:**
+* **Alternatively use this Python Code Snippet:**
   ```python
   conv = client.create_conversation(agent_id=agent_id, name="Cymbal Session")
   print("Conversation ID:", conv["id"])
@@ -322,7 +343,7 @@ Students can complete every step of Task 1 using either of **two dual pathways**
 ### 4. Test Chat API Method Before Showing Chat UI (`POST /conversational_analytics/chat`)
 * 🔗 [Open conversational_analytics_chat in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/conversational_analytics_chat)
 * **Payload:** `{"conversation_id": "<CONVERSATION_ID>", "user_message": "What is our total sales amount?"}`
-* **Python Snippet:**
+* **Alternatively use this Python Code Snippet:**
   ```python
   # Stream returns: THOUGHT, SCHEMA, QUERY, DATA, FINAL_RESPONSE
   result = client.chat(conversation_id=conv["id"], user_message="What is our total sales?")
@@ -335,7 +356,7 @@ Students can complete every step of Task 1 using either of **two dual pathways**
 ---
 
 <!-- slide -->
-# Slide 11: Step 2: Web Client Architecture & Health Check
+# Slide 12: Step 2: Web Client Architecture & Health Check
 
 ### Running the Python Client in Dedicated Argolis Cloud Shell
 
@@ -364,7 +385,7 @@ cd /home/user/cymbal_gadgets/agentic_web_app
 ---
 
 <!-- slide -->
-# Slide 12: Step 3: Interactive Prompting & Audit Real-Time Tracing
+# Slide 13: Step 3: Interactive Prompting & Audit Real-Time Tracing
 
 ### 🔍 Audit the Three Execution Tracing Accordions
 When prompts execute, the Looker Conversational Analytics API returns a rich multi-stage stream. **Students must expand and inspect each accordion below the agent's answer:**
@@ -384,7 +405,7 @@ When prompts execute, the Looker Conversational Analytics API returns a rich mul
 ---
 
 <!-- slide -->
-# Slide 13: Step 4: Where & How Guardrails Are Applied in Conversational Analytics (CA) APIs
+# Slide 14: Step 4: Where & How Guardrails Are Applied in Conversational Analytics (CA) APIs
 
 ### Enterprise AI Governance Architecture
 
@@ -407,7 +428,7 @@ Data engineers must understand both the configuration points (**WHERE**) and enf
 └────────────────────────────────────────────────────────┘
 ```
 
-### Dynamic Instruction Tuning (`PATCH /api/4.0/agents/{agent_id}`)
+### Alternatively use this Python Code Snippet (Dynamic Instruction Tuning - `PATCH /api/4.0/agents/{agent_id}`):
 ```python
 # Option A: Looker Python SDK (looker_sdk)
 sdk.update_agent(
@@ -438,7 +459,7 @@ client.update_agent(agent_id, {
 ---
 
 <!-- slide -->
-# Slide 14: Google Cloud Serverless Production Architecture
+# Slide 15: Google Cloud Serverless Production Architecture
 
 ### Production-Grade Enterprise Deployment Pattern
 
@@ -463,7 +484,52 @@ client.update_agent(agent_id, {
 ---
 
 <!-- slide -->
-# Slide 15: Key Takeaways & Best Practices for Data Engineers
+# Slide 16: Step 5: Lab Teardown & Resource Cleanup (Agent, Session, Golden Query & Patch)
+
+### Enterprise Multi-Tenant Hygiene: Clean Up After Lab
+
+In shared enterprise Looker instances and multi-tenant workshops, maintaining clean resource hygiene prevents quota exhaustion and avoids orphaned test agents.
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        4-Step Teardown Sequence                         │
+│ 1. Revert Agent Patch    ──► Unlink golden queries [] & clear prompt   │
+│ 2. Delete Golden Query   ──► DELETE /api/4.0/golden_queries/{id}       │
+│ 3. Delete Conversation   ──► DELETE /api/4.0/conversations/{id}        │
+│ 4. Delete Agent          ──► DELETE /api/4.0/agents/{agent_id}         │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### Pathway 1: Looker API Explorer Links (Reuses Window)
+1. 🔗 [Revert Patch in API Explorer (`update_agent`)](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent) - Set `{"golden_query_ids": []}`
+2. 🔗 [Delete Golden Query (`delete_golden_query`)](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_golden_query)
+3. 🔗 [Delete Conversation (`delete_conversation`)](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_conversation)
+4. 🔗 [Delete Agent (`delete_agent`)](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_agent)
+
+### Alternatively use this Python Code Snippet (Automated Cleanup):
+```bash
+# In Cloud Shell terminal:
+cd /home/user/cymbal_gadgets/agentic_web_app
+python3 cleanup.py [AGENT_ID] [CONVERSATION_ID] [GOLDEN_QUERY_ID]
+```
+```python
+# Or in Python REPL / script:
+client.cleanup_lab_resources(
+    agent_id=AGENT_ID,
+    conversation_id=CONV_ID,
+    golden_query_id=GQ_ID
+)
+```
+
+* **Interactive Web App 1-Click Option:** Students can also click the **"Run Complete Lab Cleanup"** button on the lab console wrap-up page.
+
+> **Speaker Notes:**  
+> Conclude the lab instructions by reminding students to clean up all test resources so the workshop Looker instance remains pristine.
+
+---
+
+<!-- slide -->
+# Slide 17: Key Takeaways & Best Practices for Data Engineers
 
 ### Summary Checklist for Building Enterprise Conversational Data Platforms
 
@@ -482,8 +548,12 @@ client.update_agent(agent_id, {
 5. ✅ **Use Dynamic Patching for Agile Governance:**
    * Update system instructions via `PATCH /agents/{id}` to tune persona rules without code releases.
 
+6. ✅ **Practice Clean Resource Teardown:**
+   * Remove ephemeral test agents and conversation sessions after experiments.
+
 ---
 
 ### 🎉 Congratulations on Completing the SME Academy Lab!
 * **Portal Link:** [http://localhost:8080](http://localhost:8080)
 * **Presentation Slides:** [http://localhost:8080/presentation.html](http://localhost:8080/presentation.html)
+

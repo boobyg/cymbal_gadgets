@@ -160,8 +160,11 @@
         <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-step4">
           <i class="fa-solid fa-shield-halved mr-1.5 text-rose-500"></i>Task 4: Tuning
         </button>
+        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-step5">
+          <i class="fa-solid fa-broom mr-1.5 text-teal-500"></i>Task 5: Cleanup
+        </button>
         <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-wrapup">
-          <i class="fa-solid fa-graduation-cap mr-1.5 text-teal-500"></i>Wrap-Up
+          <i class="fa-solid fa-graduation-cap mr-1.5 text-slate-500"></i>Wrap-Up
         </button>
       </nav>
 
@@ -629,7 +632,7 @@ nano .env</pre>
                 <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold">1</span>
                 <span>1. CreateAgent Method in API Explorer</span>
               </span>
-              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" target="looker_api_explorer" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                 <span>Open create_agent</span>
               </a>
@@ -638,7 +641,7 @@ nano .env</pre>
             <div class="space-y-1 text-xs text-blue-950">
               <p class="font-semibold text-slate-800">Step-by-Step Instructions:</p>
               <ol class="list-decimal pl-5 space-y-1 text-slate-700">
-                <li>Click <strong>Open create_agent</strong> above, then click the <strong>Run It</strong> tab.</li>
+                <li>Click <strong>Open create_agent</strong> above (opens/reuses the Looker API Explorer tab), then click the <strong>Run It</strong> tab.</li>
                 <li>Paste the JSON payload below into the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>.</li>
                 <li>Click the blue <strong>Run Request</strong> button. Look for status <code class="font-mono bg-emerald-100 text-emerald-800 px-1 rounded">200: OK</code>.</li>
                 <li>Copy the 32-character <code class="font-mono bg-slate-200 text-slate-900 px-1 rounded">"id"</code> property from the response!</li>
@@ -675,8 +678,9 @@ nano .env</pre>
               <div class="flex items-center justify-between">
                 <span class="font-bold text-slate-800 flex items-center space-x-1.5">
                   <i class="fa-brands fa-python text-blue-600"></i>
-                  <span>Python Code Snippet (Looker Python SDK & Zero-Dependency Client):</span>
+                  <span>Alternatively use this Python Code Snippet:</span>
                 </span>
+                <span class="text-[11px] text-slate-500 font-normal">Execute in Cloud Shell (<code class="text-indigo-600 font-mono">python3</code>) instead of API Explorer</span>
               </div>
               <div class="relative group">
                 <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
@@ -758,7 +762,7 @@ print("Agent ID:", agent["id"])</pre>
                 <span class="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-bold">2</span>
                 <span>2. Supplying a Golden Query Example (Verified Query)</span>
               </span>
-              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-amber-600 hover:bg-amber-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query" target="looker_api_explorer" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-amber-600 hover:bg-amber-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                 <span>Open create_golden_query</span>
               </a>
@@ -812,14 +816,14 @@ print("Agent ID:", agent["id"])</pre>
                   <i class="fa-solid fa-link text-amber-600"></i>
                   <span>How to Link "Golden Queries" to the Agent in API Explorer:</span>
                 </span>
-                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 text-[11px] font-semibold text-cyan-700 hover:text-cyan-900 underline">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="looker_api_explorer" rel="noopener noreferrer" class="inline-flex items-center space-x-1 text-[11px] font-semibold text-cyan-700 hover:text-cyan-900 underline">
                   <span>Open update_agent in API Explorer</span>
                   <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               </div>
               <ol class="list-decimal pl-5 space-y-1 text-slate-700 text-[11px]">
                 <li>In <code class="font-mono text-amber-800">create_golden_query</code>, click <strong>Run Request</strong> and note the integer <code class="font-mono bg-slate-100 text-slate-900 px-1 rounded">"id"</code> in the response (e.g. <code class="font-mono text-slate-800">101</code>).</li>
-                <li>Open <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="_blank" rel="noopener noreferrer" class="text-cyan-700 underline font-medium">update_agent</a> (or navigate to <code class="font-mono text-slate-700">ConversationalAnalytics &gt; update_agent</code>).</li>
+                <li>Open <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="looker_api_explorer" rel="noopener noreferrer" class="text-cyan-700 underline font-medium">update_agent</a> (reusing the same API Explorer tab).</li>
                 <li>Under <strong>Parameters</strong>, paste your 32-character Agent ID into the <code class="font-mono bg-slate-100 text-slate-900 px-1 rounded">agent_id</code> field.</li>
                 <li>In the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>, paste:
                   <pre class="bg-slate-900 text-slate-100 p-2 mt-1 rounded text-[11px] font-mono">{
@@ -842,10 +846,13 @@ print("Agent ID:", agent["id"])</pre>
 
             <!-- Python Snippet for Golden Query -->
             <div class="space-y-1.5 text-xs pt-2 border-t border-amber-200">
-              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                <i class="fa-brands fa-python text-amber-600"></i>
-                <span>Python Code Snippet (Create & Link Golden Query):</span>
-              </span>
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-800 flex items-center space-x-1.5">
+                  <i class="fa-brands fa-python text-amber-600"></i>
+                  <span>Alternatively use this Python Code Snippet:</span>
+                </span>
+                <span class="text-[11px] text-slate-500 font-normal">Execute in Cloud Shell (<code class="text-indigo-600 font-mono">python3</code>)</span>
+              </div>
               <div class="relative group">
                 <pre id="step2PythonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
 golden_query = sdk.create_golden_query(
@@ -875,7 +882,7 @@ client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})</pre>
                 <span class="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px] font-bold">3</span>
                 <span>3. Create Conversation Session Using Your Agent ID</span>
               </span>
-              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_conversation" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-purple-600 hover:bg-purple-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_conversation" target="looker_api_explorer" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-purple-600 hover:bg-purple-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                 <span>Open create_conversation</span>
               </a>
@@ -918,10 +925,13 @@ client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})</pre>
 
             <!-- Python Snippet for Create Conversation -->
             <div class="space-y-1.5 text-xs pt-2 border-t border-purple-200">
-              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                <i class="fa-brands fa-python text-purple-600"></i>
-                <span>Python Code Snippet (Create Conversation):</span>
-              </span>
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-800 flex items-center space-x-1.5">
+                  <i class="fa-brands fa-python text-purple-600"></i>
+                  <span>Alternatively use this Python Code Snippet:</span>
+                </span>
+                <span class="text-[11px] text-slate-500 font-normal">Execute in Cloud Shell (<code class="text-indigo-600 font-mono">python3</code>)</span>
+              </div>
               <div class="relative group">
                 <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
 conversation = sdk.create_conversation(
@@ -947,7 +957,7 @@ print("Conversation ID:", conv["id"])</pre>
                 <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold">4</span>
                 <span>4. Test Chat API Method Before Showing Chat UI</span>
               </span>
-              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/conversational_analytics_chat" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/conversational_analytics_chat" target="looker_api_explorer" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                 <span>Open conversational_analytics_chat</span>
               </a>
@@ -996,10 +1006,13 @@ print("Conversation ID:", conv["id"])</pre>
 
             <!-- Python Snippet for Chat API -->
             <div class="space-y-1.5 text-xs pt-2 border-t border-emerald-200">
-              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                <i class="fa-brands fa-python text-emerald-600"></i>
-                <span>Python Code Snippet (Execute Query & Parse Response Stream):</span>
-              </span>
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-800 flex items-center space-x-1.5">
+                  <i class="fa-brands fa-python text-emerald-600"></i>
+                  <span>Alternatively use this Python Code Snippet:</span>
+                </span>
+                <span class="text-[11px] text-slate-500 font-normal">Execute in Cloud Shell (<code class="text-indigo-600 font-mono">python3</code>)</span>
+              </div>
               <div class="relative group">
                 <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
 response_stream = sdk.conversational_analytics_chat(
@@ -1353,8 +1366,9 @@ print("📝 Summary:", result["final_response"])</pre>
             <div class="flex items-center justify-between">
               <span class="font-bold text-rose-950 flex items-center space-x-1.5">
                 <i class="fa-brands fa-python text-rose-600"></i>
-                <span>Python Code Snippet: Dynamic Instruction Tuning (PATCH /agents/{id}):</span>
+                <span>Alternatively use this Python Code Snippet (Dynamic Instruction Tuning - PATCH /agents/{id}):</span>
               </span>
+              <span class="text-[11px] text-rose-800 font-normal">Execute in Cloud Shell (<code class="text-indigo-600 font-mono">python3</code>)</span>
             </div>
             <div class="relative group">
               <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
@@ -1408,6 +1422,158 @@ client.update_agent(agent_id, {
             </div>
 
             <div id="cp4Feedback" class="hidden text-xs p-3 rounded-xl"></div>
+          </div>
+        </article>
+
+        <!-- SECTION: TASK 5 - LAB TEARDOWN & RESOURCE CLEANUP -->
+        <article id="section-step5" class="space-y-4 pt-4 border-t border-slate-200">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+            <div>
+              <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">Phase 5 &bull; Enterprise Resource Governance</span>
+              <h2 class="text-lg font-bold text-slate-900 mt-0.5">Task 5: Clean Up Lab Resources (Agent, Session, Golden Query & Patch)</h2>
+            </div>
+            <span class="text-xs font-bold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">Final Teardown</span>
+          </div>
+
+          <p class="text-xs text-slate-700 leading-relaxed">
+            In shared enterprise Looker instances and multi-tenant training workshops, maintaining clean resource hygiene prevents quota exhaustion and avoids orphaned test agents. Follow these steps to completely tear down all resources created during this lab.
+          </p>
+
+          <!-- 4-Step Teardown Checklist Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <!-- 1. Revert Agent Patch -->
+            <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-3 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-amber-900 flex items-center space-x-1.5">
+                  <span class="w-4 h-4 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px]">1</span>
+                  <span>Revert Agent Patch</span>
+                </span>
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="looker_api_explorer" class="text-[11px] text-amber-700 hover:text-amber-900 underline font-medium">
+                  API Explorer <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              </div>
+              <p class="text-[11px] text-slate-600">Unlinks golden query IDs (<code class="text-amber-800 font-mono">[]</code>) and clears custom prompt directives from the agent.</p>
+            </div>
+
+            <!-- 2. Delete Golden Query -->
+            <div class="bg-rose-50/70 border border-rose-200 rounded-xl p-3 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-rose-900 flex items-center space-x-1.5">
+                  <span class="w-4 h-4 rounded-full bg-rose-600 text-white flex items-center justify-center text-[10px]">2</span>
+                  <span>Delete Golden Query</span>
+                </span>
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_golden_query" target="looker_api_explorer" class="text-[11px] text-rose-700 hover:text-rose-900 underline font-medium">
+                  API Explorer <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              </div>
+              <p class="text-[11px] text-slate-600">Permanently removes the question exemplar via <code class="text-rose-800 font-mono">DELETE /golden_queries/{id}</code>.</p>
+            </div>
+
+            <!-- 3. Delete Conversation -->
+            <div class="bg-purple-50/70 border border-purple-200 rounded-xl p-3 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-purple-900 flex items-center space-x-1.5">
+                  <span class="w-4 h-4 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px]">3</span>
+                  <span>Delete Conversation</span>
+                </span>
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_conversation" target="looker_api_explorer" class="text-[11px] text-purple-700 hover:text-purple-900 underline font-medium">
+                  API Explorer <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              </div>
+              <p class="text-[11px] text-slate-600">Terminates and drops session memory via <code class="text-purple-800 font-mono">DELETE /conversations/{id}</code>.</p>
+            </div>
+
+            <!-- 4. Delete Agent -->
+            <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-blue-900 flex items-center space-x-1.5">
+                  <span class="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">4</span>
+                  <span>Delete Agent</span>
+                </span>
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_agent" target="looker_api_explorer" class="text-[11px] text-blue-700 hover:text-blue-900 underline font-medium">
+                  API Explorer <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              </div>
+              <p class="text-[11px] text-slate-600">Deletes the custom agent definition via <code class="text-blue-800 font-mono">DELETE /agents/{agent_id}</code>.</p>
+            </div>
+          </div>
+
+          <!-- Interactive 1-Click Cleanup Tool -->
+          <div class="bg-gradient-to-r from-teal-50/80 via-white to-slate-50 border-2 border-teal-300 rounded-2xl p-4 shadow-sm space-y-3 text-xs">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <span class="w-6 h-6 rounded-full bg-teal-600 text-white text-xs flex items-center justify-center font-bold">
+                  <i class="fa-solid fa-broom text-[11px]"></i>
+                </span>
+                <span class="font-bold text-slate-900">Interactive 1-Click Lab Resource Teardown</span>
+              </div>
+              <span class="text-[11px] text-teal-700 font-medium bg-teal-100/70 px-2 py-0.5 rounded">Reverts Patch & Deletes All 3 Artifacts</span>
+            </div>
+
+            <p class="text-slate-600">
+              The IDs below are auto-populated from your active session. You can review or edit them before running teardown:
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div>
+                <label class="block font-semibold text-slate-700 text-[11px] mb-1">Agent ID:</label>
+                <input id="cleanupAgentIdInput" type="text" placeholder="32-char Agent ID" class="w-full font-mono text-[11px] border border-slate-300 rounded-lg p-2 bg-white focus:outline-none focus:ring-1 focus:ring-teal-500">
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 text-[11px] mb-1">Conversation ID:</label>
+                <input id="cleanupConvIdInput" type="text" placeholder="Conversation ID" class="w-full font-mono text-[11px] border border-slate-300 rounded-lg p-2 bg-white focus:outline-none focus:ring-1 focus:ring-teal-500">
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 text-[11px] mb-1">Golden Query ID (Optional):</label>
+                <input id="cleanupGqIdInput" type="text" placeholder="Integer ID (e.g. 101)" class="w-full font-mono text-[11px] border border-slate-300 rounded-lg p-2 bg-white focus:outline-none focus:ring-1 focus:ring-teal-500">
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-2 pt-1 text-slate-700">
+              <input id="cleanupClearCredsCheckbox" type="checkbox" class="w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500">
+              <label for="cleanupClearCredsCheckbox" class="text-[11px] cursor-pointer">Also reset stored API credentials in <code class="font-mono text-slate-800">.env</code> to workshop placeholder</label>
+            </div>
+
+            <div class="flex items-center space-x-3 pt-1">
+              <button id="runCleanupBtn" type="button" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2 rounded-xl text-xs flex items-center space-x-2 transition shadow-sm">
+                <i class="fa-solid fa-trash-can"></i>
+                <span>Run Complete Lab Cleanup</span>
+              </button>
+              <button id="populateCleanupIdsBtn" type="button" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition shadow-sm">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>Refresh Active IDs</span>
+              </button>
+            </div>
+
+            <div id="cleanupFeedback" class="hidden text-xs p-3 rounded-xl"></div>
+          </div>
+
+          <!-- Python Snippet for Cleanup -->
+          <div class="space-y-1.5 text-xs pt-2 border-t border-teal-200">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-800 flex items-center space-x-1.5">
+                <i class="fa-brands fa-python text-teal-600"></i>
+                <span>Alternatively use this Python Code Snippet:</span>
+              </span>
+              <span class="text-[11px] text-slate-500 font-normal">Cloud Shell CLI (<code class="text-teal-700 font-mono">python3 cleanup.py</code>) or Python REPL</span>
+            </div>
+            <div class="relative group">
+              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Run the standalone cleanup script in Cloud Shell:
+python3 cleanup.py &lt;AGENT_ID&gt; &lt;CONVERSATION_ID&gt; &lt;GOLDEN_QUERY_ID&gt;
+
+# Option B: Run via Python client in Cloud Shell REPL:
+from looker_client import LookerClient
+import config
+
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+results = client.cleanup_lab_resources(
+    agent_id="&lt;YOUR_AGENT_ID&gt;",
+    conversation_id="&lt;YOUR_CONVERSATION_ID&gt;",
+    golden_query_id=None  # or pass integer GQ ID
+)
+print("Teardown status:", results)</pre>
+              <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
+            </div>
           </div>
         </article>
 
@@ -1792,6 +1958,7 @@ client.update_agent(agent_id, {
     // State management
     let currentAgentId = null;
     let currentConversationId = null;
+    let currentGoldenQueryId = null;
     let availableAgents = [];
     let completedCheckpoints = new Set();
     let isConfigured = false;
@@ -1892,9 +2059,9 @@ client.update_agent(agent_id, {
       if (isConfigured) {
         await checkHealth();
         await loadAgents();
-      } else {
-        openCredentialsModal();
       }
+      // Note: Do not auto-open credentials modal on load.
+      // Students read Step 0 instructions and click "Open Student Credentials Dialog" when ready.
     }
 
     // ----------------------------------------------------
@@ -2102,6 +2269,12 @@ client.update_agent(agent_id, {
         el.textContent = agentId;
       });
 
+      // Update Task 5 Cleanup input if available
+      const cleanupAgentInput = document.getElementById('cleanupAgentIdInput');
+      if (cleanupAgentInput) {
+        cleanupAgentInput.value = agentId;
+      }
+
       // Dynamically update Step 3 Request Body pre element
       const step3Pre = document.getElementById('step3RequestBodyCode');
       if (step3Pre) {
@@ -2240,6 +2413,11 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
               conversation_id: data.id,
               user_message: "What is our total sales amount across all transactions?"
             }, null, 2);
+          }
+
+          const cleanupConvInput = document.getElementById('cleanupConvIdInput');
+          if (cleanupConvInput) {
+            cleanupConvInput.value = data.id;
           }
         }
       } catch (err) {
@@ -2588,6 +2766,11 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
             });
             const data = await res.json();
             if (res.ok) {
+              if (data.id) {
+                currentGoldenQueryId = data.id;
+                const cleanupGqInput = document.getElementById('cleanupGqIdInput');
+                if (cleanupGqInput) cleanupGqInput.value = data.id;
+              }
               if (step2GoldenQueryStatus) {
                 step2GoldenQueryStatus.className = 'text-xs p-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold';
                 step2GoldenQueryStatus.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Golden query #${data.id} created & linked to Agent! (Single question used, no 422 error)`;
@@ -2646,6 +2829,9 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
             if (res.ok && data.id) {
               currentConversationId = data.id;
               sessionDisplay.textContent = `${data.id.substring(0, 10)}...`;
+
+              const cleanupConvInput = document.getElementById('cleanupConvIdInput');
+              if (cleanupConvInput) cleanupConvInput.value = data.id;
 
               if (step4ConvIdDisplay) {
                 step4ConvIdDisplay.textContent = data.id;
@@ -2732,6 +2918,158 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
           sendBtn.disabled = false;
         }
       });
+
+      // Task 5 Teardown & Resource Cleanup Listeners
+      const runCleanupBtn = document.getElementById('runCleanupBtn');
+      const populateCleanupIdsBtn = document.getElementById('populateCleanupIdsBtn');
+      const cleanupAgentIdInput = document.getElementById('cleanupAgentIdInput');
+      const cleanupConvIdInput = document.getElementById('cleanupConvIdInput');
+      const cleanupGqIdInput = document.getElementById('cleanupGqIdInput');
+      const cleanupClearCredsCheckbox = document.getElementById('cleanupClearCredsCheckbox');
+      const cleanupFeedback = document.getElementById('cleanupFeedback');
+
+      if (populateCleanupIdsBtn) {
+        populateCleanupIdsBtn.addEventListener('click', () => {
+          if (currentAgentId && cleanupAgentIdInput) cleanupAgentIdInput.value = currentAgentId;
+          if (currentConversationId && cleanupConvIdInput) cleanupConvIdInput.value = currentConversationId;
+          if (currentGoldenQueryId && cleanupGqIdInput) cleanupGqIdInput.value = currentGoldenQueryId;
+        });
+      }
+
+      if (runCleanupBtn) {
+        runCleanupBtn.addEventListener('click', async () => {
+          const agentId = cleanupAgentIdInput ? cleanupAgentIdInput.value.trim() : '';
+          const convId = cleanupConvIdInput ? cleanupConvIdInput.value.trim() : '';
+          const gqId = cleanupGqIdInput ? cleanupGqIdInput.value.trim() : '';
+          const resetCreds = cleanupClearCredsCheckbox ? cleanupClearCredsCheckbox.checked : false;
+
+          if (!agentId && !convId && !gqId && !resetCreds) {
+            alert("Please specify at least an Agent ID, Conversation ID, Golden Query ID, or select Reset Credentials to run cleanup.");
+            return;
+          }
+
+          if (!confirm("Are you sure you want to clean up these lab resources? This will revert patches and delete the specified Looker agent, conversation, and golden query.")) {
+            return;
+          }
+
+          runCleanupBtn.disabled = true;
+          runCleanupBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Cleaning up resources...';
+          if (cleanupFeedback) {
+            cleanupFeedback.className = 'text-xs p-3 rounded-xl bg-slate-100 text-slate-800 border border-slate-200';
+            cleanupFeedback.innerHTML = '<div class="flex items-center space-x-2"><i class="fa-solid fa-spinner fa-spin text-teal-600"></i><span>Reverting agent patch and deleting Looker CA artifacts...</span></div>';
+            cleanupFeedback.classList.remove('hidden');
+          }
+
+          try {
+            const res = await fetch('/api/cleanup', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                agent_id: agentId || null,
+                conversation_id: convId || null,
+                golden_query_id: gqId || null,
+                reset_credentials: resetCreds
+              })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+              const r = data.results || {};
+              let statusItems = [];
+
+              if (agentId) {
+                const ok = r.patch_reverted === true;
+                const icon = ok ? 'fa-circle-check text-emerald-600' : 'fa-circle-exclamation text-amber-600';
+                statusItems.push(`<li class="flex items-center space-x-2"><i class="fa-solid ${icon}"></i><span><strong>Agent Patch:</strong> ${ok ? 'Unlinked Golden Queries & reset prompt guardrails' : 'Skipped or not found'}</span></li>`);
+              }
+
+              if (gqId) {
+                const ok = r.golden_query_deleted === true;
+                const icon = ok ? 'fa-circle-check text-emerald-600' : 'fa-circle-exclamation text-amber-600';
+                statusItems.push(`<li class="flex items-center space-x-2"><i class="fa-solid ${icon}"></i><span><strong>Golden Query:</strong> ${ok ? 'Deleted from Looker catalog' : 'Skipped or not found'}</span></li>`);
+              }
+
+              if (convId) {
+                const ok = r.conversation_deleted === true;
+                const icon = ok ? 'fa-circle-check text-emerald-600' : 'fa-circle-exclamation text-amber-600';
+                statusItems.push(`<li class="flex items-center space-x-2"><i class="fa-solid ${icon}"></i><span><strong>Conversation Session:</strong> ${ok ? 'Session deleted and memory released' : 'Skipped or not found'}</span></li>`);
+              }
+
+              if (agentId) {
+                const ok = r.agent_deleted === true;
+                const icon = ok ? 'fa-circle-check text-emerald-600' : 'fa-circle-exclamation text-amber-600';
+                statusItems.push(`<li class="flex items-center space-x-2"><i class="fa-solid ${icon}"></i><span><strong>Agent Definition:</strong> ${ok ? 'Agent deleted from Looker instance' : 'Skipped or not found'}</span></li>`);
+              }
+
+              if (r.credentials_reset || resetCreds) {
+                statusItems.push(`<li class="flex items-center space-x-2"><i class="fa-solid fa-circle-check text-emerald-600"></i><span><strong>Credentials:</strong> Local .env reset to workshop placeholder</span></li>`);
+              }
+
+              if (r.errors && r.errors.length > 0) {
+                r.errors.forEach(err => {
+                  statusItems.push(`<li class="flex items-start space-x-2 text-rose-700 font-mono text-[11px]"><i class="fa-solid fa-triangle-exclamation text-rose-500 mt-0.5"></i><span>${escapeHtml(err)}</span></li>`);
+                });
+              }
+
+              const allFailed = r.errors && r.errors.length > 0 && !r.agent_deleted && !r.conversation_deleted && !r.golden_query_deleted && !r.patch_reverted && !r.credentials_reset;
+              const bgClass = allFailed ? 'bg-amber-50 text-amber-950 border-amber-300' : 'bg-emerald-50 text-emerald-950 border-emerald-300';
+              const titleText = allFailed ? 'Teardown Completed with Warnings (Resources might already be deleted)' : 'Teardown Completed Successfully!';
+              const titleIcon = allFailed ? 'fa-triangle-exclamation text-amber-600' : 'fa-circle-check text-emerald-600';
+
+              cleanupFeedback.className = `text-xs p-3.5 rounded-xl border space-y-2 ${bgClass}`;
+              cleanupFeedback.innerHTML = `
+                <div class="font-bold flex items-center space-x-2">
+                  <i class="fa-solid ${titleIcon}"></i>
+                  <span>${titleText}</span>
+                </div>
+                <ul class="space-y-1 text-slate-700 pl-1">${statusItems.join('')}</ul>
+              `;
+
+              // If current agent was deleted or targeted, clear state
+              if (agentId && (agentId === currentAgentId || r.agent_deleted === true)) {
+                currentAgentId = null;
+                localStorage.removeItem('looker_agent_id');
+                const trackerBadge = document.getElementById('agentIdTrackerBadge');
+                if (trackerBadge) {
+                  trackerBadge.className = 'text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200';
+                  trackerBadge.innerHTML = '<i class="fa-solid fa-trash-can text-slate-400 mr-1"></i> Cleaned up';
+                }
+                const rememberedPill = document.getElementById('rememberedAgentPill');
+                if (rememberedPill) rememberedPill.classList.add('hidden');
+                document.querySelectorAll('.step-agent-id-pill').forEach(el => {
+                  el.textContent = 'Cleaned up';
+                });
+                if (cleanupAgentIdInput) cleanupAgentIdInput.value = '';
+                await loadAgents();
+              }
+
+              if (convId && (convId === currentConversationId || r.conversation_deleted === true)) {
+                currentConversationId = null;
+                sessionDisplay.textContent = 'None';
+                if (cleanupConvIdInput) cleanupConvIdInput.value = '';
+              }
+
+              if (gqId && (gqId === currentGoldenQueryId || r.golden_query_deleted === true)) {
+                currentGoldenQueryId = null;
+                if (cleanupGqIdInput) cleanupGqIdInput.value = '';
+              }
+
+              if (resetCreds) {
+                await checkCredentialsStatus();
+              }
+            } else {
+              cleanupFeedback.className = 'text-xs p-3 rounded-xl bg-rose-50 text-rose-900 border border-rose-300';
+              cleanupFeedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600 mr-1.5"></i> ${escapeHtml(data.error || 'Cleanup encountered an error')}`;
+            }
+          } catch (err) {
+            cleanupFeedback.className = 'text-xs p-3 rounded-xl bg-rose-50 text-rose-900 border border-rose-300';
+            cleanupFeedback.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600 mr-1.5"></i> ${escapeHtml(err.message)}`;
+          } finally {
+            runCleanupBtn.disabled = false;
+            runCleanupBtn.innerHTML = '<i class="fa-solid fa-trash-can mr-1.5"></i> Run Complete Lab Cleanup';
+          }
+        });
+      }
     }
 
     function appendUserMessage(text) {

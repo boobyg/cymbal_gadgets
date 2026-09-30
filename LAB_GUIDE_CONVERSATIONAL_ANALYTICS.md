@@ -53,6 +53,7 @@ By the end of this 30-minute lab, you will have created a custom Conversational 
 | **Phase 2** | **Web Client Deployment** | Launch the Python web client in your dedicated Argolis Cloud Shell; execute automated health checks. | Cloud Shell Terminal / Web Preview |
 | **Phase 3** | **Interactive Queries & Tracing** | Submit natural language queries in the web UI and audit the 5-stage agent response lifecycle (`THOUGHT`, `SCHEMA`, `QUERY`, `DATA`, `FINAL_RESPONSE`). | Web App Dual-Pane Console |
 | **Phase 4** | **Prompt Tuning & Productionizing** | Dynamically update agent guardrails using `PATCH /agents/{id}`; review Google Cloud Run serverless deployment architecture. | REST API / Cloud Run Architecture |
+| **Phase 5** | **Teardown & Resource Cleanup** | Maintain enterprise multi-tenant hygiene: revert agent patch, delete golden query, conversation session, and custom agent. | API Explorer / Python / 1-Click UI |
 
 ---
 
@@ -128,7 +129,8 @@ When calling `POST /conversational_analytics/chat`, the API does not just return
 | **Step 2** | Launch Web App & Verify Health | 5 mins | Launch Python client; verify health via terminal or UI | 25 pts |
 | **Step 3** | Interactive Queries & Tracing | 10 mins | Submit multi-turn queries; audit 5-stage response lifecycle | 25 pts |
 | **Step 4** | Prompt Tuning & Cloud Run Architecture | 5 mins | Patch guardrails via `PATCH /agents/{id}`; review deployment | 25 pts |
-| **Total** | | **30 mins** | **Complete All 4 Checkpoints** | **100 pts** |
+| **Step 5** | Teardown & Resource Cleanup | 2 mins | Revert patch, delete golden query, conversation, and agent | Required |
+| **Total** | | **35 mins** | **Complete All 4 Checkpoints + Teardown** | **100 pts** |
 
 ---
 
@@ -187,13 +189,17 @@ Every student must authenticate using their assigned Looker API credentials (`cl
 Previous test credentials have been cleared from `.env` and the application to ensure every student begins with a clean slate. You will see the yellow prompt: **"Specify your own user id / secret"**.
 
 ### Option A: Configure in the Interactive Web Portal (Recommended)
-1. In the opened portal (`http://localhost:8080`), click the yellow **Student Credentials** button in the top navigation bar (or wait for the prompt modal).
+> 💡 **User-Centric Flow:** The web portal does **not** interrupt you with an automatic credentials popup when loaded. Instead, you can comfortably read the instructions first, and when you are ready, simply click the **Open Student Credentials Dialog** button in Step 0 or in the top navigation bar.
+
+1. In the opened portal (`http://localhost:8080`), click the button **Open Student Credentials Dialog** (located in the Step 0 card or the top navigation bar).
 2. Enter your assigned:
    * **Looker Client ID:** *(enter your assigned client ID)*
    * **Looker Client Secret:** *(enter your assigned client secret)*
 3. Click **Save & Test Connection**.
 4. The portal authenticates against Looker API 4.0 and displays a green badge: `Looker Connected`.
 
+> 💡 **Single Window / Tab Reuse:** All Looker API Explorer links in both the web portal and the slide presentation are configured to open in the **same browser tab** (`looker_api_explorer`). You won't end up with dozens of open tabs as you progress through each API method!
+>
 > 💡 **Clearing Credentials:** If you ever need to clear or re-enter credentials, open the dialog and click **Clear Saved Credentials** to wipe all stored values.
 
 ### Option B: Configure via Terminal (`.env`)
@@ -318,9 +324,9 @@ Clicking the direct link takes you directly to the `create_agent` method under t
 
 ---
 
-### 1.5 🐍 Python Code Snippets: Create Agent
+### 1.5 🐍 Alternatively use this Python Code Snippet: Create Agent
 
-After testing in API Explorer, here is how you perform `create_agent` programmatically in Python:
+If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to create your agent:
 
 #### Option A: Using the Official Looker Python SDK (`looker_sdk`)
 ```python
@@ -441,7 +447,9 @@ Once the Golden Query is created, you must link its integer ID to your agent:
 
 ---
 
-#### 🐍 Python Code Snippets: Create & Link Golden Query
+#### 🐍 Alternatively use this Python Code Snippet: Create & Link Golden Query
+
+If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to create and link the golden query:
 
 ##### Option A: Using Official Looker Python SDK (`looker_sdk`)
 ```python
@@ -515,7 +523,9 @@ Looker manages stateful conversational threads on the server. Instead of forcing
    `"id": "c1f2e3d4-5678-90ab-cdef-1234567890ab"`  
    **Copy this Conversation ID!** You will pass it directly to the Chat API method in Step 1.8.
 
-#### 🐍 Python Code Snippets: Create Conversation
+#### 🐍 Alternatively use this Python Code Snippet: Create Conversation
+
+If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to initialize the session:
 
 ##### Option A: Using Official Looker Python SDK (`looker_sdk`)
 ```python
@@ -573,7 +583,9 @@ The API returns an array of structured event objects. Notice how Looker exposes 
 5. **Stage 5 (FINAL_RESPONSE):**  
    `systemMessage.text.textType == "FINAL_RESPONSE"` &mdash; Executive summary grounded in the BigQuery tabular results.
 
-#### 🐍 Python Code Snippets: Submit Analytical Query & Parse Stream
+#### 🐍 Alternatively use this Python Code Snippet: Submit Analytical Query & Parse Stream
+
+If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to submit your question and parse the 5-stage stream:
 
 ##### Option A: Using Official Looker Python SDK (`looker_sdk`)
 ```python
@@ -759,7 +771,9 @@ Data engineers often need to enforce strict formatting, output length, or busine
 
 👉 **Direct Link:** **[UpdateAgent Method in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)**
 
-#### 🐍 Python Code Snippets: Dynamic Instruction Tuning (Update Agent)
+#### 🐍 Alternatively use this Python Code Snippet: Dynamic Instruction Tuning (Update Agent)
+
+If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to patch your agent's guardrails:
 
 ##### Option A: Using Official Looker Python SDK (`looker_sdk`)
 ```python
@@ -882,6 +896,96 @@ For enterprise production, Data Engineers deploy this pattern using Google Cloud
 
 ### 🚩 CHECKPOINT 4: Lab Wrap-Up & Scoring (25 Points)
 In the interactive portal, click the **Check my progress** button under Task 4 to earn your final **+25 points** (100/100 Total Score)!
+
+---
+
+# 🧹 Step 5: Lab Teardown & Resource Cleanup (Agent, Conversation, Golden Query & Patch) (2 Mins)
+
+In enterprise data platforms and shared training environments, **teardown and resource hygiene are critical**. Leaving orphaned agents, dangling conversation sessions, and unneeded golden queries consumes memory, creates catalog clutter, and violates multi-tenant best practices.
+
+In this step, you will clean up all four artifacts created during this lab:
+1. **Revert Agent Patch:** Unlink golden queries (`golden_query_ids: []`) and restore default system instructions.
+2. **Delete Golden Query:** Permanently remove the golden query rule via `DELETE /api/4.0/golden_queries/{id}`.
+3. **Delete Conversation Session:** Free server-side token memory and delete the session thread via `DELETE /api/4.0/conversations/{id}`.
+4. **Delete Agent Definition:** Remove your custom agent from Looker via `DELETE /api/4.0/agents/{id}`.
+
+---
+
+### 5.1 Teardown via Looker API Explorer (Pathway 1)
+
+*(All links open in the same `looker_api_explorer` window tab so you don't accumulate dozens of tabs).*
+
+1. **Revert Agent Patch:**
+   * 👉 **Direct Link:** [update_agent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)
+   * Set `agent_id`: your Agent ID.
+   * In Request Body, set:
+     ```json
+     {
+       "golden_query_ids": [],
+       "context": {
+         "instructions": "Standard retail assistant for Cymbal Gadgets."
+       }
+     }
+     ```
+   * Click **Run Request** (`200 OK`).
+
+2. **Delete Golden Query:**
+   * 👉 **Direct Link:** [delete_golden_query in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_golden_query)
+   * Set `golden_query_id`: your numeric Golden Query ID (e.g. `101`).
+   * Click **Run Request** (`204 No Content`).
+
+3. **Delete Conversation Session:**
+   * 👉 **Direct Link:** [delete_conversation in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_conversation)
+   * Set `conversation_id`: your Conversation ID.
+   * Click **Run Request** (`204 No Content`).
+
+4. **Delete Agent Definition:**
+   * 👉 **Direct Link:** [delete_agent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_agent)
+   * Set `agent_id`: your Agent ID.
+   * Click **Run Request** (`204 No Content`).
+
+---
+
+### 5.2 🐍 Alternatively use this Python Code Snippet: Lab Teardown & Resource Cleanup
+
+If you prefer executing the teardown programmatically, you can run the provided CLI script or use the Python client:
+
+#### Option A: Run the Standalone CLI Teardown Script in Cloud Shell
+```bash
+cd /home/user/cymbal_gadgets/agentic_web_app
+
+# Usage: python3 cleanup.py <agent_id> <conversation_id> [golden_query_id] [--clear-creds]
+python3 cleanup.py YOUR_AGENT_ID YOUR_CONVERSATION_ID YOUR_GOLDEN_QUERY_ID
+```
+
+#### Option B: Using the Python LookerClient Directly
+```python
+from looker_client import LookerClient
+
+client = LookerClient.from_env()
+
+# Orchestrated 4-step teardown:
+results = client.cleanup_lab_resources(
+    agent_id="YOUR_AGENT_ID",
+    conversation_id="YOUR_CONVERSATION_ID",
+    golden_query_id="YOUR_GOLDEN_QUERY_ID"  # Optional if none created
+)
+
+print("✅ Cleanup results:")
+for step, outcome in results.items():
+    print(f"  • {step}: {outcome.get('status')} - {outcome.get('message')}")
+```
+
+---
+
+### 5.3 Option C: 1-Click Interactive Teardown in the Web Portal
+
+If you are using the interactive portal (`http://localhost:8080`):
+1. Click the **Task 5: Teardown** tab in the navigation bar.
+2. Click **Auto-Populate Active Lab IDs** &mdash; the portal automatically populates your active `agent_id`, `conversation_id`, and `golden_query_id`.
+3. *(Optional)* Check **Reset Credentials to Workshop Placeholder** if you are finished with the workshop.
+4. Click **Run Complete Lab Cleanup**.
+5. The portal executes the full 4-step teardown, refreshes the available agents catalog, and confirms cleanup completion with green status indicators.
 
 ---
 

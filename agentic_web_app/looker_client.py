@@ -204,6 +204,99 @@ class LookerClient:
         }
         return self._request("POST", "/conversations", payload=payload)
 
+    def delete_conversation(self, conversation_id: str) -> dict:
+        """Delete an active conversation session (DELETE /api/4.0/conversations/{id})."""
+        logger.info(f"Deleting conversation session {conversation_id}...")
+        return self._request("DELETE", f"/conversations/{conversation_id}")
+
+    def delete_golden_query(self, golden_query_id: str) -> dict:
+        """Delete a golden query record (DELETE /api/4.0/golden_queries/{id})."""
+        logger.info(f"Deleting golden query {golden_query_id}...")
+        return self._request("DELETE", f"/golden_queries/{golden_query_id}")
+
+    def reset_agent_patch(self, agent_id: str) -> dict:
+        """
+        Revert/remove patch on the agent: clears custom instructions and unlinks golden queries.
+        (PATCH /api/4.0/agents/{id} with empty instructions & empty golden_query_ids).
+        """
+        logger.info(f"Resetting patch and unlinking golden queries on agent {agent_id}...")
+        payload = {
+            "golden_query_ids": [],
+            "context": {
+                "instructions": "",
+                "show_analytical_details": True,
+                "show_debug": False
+            }
+        }
+        return self._request("PATCH", f"/agents/{agent_id}", payload=payload)
+
+    def delete_agent(self, agent_id: str) -> dict:
+        """Delete an agent in Looker (DELETE /api/4.0/agents/{id})."""
+        logger.info(f"Deleting agent {agent_id}...")
+        return self._request("DELETE", f"/agents/{agent_id}")
+
+    def cleanup_lab_resources(self, agent_id: str = None, conversation_id: str = None, golden_query_id: str = None) -> dict:
+        """
+        Orchestrate complete teardown of lab resources:
+        1. Revert/remove patch (reset instructions & unlink golden query)
+        2. Delete golden query
+        3. Delete conversation session
+        4. Delete agent
+        """
+        results = {
+            "patch_reverted": False,
+            "golden_query_deleted": False,
+            "conversation_deleted": False,
+            "agent_deleted": False,
+            "errors": []
+        }
+
+        # 1. Reset / Remove Patch on Agent
+        if agent_id:
+            try:
+                self.reset_agent_patch(agent_id)
+                results["patch_reverted"] = True
+                logger.info(f"✅ Reverted patch on agent {agent_id}")
+            except Exception as e:
+                msg = f"Failed to revert patch on agent {agent_id}: {e}"
+                logger.warning(msg)
+                results["errors"].append(msg)
+
+        # 2. Delete Golden Query
+        if golden_query_id:
+            try:
+                self.delete_golden_query(str(golden_query_id))
+                results["golden_query_deleted"] = True
+                logger.info(f"✅ Deleted golden query {golden_query_id}")
+            except Exception as e:
+                msg = f"Failed to delete golden query {golden_query_id}: {e}"
+                logger.warning(msg)
+                results["errors"].append(msg)
+
+        # 3. Delete Conversation
+        if conversation_id:
+            try:
+                self.delete_conversation(conversation_id)
+                results["conversation_deleted"] = True
+                logger.info(f"✅ Deleted conversation {conversation_id}")
+            except Exception as e:
+                msg = f"Failed to delete conversation {conversation_id}: {e}"
+                logger.warning(msg)
+                results["errors"].append(msg)
+
+        # 4. Delete Agent
+        if agent_id:
+            try:
+                self.delete_agent(agent_id)
+                results["agent_deleted"] = True
+                logger.info(f"✅ Deleted agent {agent_id}")
+            except Exception as e:
+                msg = f"Failed to delete agent {agent_id}: {e}"
+                logger.warning(msg)
+                results["errors"].append(msg)
+
+        return results
+
     def chat(self, conversation_id: str, user_message: str) -> dict:
         """
         Submit a natural language analytical query to the conversational agent.

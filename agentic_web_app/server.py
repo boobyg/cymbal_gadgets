@@ -80,7 +80,7 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
         self.send_header("Content-Length", str(len(resp_bytes)))
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, PATCH, OPTIONS")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
         self.end_headers()
         self.wfile.write(resp_bytes)
 
@@ -100,7 +100,7 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, PATCH, OPTIONS")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
         self.end_headers()
 
     def do_GET(self):
@@ -480,6 +480,53 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 self._send_json(500, {"error": str(e)})
             return
 
+        elif path == "/api/cleanup":
+            if not is_credentials_configured():
+                self._send_json(400, {"error": "Credentials not configured. Please specify your own user id / secret."})
+                return
+
+            agent_raw = data.get("agent_id")
+            agent_id = str(agent_raw).strip() if agent_raw else None
+            conv_raw = data.get("conversation_id")
+            conversation_id = str(conv_raw).strip() if conv_raw else None
+            gq_raw = data.get("golden_query_id")
+            golden_query_id = str(gq_raw).strip() if gq_raw else None
+            clear_credentials = bool(data.get("clear_credentials") or data.get("reset_credentials"))
+
+            if not agent_id and not conversation_id and not golden_query_id and not clear_credentials:
+                self._send_json(400, {"error": "At least one resource ID (agent_id, conversation_id, golden_query_id) or reset_credentials is required."})
+                return
+
+            try:
+                results = {}
+                if agent_id or conversation_id or golden_query_id:
+                    results = client.cleanup_lab_resources(
+                        agent_id=agent_id,
+                        conversation_id=conversation_id,
+                        golden_query_id=golden_query_id
+                    )
+
+                if clear_credentials:
+                    client.client_id = "specify your own user id / secret"
+                    client.client_secret = "specify your own user id / secret"
+                    client.access_token = None
+                    client.token_expiry = 0
+                    client._current_user = None
+                    config.LOOKER_CLIENT_ID = "specify your own user id / secret"
+                    config.LOOKER_CLIENT_SECRET = "specify your own user id / secret"
+                    save_credentials_to_env("specify your own user id / secret", "specify your own user id / secret")
+                    results["credentials_reset"] = {"status": "success", "message": "Credentials reset to placeholder"}
+
+                self._send_json(200, {
+                    "status": "success",
+                    "message": "Lab cleanup completed: agent, conversation, golden query, and patch removed.",
+                    "results": results
+                })
+            except Exception as e:
+                logger.exception("Error during lab cleanup")
+                self._send_json(500, {"status": "error", "error": str(e)})
+            return
+
         self._send_json(404, {"error": f"Endpoint {path} not found."})
 
     def do_PATCH(self):
@@ -496,6 +543,35 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 self._send_json(200, updated)
             except Exception as e:
                 self._send_json(500, {"error": str(e)})
+            return
+
+        self._send_json(404, {"error": f"Endpoint {path} not found."})
+
+    def do_DELETE(self):
+        path = self.path.split("?")[0]
+        if not is_credentials_configured():
+            self._send_json(400, {"error": "Credentials not configured. Please specify your own user id / secret."})
+            return
+
+        try:
+            if path.startswith("/api/agents/"):
+                agent_id = path.replace("/api/agents/", "").strip()
+                client.delete_agent(agent_id)
+                self._send_json(200, {"status": "deleted", "agent_id": agent_id})
+                return
+            elif path.startswith("/api/conversations/"):
+                conv_id = path.replace("/api/conversations/", "").strip()
+                client.delete_conversation(conv_id)
+                self._send_json(200, {"status": "deleted", "conversation_id": conv_id})
+                return
+            elif path.startswith("/api/golden_queries/"):
+                gq_id = path.replace("/api/golden_queries/", "").strip()
+                client.delete_golden_query(gq_id)
+                self._send_json(200, {"status": "deleted", "golden_query_id": gq_id})
+                return
+        except Exception as e:
+            logger.exception("Error handling DELETE request")
+            self._send_json(500, {"error": str(e)})
             return
 
         self._send_json(404, {"error": f"Endpoint {path} not found."})

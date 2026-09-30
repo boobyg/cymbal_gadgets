@@ -51,7 +51,7 @@
       <span class="text-slate-400 font-medium">Slide</span>
       <span id="currentSlideNum" class="font-bold text-indigo-400">1</span>
       <span class="text-slate-500">/</span>
-      <span id="totalSlidesNum" class="text-slate-400 font-medium">15</span>
+      <span id="totalSlidesNum" class="text-slate-400 font-medium">17</span>
     </div>
 
     <!-- Action Controls -->
@@ -497,7 +497,63 @@ cd cymbal_gadgets/agentic_web_app</pre>
           </div>
         </div>
 
-        <!-- SLIDE 9: LOOKER API EXPLORER & DUAL PATHWAYS -->
+        <!-- SECTION DIVIDER: LAB -->
+        <div class="slide flex-col justify-between flex-1" data-title="Lab: Hands-On Practice" data-notes="Welcome to the hands-on lab portion! In this workshop phase, students will step through credentials setup, API Explorer agent creation, golden query grounding, web application integration, multi-stage thought tracing, runtime guardrail enforcement, and complete resource cleanup.">
+          <div class="space-y-4 my-auto text-center py-6">
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold uppercase tracking-wider">
+              <i class="fa-solid fa-flask-vial text-indigo-400"></i>
+              <span>Hands-On Implementation Phase</span>
+            </div>
+            
+            <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight">
+              Lab: <span class="bg-gradient-to-r from-indigo-400 via-sky-300 to-emerald-400 bg-clip-text text-transparent">Conversational Analytics with Looker</span>
+            </h1>
+
+            <p class="text-sm md:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+              Put theory into practice: Build, ground, trace, and guard conversational BI agents directly on Looker's governed semantic layer.
+            </p>
+
+            <!-- Lab Roadmap Tiles -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 pt-6 text-left max-w-4xl mx-auto">
+              <div class="bg-slate-900/90 border border-amber-500/30 p-3 rounded-2xl space-y-1">
+                <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wide">Step 0</span>
+                <h4 class="text-xs font-bold text-white">Student Credentials</h4>
+                <p class="text-[11px] text-slate-400">API3 authentication setup</p>
+              </div>
+
+              <div class="bg-slate-900/90 border border-blue-500/30 p-3 rounded-2xl space-y-1">
+                <span class="text-[10px] font-bold text-blue-400 uppercase tracking-wide">Step 1</span>
+                <h4 class="text-xs font-bold text-white">API Explorer & Agents</h4>
+                <p class="text-[11px] text-slate-400">Golden queries & chat stream</p>
+              </div>
+
+              <div class="bg-slate-900/90 border border-emerald-500/30 p-3 rounded-2xl space-y-1">
+                <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wide">Step 2</span>
+                <h4 class="text-xs font-bold text-white">Web App Setup</h4>
+                <p class="text-[11px] text-slate-400">Cloud Shell & health check</p>
+              </div>
+
+              <div class="bg-slate-900/90 border border-purple-500/30 p-3 rounded-2xl space-y-1">
+                <span class="text-[10px] font-bold text-purple-400 uppercase tracking-wide">Step 3</span>
+                <h4 class="text-xs font-bold text-white">Trace Audit Logs</h4>
+                <p class="text-[11px] text-slate-400">Thoughts, query, data inspect</p>
+              </div>
+
+              <div class="bg-slate-900/90 border border-rose-500/30 p-3 rounded-2xl space-y-1">
+                <span class="text-[10px] font-bold text-rose-400 uppercase tracking-wide">Step 4 & 5</span>
+                <h4 class="text-xs font-bold text-white">Guardrails & Cleanup</h4>
+                <p class="text-[11px] text-slate-400">Dynamic patch & teardown</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-xs text-slate-500 pt-4 border-t border-slate-800">
+            <span>Google Cloud SME Academy &bull; Data Engineering Track</span>
+            <span class="font-mono text-indigo-400">Estimated Duration: ~30 Minutes</span>
+          </div>
+        </div>
+
+        <!-- SLIDE 10: LOOKER API EXPLORER & DUAL PATHWAYS -->
         <div class="slide flex-col justify-between flex-1" data-title="API Explorer & Dual Pathways" data-notes="Explain the two pathways for Task 1: 1) API Explorer (GUI / zero setup) and 2) Python Code Snippets. Explain where to paste Python code: in Cloud Shell interactive Python terminal (python3) or script file.">
           <div class="space-y-3">
             <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">Developer Workbench & Execution Paths</span>
@@ -517,7 +573,7 @@ cd cymbal_gadgets/agentic_web_app</pre>
                 Built-in workbench in Looker. Click direct links, click the <strong>Run It</strong> tab, paste JSON payload, and click <strong>Run Request</strong>. Zero local coding required!
               </p>
               <div class="pt-1">
-                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" target="_blank" class="font-mono text-cyan-300 hover:underline text-[10px] break-all">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" target="looker_api_explorer" class="font-mono text-cyan-300 hover:underline text-[10px] break-all">
                   🔗 Open create_agent in API Explorer
                 </a>
               </div>
@@ -555,7 +611,7 @@ cd cymbal_gadgets/agentic_web_app</pre>
           </div>
         </div>
 
-        <!-- SLIDE 10: STEP 0 & STEP 1 - CREATING THE AGENT, GOLDEN QUERIES & CHAT API -->
+        <!-- SLIDE 11: STEP 0 & STEP 1 - CREATING THE AGENT, GOLDEN QUERIES & CHAT API -->
         <div class="slide flex-col justify-between flex-1" data-title="Step 0 & 1: Agent, Golden Query & Chat API" data-notes="Walk through Step 0 credentials and Step 1 agent creation, golden query creation & linking via API Explorer update_agent, conversation session using agent id, and chat API testing before showing the UI.">
           <div class="space-y-3">
             <div class="flex items-center justify-between">
@@ -579,6 +635,7 @@ cd cymbal_gadgets/agentic_web_app</pre>
                 <span class="font-mono text-[10px] text-blue-300">create_agent</span>
               </div>
               <p class="text-[11px] text-slate-300">Define model (<code class="font-mono text-slate-400">cymbal_gadgets_boris</code>), explore (<code class="font-mono text-slate-400">transactions</code>), and guardrails.</p>
+              <div class="text-[10px] text-emerald-400 font-semibold mb-0.5"><i class="fa-brands fa-python mr-1"></i>Alternatively use this Python Code Snippet:</div>
               <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-blue-300 overflow-x-auto"># Python SDK:
 agent = sdk.create_agent(body=models40.WriteAgent(
     name="Cymbal Agent", sources=[...], context=...
@@ -597,9 +654,11 @@ agent = sdk.create_agent(body=models40.WriteAgent(
               </div>
               <p class="text-[11px] text-slate-300">
                 1. Run <code class="text-amber-300 font-mono">POST /golden_queries</code> (single question required to avoid HTTP 422).<br>
-                2. In API Explorer, open <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="_blank" class="text-cyan-300 underline font-semibold">update_agent</a>, set <code class="text-amber-300 font-mono">agent_id</code>, and send body:
+                2. In API Explorer, open <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="looker_api_explorer" class="text-cyan-300 underline font-semibold">update_agent</a>, set <code class="text-amber-300 font-mono">agent_id</code>, and send body:
               </p>
-              <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-amber-300 overflow-x-auto">{"golden_query_ids": [101]}  # Status 200 OK links it!</pre>
+              <div class="text-[10px] text-emerald-400 font-semibold mb-0.5"><i class="fa-brands fa-python mr-1"></i>Alternatively use this Python Code Snippet:</div>
+              <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-amber-300 overflow-x-auto">{"golden_query_ids": [101]}  # Status 200 OK links it!
+# Python: client.update_agent(agent_id, {"golden_query_ids": [gq_id]})</pre>
             </div>
 
             <!-- 3. Create Conversation -->
@@ -612,6 +671,7 @@ agent = sdk.create_agent(body=models40.WriteAgent(
                 <span class="font-mono text-[10px] text-purple-300">create_conversation</span>
               </div>
               <p class="text-[11px] text-slate-300">Pass the newly created <code class="font-mono text-purple-300">agent_id</code> to allocate a server-side stateful thread.</p>
+              <div class="text-[10px] text-emerald-400 font-semibold mb-0.5"><i class="fa-brands fa-python mr-1"></i>Alternatively use this Python Code Snippet:</div>
               <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-purple-300 overflow-x-auto">conv = client.create_conversation(
     agent_id=agent_id,
     name="Cymbal Retail Session"
@@ -629,6 +689,7 @@ print("Conversation ID:", conv["id"])</pre>
                 <span class="font-mono text-[10px] text-emerald-300">conversational_analytics_chat</span>
               </div>
               <p class="text-[11px] text-slate-300">Inspect the 5-part stream: <code class="font-mono text-emerald-300">THOUGHT</code>, <code class="font-mono text-emerald-300">SCHEMA</code>, <code class="font-mono text-emerald-300">QUERY</code>, <code class="font-mono text-emerald-300">DATA</code>, <code class="font-mono text-emerald-300">FINAL_RESPONSE</code>.</p>
+              <div class="text-[10px] text-emerald-400 font-semibold mb-0.5"><i class="fa-brands fa-python mr-1"></i>Alternatively use this Python Code Snippet:</div>
               <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-emerald-300 overflow-x-auto">res = client.chat(conversation_id=conv["id"], user_message="...")
 print("Thoughts:", res["thoughts"])
 print("Query Spec:", res["query"], "Data:", res["data"])</pre>
@@ -785,7 +846,7 @@ print("Query Spec:", res["query"], "Data:", res["data"])</pre>
           <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-xs space-y-1">
             <span class="font-bold text-rose-300 flex items-center space-x-1.5">
               <i class="fa-brands fa-python"></i>
-              <span>Python Code Snippet (Dynamic Tuning via PATCH /agents/{agent_id}):</span>
+              <span>Alternatively use this Python Code Snippet (Dynamic Tuning via PATCH /agents/{agent_id}):</span>
             </span>
             <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-slate-300 overflow-x-auto"># looker_sdk
 sdk.update_agent(agent_id=agent_id, body=models40.WriteAgent(context=models40.AgentContext(instructions="...", show_analytical_details=True)))
@@ -857,7 +918,98 @@ client.update_agent(agent_id, {"context": {"instructions": "...", "show_analytic
           </div>
         </div>
 
-        <!-- SLIDE 14: SUMMARY & BEST PRACTICES -->
+        <!-- SLIDE 16: STEP 5 - LAB TEARDOWN & RESOURCE CLEANUP -->
+        <div class="slide flex-col justify-between flex-1" data-title="Step 5: Lab Teardown & Cleanup" data-notes="Walk through cleaning up resources created in the lab: 1) Revert/remove agent patch, 2) Delete golden queries, 3) Delete conversation session, 4) Delete the agent. Emphasize multi-tenant enterprise hygiene and the two equivalent execution pathways: API Explorer vs Python script.">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-teal-400 uppercase tracking-wider">Phase 5 &bull; Enterprise Resource Governance</span>
+              <span class="text-teal-400 font-bold text-xs bg-teal-950/60 border border-teal-800/40 px-2.5 py-0.5 rounded-full">Final Teardown</span>
+            </div>
+            <h2 class="text-xl md:text-3xl font-bold text-white">Task 5: Clean Up Lab Resources (Agent, Session, Golden Query & Patch)</h2>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              In shared enterprise Looker instances and multi-tenant workshops, maintaining clean resource hygiene prevents quota exhaustion and avoids orphaned test agents.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-2.5 my-2 text-xs">
+            <!-- 1. Revert Patch -->
+            <div class="bg-slate-900/80 border border-slate-800 p-3 rounded-xl space-y-1.5">
+              <div class="flex items-center space-x-1.5 text-amber-400 font-bold">
+                <span class="w-4 h-4 rounded-full bg-amber-600 text-white flex items-center justify-center text-[9px]">1</span>
+                <span>Revert Agent Patch</span>
+              </div>
+              <p class="text-[11px] text-slate-300">Unlink golden queries (<code class="text-amber-300 font-mono">[]</code>) and reset instructions to default.</p>
+              <div class="pt-1">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="looker_api_explorer" class="text-cyan-300 hover:underline text-[10px] block truncate">
+                  🔗 API Explorer: update_agent
+                </a>
+              </div>
+            </div>
+
+            <!-- 2. Delete Golden Query -->
+            <div class="bg-slate-900/80 border border-slate-800 p-3 rounded-xl space-y-1.5">
+              <div class="flex items-center space-x-1.5 text-rose-400 font-bold">
+                <span class="w-4 h-4 rounded-full bg-rose-600 text-white flex items-center justify-center text-[9px]">2</span>
+                <span>Delete Golden Query</span>
+              </div>
+              <p class="text-[11px] text-slate-300">Delete the created question exemplar via <code class="text-rose-300 font-mono">DELETE /golden_queries/{id}</code>.</p>
+              <div class="pt-1">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_golden_query" target="looker_api_explorer" class="text-cyan-300 hover:underline text-[10px] block truncate">
+                  🔗 API Explorer: delete_golden_query
+                </a>
+              </div>
+            </div>
+
+            <!-- 3. Delete Conversation -->
+            <div class="bg-slate-900/80 border border-slate-800 p-3 rounded-xl space-y-1.5">
+              <div class="flex items-center space-x-1.5 text-purple-400 font-bold">
+                <span class="w-4 h-4 rounded-full bg-purple-600 text-white flex items-center justify-center text-[9px]">3</span>
+                <span>Delete Conversation</span>
+              </div>
+              <p class="text-[11px] text-slate-300">Close and drop stateful thread via <code class="text-purple-300 font-mono">DELETE /conversations/{id}</code>.</p>
+              <div class="pt-1">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_conversation" target="looker_api_explorer" class="text-cyan-300 hover:underline text-[10px] block truncate">
+                  🔗 API Explorer: delete_conversation
+                </a>
+              </div>
+            </div>
+
+            <!-- 4. Delete Agent -->
+            <div class="bg-slate-900/80 border border-slate-800 p-3 rounded-xl space-y-1.5">
+              <div class="flex items-center space-x-1.5 text-blue-400 font-bold">
+                <span class="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[9px]">4</span>
+                <span>Delete Agent</span>
+              </div>
+              <p class="text-[11px] text-slate-300">Permanently delete custom agent via <code class="text-blue-300 font-mono">DELETE /agents/{agent_id}</code>.</p>
+              <div class="pt-1">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_agent" target="looker_api_explorer" class="text-cyan-300 hover:underline text-[10px] block truncate">
+                  🔗 API Explorer: delete_agent
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/90 border border-teal-900/40 p-3 rounded-xl text-xs space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-teal-300 font-bold flex items-center space-x-2">
+                <i class="fa-brands fa-python"></i>
+                <span>Alternatively use this Python Code Snippet (Automated Cleanup):</span>
+              </span>
+              <span class="text-slate-400 text-[10px] font-mono">python3 cleanup.py</span>
+            </div>
+            <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-teal-300 overflow-x-auto"># Zero-Dependency Python Client (or run python3 cleanup.py in Cloud Shell):
+client.cleanup_lab_resources(agent_id=AGENT_ID, conversation_id=CONV_ID, golden_query_id=GQ_ID)
+# Looker Python SDK:
+# sdk.delete_golden_query(gq_id); sdk.delete_conversation(conv_id); sdk.delete_agent(agent_id)</pre>
+          </div>
+
+          <div class="p-2.5 bg-gradient-to-r from-teal-950/40 to-slate-900 border border-teal-800/40 rounded-xl flex items-center justify-between text-xs">
+            <span class="text-slate-300">💡 <strong>Interactive Web App:</strong> You can also click the <strong>Run Complete Lab Cleanup</strong> button on the portal wrap-up page.</span>
+            <span class="text-teal-400 font-semibold text-[11px]">Zero Orphaned Resources</span>
+          </div>
+        </div>
+
+        <!-- SLIDE 17: SUMMARY & BEST PRACTICES -->
         <div class="slide flex-col justify-between flex-1" data-title="Summary & Best Practices" data-notes="Wrap up key takeaways for Data Engineers: Ground AI in semantic layers, use API Explorer, leverage server-side conversation state, and build auditability into every analytics application.">
           <div class="space-y-4">
             <span class="text-xs font-bold text-teal-400 uppercase tracking-wider">Wrap-Up & Best Practices</span>
