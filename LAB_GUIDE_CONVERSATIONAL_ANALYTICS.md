@@ -7,9 +7,6 @@
 **Companion Presentations:** [Google Slides (Standard Google Cloud Style)](https://docs.google.com/presentation/d/1looker-conversational-analytics-standard-gcp-deck/edit?usp=sharing) | [Interactive Presentation Slides](http://localhost:8080/presentation.html) | [Markdown Presentation Deck](PRESENTATION_LOOKER_CONVERSATIONAL_ANALYTICS.md)  
 **Walkthrough Video:** [Looker Conversational Analytics API (YouTube)](https://www.youtube.com/watch?v=XyU90O49p8o) by Looker EMEA Customer Engineering  
 
-> [!WARNING] The complete lab and application are available in the GitHub repository (`https://github.com/boobyg/cymbal_gadgets.git`) for students to clone and run in their own dedicated **Argolis environment** (using **Google Cloud Shell** in their assigned Argolis GCP project).
-> 
-
 ## 🧭 Introduction for Data Engineers: Why Looker Conversational Analytics?
 
 ### The Problem Data Engineers Face with Generative AI
@@ -50,7 +47,7 @@ By the end of this 30-minute lab, you will have created a custom Conversational 
 | :---: | :--- | :--- | :--- |
 | **Phase 0** | **Student Credentials Setup** | Authenticate to Looker 4.0 API using assigned API3 client credentials. Clear any legacy credentials. | Web App Portal (`:8080`) / `.env` |
 | **Phase 1** | **API Explorer & Core API Methods** | Follow the video journey: create agent (`POST /agents`), supply golden query, create conversation (`POST /conversations`), test chat API (`POST /conversational_analytics/chat`), inspect Python code snippets. | Looker API Explorer & Python SDK |
-| **Phase 2** | **Web Client Deployment** | Launch the Python web client in your dedicated Argolis Cloud Shell; execute automated health checks. | Cloud Shell Terminal / Web Preview |
+| **Phase 2** | **Web Client Deployment** | Launch the Python web client in your dedicated Cloud Shell; execute automated health checks. | Cloud Shell Terminal / Web Preview |
 | **Phase 3** | **Interactive Queries & Tracing** | Submit natural language queries in the web UI and audit the 5-stage agent response lifecycle (`THOUGHT`, `SCHEMA`, `QUERY`, `DATA`, `FINAL_RESPONSE`). | Web App Dual-Pane Console |
 | **Phase 4** | **Prompt Tuning & Productionizing** | Dynamically update agent guardrails using `PATCH /agents/{id}`; review Google Cloud Run serverless deployment architecture. | REST API / Cloud Run Architecture |
 | **Phase 5** | **Teardown & Resource Cleanup** | Maintain enterprise multi-tenant hygiene: revert agent patch, delete golden query, conversation session, and custom agent. | API Explorer / Python / 1-Click UI |
@@ -125,59 +122,12 @@ When calling `POST /conversational_analytics/chat`, the API does not just return
 | Step | Topic | Duration | Assessment Deliverable | Points |
 | :---: | :--- | :---: | :--- | :---: |
 | **Step 0** | Student Credentials Setup | 3 mins | Enter assigned Looker API credentials; clear previous cache | Required |
-| **Step 1** | API Explorer & Create Custom Agent | 10 mins | Create uniquely-named agent via `POST /agents` | 25 pts |
-| **Step 2** | Launch Web App & Verify Health | 5 mins | Launch Python client; verify health via terminal or UI | 25 pts |
-| **Step 3** | Interactive Queries & Tracing | 10 mins | Submit multi-turn queries; audit 5-stage response lifecycle | 25 pts |
-| **Step 4** | Prompt Tuning & Cloud Run Architecture | 5 mins | Patch guardrails via `PATCH /agents/{id}`; review deployment | 25 pts |
-| **Step 5** | Teardown & Resource Cleanup | 2 mins | Revert patch, delete golden query, conversation, and agent | Required |
-| **Total** | | **35 mins** | **Complete All 4 Checkpoints + Teardown** | **100 pts** |
-
----
-
-## 🛠️ Mandatory Environment: Deploy in Your Own Argolis Project
-
-> [!IMPORTANT]
-> **Every student MUST deploy and run this lab within their own dedicated Google Cloud Argolis environment** (e.g. using **Google Cloud Shell** in your personal Argolis GCP project).  
-> **Why?**
-> 1. **Complete Isolation:** Prevents local port collisions (`8080`) and conflicting session state across concurrent students.
-> 2. **Credential Privacy:** Keeps your Looker API credentials securely stored inside your private GCP sandbox.
-> 3. **Built-in Web Preview:** Cloud Shell provides an instant, secure HTTPS proxy to preview port 8080 without requiring firewall rules or SSH port forwarding.
-> 4. **Zero Local Dependencies:** All tools (Python 3, Git, curl, jq) are pre-installed in Cloud Shell.
-
-* **Looker Instance Base URL:** `https://ceworkshops.cloud.looker.com`
-* **LookML Model:** `cymbal_gadgets_boris`
-* **LookML Explore:** `transactions` (Cymbal Gadgets Retail Sales & Transactions)
-* **API Credentials:** Assigned to you by the instructor (Client ID & Client Secret)
-* **Git Repository:** `https://github.com/boobyg/cymbal_gadgets.git` (Public repository; no password required)
-* **Web Application Port:** `8080` (accessible via Cloud Shell Web Preview)
-
----
-
-# 📥 Getting Started: Clone & Launch in Argolis Cloud Shell
-
-### Step A: Open Cloud Shell in your Argolis Project
-1. Open the Google Cloud Console: [console.cloud.google.com](https://console.cloud.google.com).
-2. Ensure your active project is your assigned **Argolis project**.
-3. Click the **Activate Cloud Shell** icon (`>_`) in the top navigation bar.
-
-### Step B: Clone the Repository & Launch App
-In your Cloud Shell terminal:
-```bash
-# 1. Clone the public repository
-git clone https://github.com/boobyg/cymbal_gadgets.git
-
-# 2. Navigate to the web application directory
-cd cymbal_gadgets/agentic_web_app
-
-# 3. Start the web server (initializes environment and runs on port 8080)
-./run.sh
-```
-
-### Step C: Open the Interactive Lab Portal
-In Google Cloud Shell:
-1. Click the **Web Preview** icon in the upper-right corner of the Cloud Shell toolbar.
-2. Select **Preview on port 8080**.
-3. The interactive training portal will open in a new browser tab!
+| **Step 1** | API Explorer & Create Custom Agent | 10 mins | Create uniquely-named agent via `POST /agents` | 20 pts |
+| **Step 2** | Launch Web App & Verify Health | 5 mins | Launch Python client; verify health via terminal or UI | 20 pts |
+| **Step 3** | Interactive Queries & Tracing | 10 mins | Submit multi-turn queries; audit 5-stage response lifecycle | 20 pts |
+| **Step 4** | Prompt Tuning & Cloud Run Architecture | 5 mins | Patch guardrails via `PATCH /agents/{id}`; review deployment | 20 pts |
+| **Step 5** | Teardown & Resource Cleanup | 2 mins | Revert patch, delete golden query, conversation, and agent | 20 pts |
+| **Total** | | **35 mins** | **Complete All 5 Checkpoints (Including Teardown)** | **100 pts** |
 
 ---
 
@@ -437,13 +387,13 @@ Once the Golden Query is created, you must link its integer ID to your agent:
 4. In the **Request Body (`body`)** editor, paste:
 ```json
 {
-  "golden_query_ids": [101]
+  "golden_query_ids": [<YOUR_GOLDEN_QUERY_ID>]
 }
 ```
-*(Replace `101` with your actual integer Golden Query ID returned in the previous step).*
+*(Replace `<YOUR_GOLDEN_QUERY_ID>` with your actual numeric Golden Query ID returned in the previous step, e.g. `142`).*
 5. Click **Run Request**.  
    * **Status:** `PATCH /agents/{agent_id} (200: OK)`  
-   * **Response Body:** The response contains `"golden_query_ids": [101]`, confirming that your agent is now officially anchored by the verified golden query!
+   * **Response Body:** The response contains `"golden_query_ids": [<YOUR_GOLDEN_QUERY_ID>]`, confirming that your agent is now officially anchored by the verified golden query!
 
 ---
 
@@ -622,10 +572,10 @@ print("\n📝 Final Response:\n", result["final_response"])
 
 ---
 
-### 1.8 🚩 CHECKPOINT 1: Verify Agent Creation (25 Points)
+### 1.8 🚩 CHECKPOINT 1: Verify Agent Creation (20 Points)
 **Goal:** Confirm your agent exists and is queryable on the Looker instance.
 
-* **In the Web App:** Navigate to `http://localhost:8080`, enter your generated **Agent ID** into the **Task 1** checkpoint field, and click **Check my progress** to earn **+25 points**!
+* **In the Web App:** Navigate to `http://localhost:8080`, enter your generated **Agent ID** into the **Task 1** checkpoint field, and click **Check my progress** to earn **+20 points**!
 * **Via Terminal (Optional):**
 ```bash
 # In Cloud Shell, using your assigned credentials:
@@ -664,20 +614,29 @@ cd /home/user/cymbal_gadgets/agentic_web_app
 
 ---
 
-### 🚩 CHECKPOINT 2: Verify Web Server Health (25 Points)
+### 🚩 CHECKPOINT 2: Verify Web Server Health (20 Points)
 **Goal:** Confirm the web server is running and authenticated to Looker.
 
 #### ❓ Crucial Instruction: Where to Execute Health Verification
 1. **Option A (Fastest - Recommended): Use the Web UI Button**  
-   In the web portal (`http://localhost:8080`), scroll to **Task 2: Checkpoint 2** and click **Check my progress**. The app automatically verifies health and awards **+25 points**!
+   In the web portal (`http://localhost:8080`), scroll to **Task 2: Checkpoint 2** and click **Check my progress**. The app automatically verifies health and awards **+20 points**!
 2. **Option B: Run curl in a SECOND Terminal Tab in Cloud Shell**  
    * Open a **second terminal tab** (`+` icon in Cloud Shell).
    * **Do NOT run in the first terminal** (it is busy running `./run.sh`).
    * **Do NOT run on your local laptop** (`localhost:8080` exists in remote Cloud Shell).
-   * **Do NOT curl external `https://*.cloudshell.dev` URLs** (they return HTML login pages).
+   * **Do NOT curl external `https://*.cloudshell.dev` URLs**:
+     > [!CAUTION]
+     > **Troubleshooting `jq: parse error: Invalid numeric literal at line 1, column 3`:**  
+     > If you run `curl -s https://<port>-cs-...cloudshell.dev/api/health | jq .`, it fails with:  
+     > `jq: parse error: Invalid numeric literal at line 1, column 3`.  
+     > **Root Cause:** External Cloud Shell Web Preview URLs require Google Single Sign-On (SSO) browser session authentication cookies. A headless terminal `curl` receives an HTTP 302 redirect returning HTML (`<a href="...">Found</a>.`), which fails `jq` parsing at column 3 (`<a `).  
+     > **Solution:** Inside Cloud Shell, always query the loopback address directly:  
+     > ```bash
+     > curl -s http://localhost:8080/api/health | jq .
+     > ```
    * In your second Cloud Shell terminal:
    ```bash
-   curl http://localhost:8080/api/health | jq .
+   curl -s http://localhost:8080/api/health | jq .
    ```
    **Expected Output:**
    ```json
@@ -687,7 +646,7 @@ cd /home/user/cymbal_gadgets/agentic_web_app
      "looker_url": "https://ceworkshops.cloud.looker.com",
      "user_email": "api_user@example.com"
    }
-    ```
+   ```
 
 ### 2.3 Display the Looker Conversational Analytics Window (End of Step 2)
 Now that your agent is created (Step 1) and your backend client is verified healthy (Step 2):
@@ -753,10 +712,10 @@ Now test analytical queries in the right-hand chat window and inspect the real-t
 
 ---
 
-### 🚩 CHECKPOINT 3: Verify Interactive Query Flow (25 Points)
+### 🚩 CHECKPOINT 3: Verify Interactive Query Flow (20 Points)
 **Goal:** Confirm the complete natural language-to-BigQuery execution pipeline.
 
-* **In the Web App:** Enter your Step 1 `agent_id` into the **Task 3** checkpoint field and click **Check my progress** to earn **+25 points**!
+* **In the Web App:** Enter your Step 1 `agent_id` into the **Task 3** checkpoint field and click **Check my progress** to earn **+20 points**!
 * **Via Automated CLI Script:**
 ```bash
 python3 /home/user/cymbal_gadgets/agentic_web_app/test_pipeline.py YOUR_STEP_1_AGENT_ID
@@ -894,8 +853,8 @@ For enterprise production, Data Engineers deploy this pattern using Google Cloud
 
 ---
 
-### 🚩 CHECKPOINT 4: Lab Wrap-Up & Scoring (25 Points)
-In the interactive portal, click the **Check my progress** button under Task 4 to earn your final **+25 points** (100/100 Total Score)!
+### 🚩 CHECKPOINT 4: Prompt Guardrails & Tuning (20 Points)
+In the interactive portal, click the **Check my progress** button under Task 4 to earn **+20 points** (80/100 Points Total). Complete Task 5 Teardown to earn the final 20 points and achieve 100/100!
 
 ---
 
@@ -986,6 +945,17 @@ If you are using the interactive portal (`http://localhost:8080`):
 3. *(Optional)* Check **Reset Credentials to Workshop Placeholder** if you are finished with the workshop.
 4. Click **Run Complete Lab Cleanup**.
 5. The portal executes the full 4-step teardown, refreshes the available agents catalog, and confirms cleanup completion with green status indicators.
+
+---
+
+### 🚩 CHECKPOINT 5: Verify Lab Teardown & Resource Cleanup (20 Points)
+**Goal:** Confirm that your custom agent and test resources have been safely cleaned up.
+
+* **In the Web App:** Navigate to Task 5: Checkpoint 5 and click **Check my progress** (or click **Run Complete Lab Cleanup** in the 1-click teardown card) to earn your final **+20 points** and reach **100/100 Total Score**! The final completion celebration modal will unlock upon completing Checkpoint 5.
+* **Via Automated CLI Check:**
+```bash
+python3 /home/user/cymbal_gadgets/agentic_web_app/cleanup.py YOUR_AGENT_ID YOUR_CONVERSATION_ID YOUR_GOLDEN_QUERY_ID
+```
 
 ---
 

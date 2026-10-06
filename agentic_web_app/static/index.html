@@ -97,13 +97,6 @@
         <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70"></i>
       </a>
 
-      <!-- Argolis Setup Quickstart Button -->
-      <button id="openArgolisBtn" onclick="openArgolisModal()" class="flex items-center space-x-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl border border-sky-200 bg-sky-50 text-sky-800 hover:bg-sky-100 transition shadow-sm" title="Argolis Setup & Git Quickstart instructions">
-        <i class="fa-solid fa-cloud text-sky-600"></i>
-        <span class="hidden md:inline">Argolis Quickstart</span>
-        <span class="md:hidden">Argolis</span>
-      </button>
-
       <!-- Student Credentials Button -->
       <button id="openCredentialsBtn" class="flex items-center space-x-2 text-xs font-semibold px-3 py-1.5 rounded-xl border transition shadow-sm bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100">
         <i class="fa-solid fa-key text-amber-600"></i>
@@ -141,9 +134,6 @@
       <nav class="h-11 bg-slate-50 border-b border-slate-200 px-4 flex items-center space-x-1 overflow-x-auto text-xs shrink-0 custom-scrollbar">
         <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-semibold bg-white text-indigo-700 shadow-sm whitespace-nowrap border border-slate-200" data-target="section-overview">
           <i class="fa-solid fa-compass mr-1.5 text-indigo-500"></i>Overview
-        </button>
-        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-argolis">
-          <i class="fa-solid fa-cloud mr-1.5 text-sky-500"></i>Argolis Setup
         </button>
         <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-step0">
           <i class="fa-solid fa-key mr-1.5 text-amber-500"></i>Step 0: Credentials
@@ -205,40 +195,6 @@
                 <span>Launch Interactive Slides</span>
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
               </a>
-            </div>
-          </div>
-
-          <!-- Argolis Setup Quickstart Callout -->
-          <div class="bg-gradient-to-r from-sky-50 via-white to-blue-50 border-2 border-sky-300 rounded-xl p-3.5 text-xs space-y-2.5 shadow-sm">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-2 text-sky-950 font-bold">
-                <i class="fa-solid fa-cloud text-sky-600 text-base"></i>
-                <span>Argolis Environment &amp; Git Quickstart</span>
-              </div>
-              <span class="text-[11px] font-semibold text-sky-800 bg-sky-100 px-2 py-0.5 rounded-full border border-sky-200">Mandatory Setup</span>
-            </div>
-            <p class="text-slate-600 text-xs leading-relaxed">
-              Every student runs in their own Google Cloud Argolis project sandbox via <strong>Google Cloud Shell</strong>. This ensures total isolation, zero port collisions on <code class="font-mono text-indigo-700">8080</code>, and secure credential handling.
-            </p>
-            <div class="relative group">
-              <pre class="bg-slate-900 text-emerald-400 p-2.5 rounded-lg text-xs font-mono select-all">git clone https://github.com/boobyg/cymbal_gadgets.git &amp;&amp; cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh</pre>
-              <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git &amp;&amp; cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh', this)" class="absolute top-1.5 right-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded-md text-[11px] border border-slate-700 transition flex items-center space-x-1 shadow-sm">
-                <i class="fa-regular fa-copy"></i>
-                <span>Copy 1-Liner</span>
-              </button>
-            </div>
-            <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-[11px]">
-              <span class="text-slate-500">Run in Cloud Shell &rarr; Web Preview &rarr; Preview on port 8080</span>
-              <div class="flex items-center space-x-2">
-                <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git', this)" class="text-sky-700 hover:text-sky-900 font-medium underline flex items-center space-x-1">
-                  <i class="fa-regular fa-copy text-[10px]"></i>
-                  <span>Copy Git Clone</span>
-                </button>
-                <button onclick="openArgolisModal()" class="bg-sky-600 hover:bg-sky-700 text-white font-semibold px-2.5 py-1 rounded-lg transition shadow-sm flex items-center space-x-1">
-                  <span>Full Instructions</span>
-                  <i class="fa-solid fa-arrow-right text-[9px]"></i>
-                </button>
-              </div>
             </div>
           </div>
 
@@ -321,178 +277,13 @@
                 </thead>
                 <tbody class="divide-y divide-slate-200 text-slate-700">
                   <tr><td class="py-1.5 font-semibold">Step 0</td><td>Student Credentials Setup</td><td>3 mins</td><td>Required</td></tr>
-                  <tr><td class="py-1.5 font-semibold">Step 1</td><td>API Explorer & Create Agent</td><td>10 mins</td><td>25 pts</td></tr>
-                  <tr><td class="py-1.5 font-semibold">Step 2</td><td>Web Application Architecture</td><td>5 mins</td><td>25 pts</td></tr>
-                  <tr><td class="py-1.5 font-semibold">Step 3</td><td>Consuming Endpoints & Tracing</td><td>10 mins</td><td>25 pts</td></tr>
-                  <tr><td class="py-1.5 font-semibold">Step 4</td><td>Prompt Tuning & Cloud Run</td><td>5 mins</td><td>25 pts</td></tr>
+                  <tr><td class="py-1.5 font-semibold">Step 1</td><td>API Explorer & Create Agent</td><td>10 mins</td><td>20 pts</td></tr>
+                  <tr><td class="py-1.5 font-semibold">Step 2</td><td>Web Application Architecture</td><td>5 mins</td><td>20 pts</td></tr>
+                  <tr><td class="py-1.5 font-semibold">Step 3</td><td>Consuming Endpoints & Tracing</td><td>10 mins</td><td>20 pts</td></tr>
+                  <tr><td class="py-1.5 font-semibold">Step 4</td><td>Prompt Tuning & Cloud Run</td><td>5 mins</td><td>20 pts</td></tr>
+                  <tr><td class="py-1.5 font-semibold">Step 5</td><td>Teardown & Clean Up</td><td>2 mins</td><td>20 pts</td></tr>
                 </tbody>
               </table>
-            </div>
-          </div>
-        </article>
-
-        <!-- SECTION: ARGOLIS SETUP & GIT QUICKSTART -->
-        <article id="section-argolis" class="space-y-4 pt-4 border-t border-slate-200">
-          <div class="border-b border-slate-200 pb-3 flex items-center justify-between">
-            <div>
-              <span class="text-xs font-bold text-sky-600 uppercase tracking-wider">Environment Preparation</span>
-              <h2 class="text-xl font-bold text-slate-900 mt-1">🛠️ Argolis Lab Setup &amp; Git Quickstart</h2>
-              <p class="text-xs text-slate-600 mt-1">Deploy the lab portal and backend inside your private Google Cloud Argolis project sandbox</p>
-            </div>
-            <button onclick="openArgolisModal()" class="hidden sm:flex items-center space-x-1.5 bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-300 font-semibold px-3 py-1.5 rounded-xl text-xs transition shadow-sm">
-              <i class="fa-solid fa-window-restore text-sky-600"></i>
-              <span>Popup Modal</span>
-            </button>
-          </div>
-
-          <!-- Why Argolis Box -->
-          <div class="bg-sky-50/70 border-2 border-sky-200 rounded-2xl p-4 text-xs text-slate-700 space-y-2.5">
-            <div class="flex items-center space-x-2 font-bold text-sky-900">
-              <i class="fa-solid fa-shield-halved text-sky-600 text-sm"></i>
-              <span>Mandatory Sandbox Architecture: Why Argolis &amp; Google Cloud Shell?</span>
-            </div>
-            <p class="text-xs text-slate-700 leading-relaxed">
-              Every student <strong>must install and run this lab inside their own dedicated Google Cloud Argolis environment</strong> using Google Cloud Shell.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-1 text-xs">
-              <div class="bg-white p-3 rounded-xl border border-sky-200 shadow-sm space-y-1">
-                <div class="font-bold text-sky-950 flex items-center space-x-1.5">
-                  <i class="fa-solid fa-network-wired text-sky-600"></i>
-                  <span>Zero Port Collisions</span>
-                </div>
-                <p class="text-slate-600 text-[11px] leading-relaxed">
-                  Avoids port <code class="font-mono text-indigo-700">8080</code> conflicts between concurrent students on shared hosts.
-                </p>
-              </div>
-              <div class="bg-white p-3 rounded-xl border border-sky-200 shadow-sm space-y-1">
-                <div class="font-bold text-sky-950 flex items-center space-x-1.5">
-                  <i class="fa-solid fa-lock text-sky-600"></i>
-                  <span>Credential Privacy</span>
-                </div>
-                <p class="text-slate-600 text-[11px] leading-relaxed">
-                  Your Looker API credentials remain securely sandboxed in your individual GCP account.
-                </p>
-              </div>
-              <div class="bg-white p-3 rounded-xl border border-sky-200 shadow-sm space-y-1">
-                <div class="font-bold text-sky-950 flex items-center space-x-1.5">
-                  <i class="fa-solid fa-globe text-sky-600"></i>
-                  <span>Secure Web Preview</span>
-                </div>
-                <p class="text-slate-600 text-[11px] leading-relaxed">
-                  Cloud Shell provides instant, secure HTTPS proxying to port 8080 without firewall rules or SSH tunneling.
-                </p>
-              </div>
-              <div class="bg-white p-3 rounded-xl border border-sky-200 shadow-sm space-y-1">
-                <div class="font-bold text-sky-950 flex items-center space-x-1.5">
-                  <i class="fa-solid fa-screwdriver-wrench text-sky-600"></i>
-                  <span>Zero Local Prerequisites</span>
-                </div>
-                <p class="text-slate-600 text-[11px] leading-relaxed">
-                  Debian Linux container with Python 3, Git, and curl pre-installed and ready out of the box.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- One-Shot Fast Track Box -->
-          <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 border border-slate-700 rounded-2xl p-4 text-xs text-white space-y-2 shadow-md">
-            <div class="flex items-center justify-between">
-              <span class="font-bold flex items-center space-x-2 text-amber-300">
-                <i class="fa-solid fa-bolt text-amber-400"></i>
-                <span>Fast Track: Copy One-Shot Setup Command</span>
-              </span>
-              <span class="text-[10px] bg-slate-700 text-slate-300 px-2 py-0.5 rounded-full border border-slate-600">One-Line Execution</span>
-            </div>
-            <p class="text-[11px] text-slate-300">
-              Paste this entire line into Google Cloud Shell to clone the repo, install dependencies, and start the web server:
-            </p>
-            <div class="relative group mt-1">
-              <pre class="bg-black/60 text-emerald-400 p-3 rounded-xl text-xs font-mono select-all overflow-x-auto">git clone https://github.com/boobyg/cymbal_gadgets.git &amp;&amp; cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh</pre>
-              <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git &amp;&amp; cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh', this)" class="absolute top-2 right-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 shadow">
-                <i class="fa-regular fa-copy"></i>
-                <span>Copy Command</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Detailed Step-by-Step Instructions -->
-          <div class="space-y-4">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Detailed Step-by-Step Installation:</h3>
-
-            <!-- Step A -->
-            <div class="bg-white border border-slate-200 rounded-xl p-3.5 space-y-2">
-              <div class="flex items-center space-x-2 font-bold text-slate-900 text-xs">
-                <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px]">A</span>
-                <span>Open Google Cloud Shell in your Argolis Project</span>
-              </div>
-              <ol class="list-decimal pl-6 text-xs text-slate-600 space-y-1">
-                <li>Open Google Cloud Console: <a href="https://console.cloud.google.com" target="_blank" rel="noopener noreferrer" class="text-sky-600 underline font-medium">console.cloud.google.com</a>.</li>
-                <li>Verify your project selector shows your assigned <strong>Argolis sandbox project</strong>.</li>
-                <li>Click the <strong>Activate Cloud Shell</strong> icon (<code class="font-mono bg-slate-100 text-slate-800 px-1 rounded">&gt;_</code>) in the top-right toolbar.</li>
-              </ol>
-            </div>
-
-            <!-- Step B -->
-            <div class="bg-white border border-slate-200 rounded-xl p-3.5 space-y-2">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2 font-bold text-slate-900 text-xs">
-                  <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px]">B</span>
-                  <span>Clone Git Repository to Cloud Shell</span>
-                </div>
-                <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git', this)" class="text-xs text-sky-700 hover:text-sky-900 font-semibold flex items-center space-x-1 bg-sky-50 hover:bg-sky-100 border border-sky-200 px-2.5 py-1 rounded-lg transition shadow-sm">
-                  <i class="fa-regular fa-copy"></i>
-                  <span>Copy Git Clone</span>
-                </button>
-              </div>
-              <p class="text-xs text-slate-600">In your Cloud Shell terminal, clone the public repository:</p>
-              <div class="relative group">
-                <pre class="bg-slate-900 text-slate-100 p-2.5 rounded-lg text-xs font-mono select-all">git clone https://github.com/boobyg/cymbal_gadgets.git</pre>
-                <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git', this)" class="absolute top-1.5 right-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px] border border-slate-700">Copy</button>
-              </div>
-            </div>
-
-            <!-- Step C -->
-            <div class="bg-white border border-slate-200 rounded-xl p-3.5 space-y-2">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2 font-bold text-slate-900 text-xs">
-                  <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px]">C</span>
-                  <span>Navigate and Launch Application Server</span>
-                </div>
-                <button onclick="copyText('cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh', this)" class="text-xs text-sky-700 hover:text-sky-900 font-semibold flex items-center space-x-1 bg-sky-50 hover:bg-sky-100 border border-sky-200 px-2.5 py-1 rounded-lg transition shadow-sm">
-                  <i class="fa-regular fa-copy"></i>
-                  <span>Copy Launch Command</span>
-                </button>
-              </div>
-              <div class="relative group">
-                <pre class="bg-slate-900 text-slate-100 p-2.5 rounded-lg text-xs font-mono select-all">cd cymbal_gadgets/agentic_web_app
-./run.sh</pre>
-                <button onclick="copyText('cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh', this)" class="absolute top-1.5 right-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px] border border-slate-700">Copy</button>
-              </div>
-              <p class="text-[11px] text-slate-500">The script creates a Python virtual environment, installs dependencies, and binds the web server to port <code class="font-mono text-indigo-700">8080</code>.</p>
-            </div>
-
-            <!-- Step D -->
-            <div class="bg-white border border-slate-200 rounded-xl p-3.5 space-y-2">
-              <div class="flex items-center space-x-2 font-bold text-slate-900 text-xs">
-                <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px]">D</span>
-                <span>Open Cloud Shell Web Preview on Port 8080</span>
-              </div>
-              <ol class="list-decimal pl-6 text-xs text-slate-600 space-y-1">
-                <li>In the Google Cloud Shell toolbar (top-right), click the <strong>Web Preview</strong> icon (<i class="fa-solid fa-window-maximize text-slate-500"></i>).</li>
-                <li>Select <strong>Preview on port 8080</strong> from the dropdown menu.</li>
-                <li>Your browser opens the full interactive training portal via an authorized proxy!</li>
-              </ol>
-            </div>
-
-            <!-- Step E -->
-            <div class="bg-white border border-slate-200 rounded-xl p-3.5 space-y-2">
-              <div class="flex items-center space-x-2 font-bold text-slate-900 text-xs">
-                <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px]">E</span>
-                <span>Enter Your Looker API Credentials in the Portal</span>
-              </div>
-              <p class="text-xs text-slate-600 leading-relaxed">
-                When the portal loads, click the yellow <strong>"Specify your own user id / secret"</strong> button in the top navigation bar (or configure <code class="font-mono text-slate-700">.env</code> directly in terminal) to enter your assigned Looker Client ID and Secret.
-              </p>
             </div>
           </div>
         </article>
@@ -516,10 +307,14 @@
             <p class="text-amber-800">
               Please enter your assigned credentials when prompted: <strong>specify your own user id / secret</strong>.
             </p>
-            <div class="flex flex-wrap gap-2 pt-1">
+            <div class="flex flex-wrap gap-2 pt-1 items-center">
               <button onclick="openCredentialsModal()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-4 py-2 rounded-lg transition shadow-sm flex items-center space-x-1.5">
                 <i class="fa-solid fa-key"></i>
                 <span>Open Student Credentials Dialog</span>
+              </button>
+              <button onclick="clearRememberedAgentId(); alert('Agent ID has been cleared. You are ready to start with a clean slate!');" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-semibold px-3 py-2 rounded-lg transition shadow-sm flex items-center space-x-1.5" title="Clear any active Agent ID before starting">
+                <i class="fa-solid fa-arrows-rotate text-slate-500"></i>
+                <span>Clear Agent ID (Clean Start)</span>
               </button>
             </div>
           </div>
@@ -632,7 +427,7 @@ nano .env</pre>
                 <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold">1</span>
                 <span>1. CreateAgent Method in API Explorer</span>
               </span>
-              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" target="looker_api_explorer" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                 <span>Open create_agent</span>
               </a>
@@ -641,7 +436,7 @@ nano .env</pre>
             <div class="space-y-1 text-xs text-blue-950">
               <p class="font-semibold text-slate-800">Step-by-Step Instructions:</p>
               <ol class="list-decimal pl-5 space-y-1 text-slate-700">
-                <li>Click <strong>Open create_agent</strong> above (opens/reuses the Looker API Explorer tab), then click the <strong>Run It</strong> tab.</li>
+                <li>Click <strong>Open create_agent</strong> above (opens/reuses the Looker API Explorer window), then click the <strong>Run It</strong> tab.</li>
                 <li>Paste the JSON payload below into the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>.</li>
                 <li>Click the blue <strong>Run Request</strong> button. Look for status <code class="font-mono bg-emerald-100 text-emerald-800 px-1 rounded">200: OK</code>.</li>
                 <li>Copy the 32-character <code class="font-mono bg-slate-200 text-slate-900 px-1 rounded">"id"</code> property from the response!</li>
@@ -721,7 +516,7 @@ print("Agent ID:", agent["id"])</pre>
             </div>
 
             <p class="text-xs text-slate-600 leading-relaxed">
-              When you create an agent (via <strong>API Explorer</strong> or the <strong>Quick Create</strong> button below), paste its 32-character Agent ID here. The portal will <strong>remember it</strong> across your session and <strong>display/auto-fill it into Steps 2, 3, 4, and Checkpoint 1</strong> so you don't lose track of it!
+              When you create an agent (via <strong>API Explorer</strong> or the Python snippet), paste its 32-character Agent ID here. The portal will <strong>remember it</strong> across your session and <strong>display/auto-fill it into Steps 2, 3, 4, and Checkpoint 1</strong> so you don't lose track of it!
             </p>
 
             <div class="flex flex-col sm:flex-row gap-2">
@@ -730,9 +525,9 @@ print("Agent ID:", agent["id"])</pre>
                 <i class="fa-solid fa-bookmark"></i>
                 <span>Remember Agent ID</span>
               </button>
-              <button id="task1QuickCreateBtn" type="button" class="bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-200 font-semibold px-3 py-2 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition shadow-sm shrink-0">
-                <i class="fa-solid fa-bolt text-amber-500"></i>
-                <span>Quick Create Agent</span>
+              <button onclick="clearRememberedAgentId()" type="button" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-semibold px-3 py-2 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition shadow-sm shrink-0" title="Clear saved Agent ID">
+                <i class="fa-solid fa-arrows-rotate text-slate-500"></i>
+                <span>Clear</span>
               </button>
             </div>
 
@@ -762,7 +557,7 @@ print("Agent ID:", agent["id"])</pre>
                 <span class="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px] font-bold">2</span>
                 <span>2. Supplying a Golden Query Example (Verified Query)</span>
               </span>
-              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query" target="looker_api_explorer" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-amber-600 hover:bg-amber-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-amber-600 hover:bg-amber-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                 <span>Open create_golden_query</span>
               </a>
@@ -810,38 +605,43 @@ print("Agent ID:", agent["id"])</pre>
             </div>
 
             <!-- How to Link Golden Queries to Agent via API Explorer -->
-            <div class="bg-white border border-amber-300 rounded-lg p-3 text-xs space-y-2">
+            <div class="bg-white border-2 border-amber-300 rounded-xl p-3.5 text-xs space-y-3 shadow-sm">
               <div class="flex items-center justify-between">
                 <span class="font-bold text-amber-900 flex items-center space-x-1.5">
                   <i class="fa-solid fa-link text-amber-600"></i>
                   <span>How to Link "Golden Queries" to the Agent in API Explorer:</span>
                 </span>
-                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="looker_api_explorer" rel="noopener noreferrer" class="inline-flex items-center space-x-1 text-[11px] font-semibold text-cyan-700 hover:text-cyan-900 underline">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="inline-flex items-center space-x-1 text-[11px] font-semibold text-cyan-700 hover:text-cyan-900 underline">
                   <span>Open update_agent in API Explorer</span>
                   <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               </div>
-              <ol class="list-decimal pl-5 space-y-1 text-slate-700 text-[11px]">
-                <li>In <code class="font-mono text-amber-800">create_golden_query</code>, click <strong>Run Request</strong> and note the integer <code class="font-mono bg-slate-100 text-slate-900 px-1 rounded">"id"</code> in the response (e.g. <code class="font-mono text-slate-800">101</code>).</li>
-                <li>Open <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="looker_api_explorer" rel="noopener noreferrer" class="text-cyan-700 underline font-medium">update_agent</a> (reusing the same API Explorer tab).</li>
-                <li>Under <strong>Parameters</strong>, paste your 32-character Agent ID into the <code class="font-mono bg-slate-100 text-slate-900 px-1 rounded">agent_id</code> field.</li>
-                <li>In the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>, paste:
-                  <pre class="bg-slate-900 text-slate-100 p-2 mt-1 rounded text-[11px] font-mono">{
-  "golden_query_ids": [101]
-}</pre>
-                  <em>(Replace <code class="font-mono text-slate-700">101</code> with your actual integer Golden Query ID)</em>
-                </li>
-                <li>Click <strong>Run Request</strong>. Status <code class="font-mono bg-emerald-100 text-emerald-800 px-1 rounded">200: OK</code> with <code class="font-mono text-slate-800">"golden_query_ids": [...]</code> confirms linking!</li>
-              </ol>
-            </div>
 
-            <!-- 1-Click Supply Golden Query Button -->
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 pt-1">
-              <button id="step2SupplyGoldenQueryBtn" type="button" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center space-x-1.5 transition shadow-sm">
-                <i class="fa-solid fa-wand-magic-sparkles text-amber-200"></i>
-                <span>Supply & Link Golden Query (1-Click)</span>
-              </button>
-              <span id="step2GoldenQueryStatus" class="hidden text-xs font-medium px-2 py-1 rounded-lg"></span>
+              <!-- Interactive GQ ID Input that updates the snippet live -->
+              <div class="bg-amber-50 border border-amber-200 rounded-lg p-2.5 space-y-1.5">
+                <label for="step2GqIdInput" class="block font-bold text-slate-800 text-[11px]">
+                  Enter the Golden Query ID you just created:
+                </label>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                  <input type="number" id="step2GqIdInput" placeholder="Paste integer ID from response (e.g. 142)..." class="w-full sm:w-64 bg-white border border-amber-300 rounded-lg px-2.5 py-1 text-xs font-mono focus:ring-2 focus:ring-amber-500 focus:outline-none" oninput="updateGoldenQueryLinkingJson()">
+                  <span class="text-[11px] text-slate-500">Auto-updates the Request Body payload below</span>
+                </div>
+              </div>
+
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-700 text-[11px]">
+                <li>In <code class="font-mono text-amber-800">create_golden_query</code>, click <strong>Run Request</strong> and copy the integer <code class="font-mono bg-slate-100 text-slate-900 px-1 rounded">"id"</code> in the response. Paste it into the box above.</li>
+                <li>Click <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-cyan-700 underline font-medium">Open update_agent in API Explorer</a>.</li>
+                <li>Under <strong>Parameters</strong>, paste your 32-character Agent ID into the <code class="font-mono bg-slate-100 text-slate-900 px-1 rounded">agent_id</code> field.</li>
+                <li>In the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>, paste the JSON below (it contains the Golden Query ID you entered above):
+                  <div class="relative group mt-1">
+                    <pre id="step2LinkingJsonCode" class="bg-slate-900 text-slate-100 p-2.5 rounded text-[11px] font-mono select-all">{
+  "golden_query_ids": [142]
+}</pre>
+                    <button onclick="copyCode(this)" class="absolute top-1.5 right-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px] border border-slate-700">Copy JSON</button>
+                  </div>
+                </li>
+                <li>Click <strong>Run Request</strong>. Status <code class="font-mono bg-emerald-100 text-emerald-800 px-1 rounded">200: OK</code> with your <code class="font-mono text-slate-800">"golden_query_ids"</code> confirms the linking!</li>
+              </ol>
             </div>
 
             <!-- Python Snippet for Golden Query -->
@@ -882,7 +682,7 @@ client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})</pre>
                 <span class="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px] font-bold">3</span>
                 <span>3. Create Conversation Session Using Your Agent ID</span>
               </span>
-              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_conversation" target="looker_api_explorer" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-purple-600 hover:bg-purple-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_conversation" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-purple-600 hover:bg-purple-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                 <span>Open create_conversation</span>
               </a>
@@ -899,10 +699,6 @@ client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})</pre>
                 <button onclick="copyCurrentAgentId(this)" class="bg-purple-600 hover:bg-purple-700 text-white px-2.5 py-1 rounded-lg text-xs font-medium flex items-center justify-center space-x-1">
                   <i class="fa-regular fa-copy"></i>
                   <span>Copy Agent ID</span>
-                </button>
-                <button id="step3CreateConvBtn" type="button" class="bg-white hover:bg-purple-50 text-purple-700 border border-purple-300 px-2.5 py-1 rounded-lg text-xs font-medium flex items-center justify-center space-x-1 shadow-sm">
-                  <i class="fa-solid fa-play text-[10px]"></i>
-                  <span>Create Session (1-Click)</span>
                 </button>
               </div>
             </div>
@@ -957,7 +753,7 @@ print("Conversation ID:", conv["id"])</pre>
                 <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold">4</span>
                 <span>4. Test Chat API Method Before Showing Chat UI</span>
               </span>
-              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/conversational_analytics_chat" target="looker_api_explorer" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
+              <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/conversational_analytics_chat" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3 py-1 rounded-lg text-xs transition shadow-sm">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                 <span>Open conversational_analytics_chat</span>
               </a>
@@ -1036,6 +832,52 @@ print("📝 Summary:", result["final_response"])</pre>
             </div>
           </div>
 
+          <!-- 1-Click Fast-Track Shortcuts Accordion (Hidden by Default at bottom of section) -->
+          <details class="group bg-slate-100 border border-slate-300 rounded-2xl overflow-hidden shadow-sm transition">
+            <summary class="cursor-pointer px-4 py-3 bg-slate-200/80 hover:bg-slate-200 flex items-center justify-between text-xs font-bold text-slate-800 select-none">
+              <span class="flex items-center space-x-2">
+                <i class="fa-solid fa-bolt text-amber-500 text-sm"></i>
+                <span>⚡ Fast-Track 1-Click Shortcuts (Hidden by Default &bull; Optional Automation)</span>
+              </span>
+              <span class="text-[11px] font-normal text-slate-500 group-open:rotate-180 transition-transform">
+                <i class="fa-solid fa-chevron-down"></i>
+              </span>
+            </summary>
+            <div class="p-4 space-y-3 bg-white text-xs border-t border-slate-200">
+              <p class="text-slate-600 text-[11px] leading-relaxed">
+                If you prefer to automate any Step 1 API calls without manually executing them in API Explorer or Python, expand these 1-click shortcuts:
+              </p>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div class="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2">
+                  <span class="font-bold text-indigo-900 block">1. Quick Create Agent</span>
+                  <p class="text-[11px] text-slate-600">Creates an agent on Looker with standard Cymbal Gadgets configuration.</p>
+                  <button id="task1QuickCreateBtn" type="button" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1 transition shadow-sm">
+                    <i class="fa-solid fa-bolt text-amber-300 mr-1"></i>
+                    <span>Quick Create Agent</span>
+                  </button>
+                </div>
+                <div class="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2">
+                  <span class="font-bold text-amber-900 block">2. Supply Golden Query</span>
+                  <p class="text-[11px] text-slate-600">Creates golden query & links it to active Agent without 422 error.</p>
+                  <button id="step2SupplyGoldenQueryBtn" type="button" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1 transition shadow-sm">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-200 mr-1"></i>
+                    <span>Supply & Link GQ</span>
+                  </button>
+                  <span id="step2GoldenQueryStatus" class="hidden text-[11px] block p-1 rounded"></span>
+                </div>
+                <div class="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2">
+                  <span class="font-bold text-purple-900 block">3. Create Session</span>
+                  <p class="text-[11px] text-slate-600">Spawns a conversational session on Looker for your active Agent.</p>
+                  <button id="step3CreateConvBtn" type="button" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1 transition shadow-sm">
+                    <i class="fa-solid fa-play text-white mr-1 text-[10px]"></i>
+                    <span>Create Session</span>
+                  </button>
+                  <div id="step3ConvStatus" class="hidden text-[11px] p-1 rounded font-medium"></div>
+                </div>
+              </div>
+            </div>
+          </details>
+
           <!-- CHECKPOINT 1 INTERACTIVE CARD -->
           <div class="bg-slate-50 border-2 border-indigo-200 rounded-2xl p-5 shadow-sm space-y-3">
             <div class="flex items-center justify-between">
@@ -1043,7 +885,7 @@ print("📝 Summary:", result["final_response"])</pre>
                 <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">1</span>
                 <h4 class="font-bold text-sm text-slate-900">Assessment Checkpoint 1: Verify Agent Creation</h4>
               </div>
-              <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2.5 py-1 rounded-full">+25 Points</span>
+              <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2.5 py-1 rounded-full">+20 Points</span>
             </div>
             
             <p class="text-xs text-slate-600">
@@ -1081,19 +923,26 @@ print("📝 Summary:", result["final_response"])</pre>
               <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy</button>
             </div>
 
-            <!-- CRITICAL CLOUD SHELL WARNING -->
-            <div class="bg-amber-50 border border-amber-300 rounded-xl p-3 text-[11px] text-amber-900 space-y-1.5 shadow-sm">
-              <div class="font-bold flex items-center space-x-1.5 text-amber-900">
+            <!-- CRITICAL CLOUD SHELL WARNING & TROUBLESHOOTING -->
+            <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-3.5 text-[11px] text-amber-950 space-y-2 shadow-sm">
+              <div class="font-bold flex items-center space-x-1.5 text-amber-900 text-xs">
                 <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
-                <span>Cloud Shell Note: Do NOT curl your external Web Preview URL</span>
+                <span>Cloud Shell Troubleshooting: Fixing "jq: parse error: Invalid numeric literal at line 1, column 3"</span>
               </div>
               <p class="leading-relaxed">
-                Run the command with <code class="font-mono bg-amber-100 px-1 py-0.5 rounded font-bold text-amber-950">http://localhost:8080</code> directly in a second Cloud Shell terminal window.
+                If you ran <code class="font-mono bg-rose-100 text-rose-900 px-1 py-0.5 rounded font-bold">curl -s https://8080-cs-...cloudshell.dev/api/health | jq .</code>, you received this error:
               </p>
-              <p class="leading-relaxed text-amber-800">
-                ⚠️ Do <strong>NOT</strong> replace <code class="font-mono">localhost:8080</code> with your browser's <code class="font-mono">https://*.cloudshell.dev</code> URL. The external Web Preview proxy requires Google SSO login cookies and returns HTML, which results in:
-                <code class="font-mono bg-rose-50 border border-rose-200 text-rose-700 block p-1.5 rounded mt-1 font-semibold">jq: parse error: Invalid numeric literal at line 1, column ...</code>
-              </p>
+              <div class="bg-rose-950 text-rose-200 p-2.5 rounded-lg font-mono text-[11px] border border-rose-800">
+                jq: parse error: Invalid numeric literal at line 1, column 3
+              </div>
+              <div class="space-y-1 text-slate-700">
+                <p><strong>Why this happens:</strong> The external <code class="font-mono text-indigo-700">https://8080-cs-*.cloudshell.dev</code> URL is an authenticated Google SSO Web Preview proxy. When accessed via curl without your browser session cookie, it returns an HTTP 302 HTML redirect (<code class="font-mono">&lt;a href="..."&gt;Found&lt;/a&gt;</code>). The <code class="font-mono text-indigo-700">jq</code> utility cannot parse HTML starting with <code class="font-mono">&lt;a</code>, throwing the column 3 numeric literal error.</p>
+                <p><strong>The Fix:</strong> Inside your Cloud Shell terminal, always curl local loopback on port 8080:</p>
+                <div class="relative group mt-1">
+                  <pre class="bg-slate-900 text-emerald-400 p-2 rounded text-[11px] font-mono select-all">curl -s http://localhost:8080/api/health | jq .</pre>
+                  <button onclick="copyCode(this)" class="absolute top-1 right-1 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px] border border-slate-700">Copy</button>
+                </div>
+              </div>
             </div>
 
             <!-- WHERE TO RUN THE CURL COMMAND CALLOUT -->
@@ -1117,7 +966,7 @@ print("📝 Summary:", result["final_response"])</pre>
                 <span class="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs flex items-center justify-center font-bold">2</span>
                 <h4 class="font-bold text-sm text-slate-900">Assessment Checkpoint 2: Verify Web Server Health</h4>
               </div>
-              <span class="text-xs font-bold text-emerald-600 bg-emerald-100 px-2.5 py-1 rounded-full">+25 Points</span>
+              <span class="text-xs font-bold text-emerald-600 bg-emerald-100 px-2.5 py-1 rounded-full">+20 Points</span>
             </div>
             
             <p class="text-xs text-slate-600">
@@ -1258,7 +1107,7 @@ print("📝 Summary:", result["final_response"])</pre>
                 <span class="w-6 h-6 rounded-full bg-purple-600 text-white text-xs flex items-center justify-center font-bold">3</span>
                 <h4 class="font-bold text-sm text-slate-900">Assessment Checkpoint 3: Verify Interactive Query Flow</h4>
               </div>
-              <span class="text-xs font-bold text-purple-600 bg-purple-100 px-2.5 py-1 rounded-full">+25 Points</span>
+              <span class="text-xs font-bold text-purple-600 bg-purple-100 px-2.5 py-1 rounded-full">+20 Points</span>
             </div>
             
             <p class="text-xs text-slate-600">
@@ -1403,11 +1252,11 @@ client.update_agent(agent_id, {
                 <span class="w-6 h-6 rounded-full bg-rose-600 text-white text-xs flex items-center justify-center font-bold">4</span>
                 <h4 class="font-bold text-sm text-slate-900">Assessment Checkpoint 4: Verify Prompt Tuning</h4>
               </div>
-              <span class="text-xs font-bold text-rose-600 bg-rose-100 px-2.5 py-1 rounded-full">+25 Points</span>
+              <span class="text-xs font-bold text-rose-600 bg-rose-100 px-2.5 py-1 rounded-full">+20 Points</span>
             </div>
             
             <p class="text-xs text-slate-600">
-              Apply or verify the Cymbal Executive guardrail persona to achieve 100/100 points!
+              Apply or verify the Cymbal Executive guardrail persona to achieve 80/100 points! (Complete Task 5 Clean Up to reach 100/100).
             </p>
 
             <div class="flex flex-wrap gap-2">
@@ -1448,7 +1297,7 @@ client.update_agent(agent_id, {
                   <span class="w-4 h-4 rounded-full bg-amber-600 text-white flex items-center justify-center text-[10px]">1</span>
                   <span>Revert Agent Patch</span>
                 </span>
-                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="looker_api_explorer" class="text-[11px] text-amber-700 hover:text-amber-900 underline font-medium">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-[11px] text-amber-700 hover:text-amber-900 underline font-medium">
                   API Explorer <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               </div>
@@ -1462,7 +1311,7 @@ client.update_agent(agent_id, {
                   <span class="w-4 h-4 rounded-full bg-rose-600 text-white flex items-center justify-center text-[10px]">2</span>
                   <span>Delete Golden Query</span>
                 </span>
-                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_golden_query" target="looker_api_explorer" class="text-[11px] text-rose-700 hover:text-rose-900 underline font-medium">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_golden_query" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-[11px] text-rose-700 hover:text-rose-900 underline font-medium">
                   API Explorer <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               </div>
@@ -1476,7 +1325,7 @@ client.update_agent(agent_id, {
                   <span class="w-4 h-4 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px]">3</span>
                   <span>Delete Conversation</span>
                 </span>
-                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_conversation" target="looker_api_explorer" class="text-[11px] text-purple-700 hover:text-purple-900 underline font-medium">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_conversation" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-[11px] text-purple-700 hover:text-purple-900 underline font-medium">
                   API Explorer <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               </div>
@@ -1490,7 +1339,7 @@ client.update_agent(agent_id, {
                   <span class="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">4</span>
                   <span>Delete Agent</span>
                 </span>
-                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_agent" target="looker_api_explorer" class="text-[11px] text-blue-700 hover:text-blue-900 underline font-medium">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-[11px] text-blue-700 hover:text-blue-900 underline font-medium">
                   API Explorer <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               </div>
@@ -1574,6 +1423,31 @@ results = client.cleanup_lab_resources(
 print("Teardown status:", results)</pre>
               <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
             </div>
+          </div>
+
+          <!-- CHECKPOINT 5 INTERACTIVE CARD: VERIFY LAB RESOURCE CLEANUP (FINAL 20 PTS) -->
+          <div class="bg-slate-50 border-2 border-teal-300 rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <span class="w-6 h-6 rounded-full bg-teal-600 text-white text-xs flex items-center justify-center font-bold">5</span>
+                <h4 class="font-bold text-sm text-slate-900">Assessment Checkpoint 5: Verify Enterprise Resource Teardown</h4>
+              </div>
+              <span class="text-xs font-bold text-teal-700 bg-teal-100 px-2.5 py-1 rounded-full">+20 Points &bull; Final 100/100</span>
+            </div>
+            
+            <p class="text-xs text-slate-600">
+              Verify that test artifacts (agent, conversation, golden queries) have been cleaned up and custom prompt directives reverted. This awards the final 20 points to complete the lab with 100/100!
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input type="text" id="cp5AgentIdInput" placeholder="Agent ID to verify teardown (Optional - uses remembered ID)..." class="flex-1 bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-mono focus:ring-2 focus:ring-teal-500 focus:outline-none">
+              <button id="checkProgress5Btn" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2 rounded-xl text-xs flex items-center justify-center space-x-2 transition shadow-sm">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Check my progress</span>
+              </button>
+            </div>
+
+            <div id="cp5Feedback" class="hidden text-xs p-3 rounded-xl"></div>
           </div>
         </article>
 
@@ -1708,109 +1582,6 @@ print("Teardown status:", results)</pre>
   </div>
 
   <!-- ============================================================ -->
-  <!-- MODAL 0: ARGOLIS SETUP & GIT QUICKSTART                      -->
-  <!-- ============================================================ -->
-  <div id="argolisModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden transform transition-all flex flex-col max-h-[90vh]">
-      <div class="bg-gradient-to-r from-sky-600 to-indigo-700 px-6 py-4 text-white flex items-center justify-between shrink-0">
-        <div class="flex items-center space-x-2">
-          <i class="fa-solid fa-cloud text-sky-200"></i>
-          <h3 class="font-bold text-sm">Argolis Environment Setup &amp; Git Quickstart</h3>
-        </div>
-        <button onclick="closeArgolisModal()" class="text-white/80 hover:text-white text-sm">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <div class="p-6 overflow-y-auto space-y-4 text-xs custom-scrollbar">
-        <!-- Callout Banner -->
-        <div class="bg-sky-50 border border-sky-200 text-sky-950 p-3.5 rounded-xl space-y-1.5">
-          <div class="font-bold flex items-center space-x-1.5 text-sky-900">
-            <i class="fa-solid fa-circle-info text-sky-600"></i>
-            <span>Why Argolis &amp; Google Cloud Shell?</span>
-          </div>
-          <p class="text-[11px] text-slate-700 leading-relaxed">
-            Every student runs their own isolated environment in their dedicated Argolis GCP sandbox. Google Cloud Shell provides a pre-configured Linux container with Python 3, Git, curl, and secure HTTPS Web Preview on port 8080—completely eliminating port collisions and credential leaks!
-          </p>
-        </div>
-
-        <!-- 1-Liner Quickstart with Copy Button -->
-        <div class="space-y-1.5">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-              <i class="fa-solid fa-bolt text-amber-500"></i>
-              <span>One-Shot Command (Copy &amp; Paste into Cloud Shell):</span>
-            </span>
-            <span class="text-[10px] text-slate-500">Clones, sets up &amp; runs port 8080</span>
-          </div>
-          <div class="relative group">
-            <pre class="bg-slate-900 text-emerald-400 p-3 rounded-xl text-xs font-mono select-all overflow-x-auto">git clone https://github.com/boobyg/cymbal_gadgets.git &amp;&amp; cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh</pre>
-            <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git &amp;&amp; cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh', this)" class="absolute top-2 right-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-lg text-xs font-semibold transition flex items-center space-x-1 shadow">
-              <i class="fa-regular fa-copy"></i>
-              <span>Copy Command</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step-by-Step Breakdown -->
-        <div class="space-y-3 pt-2 border-t border-slate-200">
-          <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider">Step-by-Step Installation:</h4>
-          
-          <div class="space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-200">
-            <div class="font-semibold text-slate-800">1. Open Google Cloud Shell:</div>
-            <p class="text-slate-600 text-[11px]">
-              Navigate to <a href="https://console.cloud.google.com" target="_blank" rel="noopener noreferrer" class="text-sky-600 underline font-medium">console.cloud.google.com</a>, ensure your project selector shows your assigned Argolis project, and click the <strong>Activate Cloud Shell</strong> icon (<code class="font-mono bg-white text-slate-800 px-1 rounded">&gt;_</code>) in the top navbar.
-            </p>
-          </div>
-
-          <div class="space-y-1.5 bg-slate-50 p-3 rounded-xl border border-slate-200">
-            <div class="flex items-center justify-between">
-              <span class="font-semibold text-slate-800">2. Clone Git Repository:</span>
-              <button onclick="copyText('git clone https://github.com/boobyg/cymbal_gadgets.git', this)" class="text-xs text-sky-700 hover:text-sky-900 font-semibold flex items-center space-x-1 bg-white hover:bg-sky-50 border border-sky-200 px-2.5 py-1 rounded-lg transition shadow-sm">
-                <i class="fa-regular fa-copy"></i>
-                <span>Copy Git Clone</span>
-              </button>
-            </div>
-            <pre class="bg-slate-900 text-slate-100 p-2.5 rounded-lg text-xs font-mono select-all overflow-x-auto">git clone https://github.com/boobyg/cymbal_gadgets.git</pre>
-          </div>
-
-          <div class="space-y-1.5 bg-slate-50 p-3 rounded-xl border border-slate-200">
-            <div class="flex items-center justify-between">
-              <span class="font-semibold text-slate-800">3. Navigate and Launch Application:</span>
-              <button onclick="copyText('cd cymbal_gadgets/agentic_web_app &amp;&amp; ./run.sh', this)" class="text-xs text-sky-700 hover:text-sky-900 font-semibold flex items-center space-x-1 bg-white hover:bg-sky-50 border border-sky-200 px-2.5 py-1 rounded-lg transition shadow-sm">
-                <i class="fa-regular fa-copy"></i>
-                <span>Copy Launch</span>
-              </button>
-            </div>
-            <pre class="bg-slate-900 text-slate-100 p-2.5 rounded-lg text-xs font-mono select-all overflow-x-auto">cd cymbal_gadgets/agentic_web_app
-./run.sh</pre>
-          </div>
-
-          <div class="space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-200">
-            <div class="font-semibold text-slate-800">4. Open Cloud Shell Web Preview:</div>
-            <p class="text-slate-600 text-[11px]">
-              In the Cloud Shell toolbar, click the <strong>Web Preview</strong> icon and choose <strong>Preview on port 8080</strong>.
-            </p>
-          </div>
-
-          <div class="space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-200">
-            <div class="font-semibold text-slate-800">5. Enter Looker API Credentials:</div>
-            <p class="text-slate-600 text-[11px]">
-              Click the yellow <strong>"Specify your own user id / secret"</strong> button at the top of the portal to enter your assigned Client ID &amp; Secret.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex justify-end shrink-0">
-        <button type="button" onclick="closeArgolisModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium text-xs transition">
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================ -->
   <!-- MODAL 1: STUDENT CREDENTIALS SETUP ("specify your own...")   -->
   <!-- ============================================================ -->
   <div id="credentialsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -1939,10 +1710,11 @@ print("Teardown status:", results)</pre>
       </div>
 
       <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-left text-xs space-y-2">
-        <div class="flex items-center text-emerald-700 font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Checkpoint 1: Agent Created (25 pts)</div>
-        <div class="flex items-center text-emerald-700 font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Checkpoint 2: Server Health Verified (25 pts)</div>
-        <div class="flex items-center text-emerald-700 font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Checkpoint 3: Governed Queries Executed (25 pts)</div>
-        <div class="flex items-center text-emerald-700 font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Checkpoint 4: Prompt Guardrails Tuned (25 pts)</div>
+        <div class="flex items-center text-emerald-700 font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Checkpoint 1: Agent Created (20 pts)</div>
+        <div class="flex items-center text-emerald-700 font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Checkpoint 2: Server Health Verified (20 pts)</div>
+        <div class="flex items-center text-emerald-700 font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Checkpoint 3: Governed Queries Executed (20 pts)</div>
+        <div class="flex items-center text-emerald-700 font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Checkpoint 4: Prompt Guardrails Tuned (20 pts)</div>
+        <div class="flex items-center text-emerald-700 font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Checkpoint 5: Lab Resources Cleaned Up (20 pts)</div>
       </div>
 
       <button onclick="closeCelebrationModal()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition shadow">
@@ -2049,16 +1821,16 @@ print("Teardown status:", results)</pre>
       setupEventListeners();
       updateConsoleUnlockStatus();
 
-      // Restore remembered Agent ID if previously saved
-      const savedAgentId = localStorage.getItem('looker_agent_id');
-      if (savedAgentId) {
-        setRememberedAgentId(savedAgentId, false);
-      }
-      
       await checkCredentialsStatus();
       if (isConfigured) {
         await checkHealth();
         await loadAgents();
+        const savedAgentId = localStorage.getItem('looker_agent_id');
+        if (savedAgentId) {
+          setRememberedAgentId(savedAgentId, false);
+        }
+      } else {
+        clearRememberedAgentId();
       }
       // Note: Do not auto-open credentials modal on load.
       // Students read Step 0 instructions and click "Open Student Credentials Dialog" when ready.
@@ -2078,6 +1850,7 @@ print("Teardown status:", results)</pre>
         } else {
           openCredentialsBtn.className = 'flex items-center space-x-2 text-xs font-semibold px-3 py-1.5 rounded-xl border transition shadow-sm bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100';
           credButtonText.textContent = 'Specify your own user id / secret';
+          clearRememberedAgentId();
         }
       } catch (err) {
         console.error("Failed to check credentials:", err);
@@ -2108,6 +1881,7 @@ print("Teardown status:", results)</pre>
           credClientId.value = '';
           credClientSecret.value = '';
           isConfigured = false;
+          clearRememberedAgentId();
           openCredentialsBtn.className = 'flex items-center space-x-2 text-xs font-semibold px-3 py-1.5 rounded-xl border transition shadow-sm bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100';
           credButtonText.textContent = 'Specify your own user id / secret';
           connectionPill.className = 'flex items-center space-x-1.5 px-2.5 py-1 rounded-full font-medium bg-amber-50 text-amber-700 border border-amber-200';
@@ -2222,8 +1996,6 @@ print("Teardown status:", results)</pre>
 
         if (currentAgentId && availableAgents.some(a => a.id === currentAgentId)) {
           agentSelect.value = currentAgentId;
-        } else if (availableAgents.length === 1) {
-          selectAgent(availableAgents[0].id);
         }
       } catch (err) {
         console.error("Failed to load agents:", err);
@@ -2426,19 +2198,19 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
     }
 
     // ----------------------------------------------------
-    // CHECKPOINT PROGRESS & SCORING
+    // CHECKPOINT PROGRESS & SCORING (5 Checkpoints x 20 Pts = 100 Pts)
     // ----------------------------------------------------
     function awardCheckpoint(num, points) {
       if (!completedCheckpoints.has(num)) {
         completedCheckpoints.add(num);
-        const score = completedCheckpoints.size * 25;
+        const score = completedCheckpoints.size * 20;
         scoreDisplay.textContent = score;
         scoreBar.style.width = `${score}%`;
 
         updateConsoleUnlockStatus();
 
-        // Check if all complete
-        if (completedCheckpoints.size === 4) {
+        // Check if all complete (5 checkpoints x 20 pts = 100 pts)
+        if (completedCheckpoints.size === 5) {
           setTimeout(showCelebration, 600);
         }
       }
@@ -2481,8 +2253,8 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
 
         if (data.passed) {
           cp1Feedback.className = 'text-xs p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium';
-          cp1Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: ${data.message} (+25 points awarded!)`;
-          awardCheckpoint(1, 25);
+          cp1Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: ${data.message} (+20 points awarded!)`;
+          awardCheckpoint(1, 20);
           selectAgent(targetId);
           await loadAgents();
         } else {
@@ -2512,8 +2284,8 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
 
         if (data.passed) {
           cp2Feedback.className = 'text-xs p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium';
-          cp2Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: ${data.message} (+25 points awarded!)`;
-          awardCheckpoint(2, 25);
+          cp2Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: ${data.message} (+20 points awarded!)`;
+          awardCheckpoint(2, 20);
         } else {
           cp2Feedback.className = 'text-xs p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800';
           cp2Feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-1.5"></i> Check Failed: ${data.error}`;
@@ -2560,10 +2332,10 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
         if (data.passed) {
           cp3Feedback.className = 'text-xs p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium';
           cp3Feedback.innerHTML = `
-            <div><i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: Verified LookML compilation & data results with Step 1 Agent! (+25 points)</div>
+            <div><i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: Verified LookML compilation & data results with Step 1 Agent! (+20 points)</div>
             <div class="mt-1 text-[11px] font-mono text-emerald-700">Reasoning Steps: ${data.thoughts_count} &bull; Final: "${data.final_response.substring(0, 80)}..."</div>
           `;
-          awardCheckpoint(3, 25);
+          awardCheckpoint(3, 20);
         } else {
           cp3Feedback.className = 'text-xs p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800';
           cp3Feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-1.5"></i> Check Failed: ${data.error}`;
@@ -2590,9 +2362,9 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
         const data = await res.json();
         if (data.passed) {
           cp4Feedback.className = 'text-xs p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium';
-          cp4Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> ${data.message}`;
+          cp4Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> ${data.message} (+20 points &bull; 80/100 points)`;
           cp4Feedback.classList.remove('hidden');
-          awardCheckpoint(4, 25);
+          awardCheckpoint(4, 20);
         }
       } catch (err) {
         alert(err.message);
@@ -2614,9 +2386,9 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
         const data = await res.json();
         if (data.passed) {
           cp4Feedback.className = 'text-xs p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium';
-          cp4Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: ${data.message}`;
+          cp4Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: ${data.message} (+20 points &bull; 80/100 points)`;
           cp4Feedback.classList.remove('hidden');
-          awardCheckpoint(4, 25);
+          awardCheckpoint(4, 20);
         } else {
           cp4Feedback.className = 'text-xs p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800';
           cp4Feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-1.5"></i> Check Failed: ${data.error}`;
@@ -2631,6 +2403,56 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
         checkProgress4Btn.innerHTML = '<i class="fa-solid fa-circle-check mr-1.5"></i> Check my progress';
       }
     });
+
+    // Checkpoint 5 Validation (Clean Up & Teardown - Final 20 pts)
+    const checkProgress5Btn = document.getElementById('checkProgress5Btn');
+    const cp5AgentIdInput = document.getElementById('cp5AgentIdInput');
+    const cp5Feedback = document.getElementById('cp5Feedback');
+
+    if (checkProgress5Btn) {
+      checkProgress5Btn.addEventListener('click', async () => {
+        const targetId = (cp5AgentIdInput ? cp5AgentIdInput.value.trim() : '') || currentAgentId;
+        checkProgress5Btn.disabled = true;
+        checkProgress5Btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Checking Teardown...';
+        if (cp5Feedback) {
+          cp5Feedback.className = 'text-xs p-3 rounded-xl bg-slate-100 text-slate-700';
+          cp5Feedback.classList.remove('hidden');
+          cp5Feedback.textContent = "Verifying resource cleanup on Looker...";
+        }
+
+        try {
+          const res = await fetch('/api/checkpoints/5', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ agent_id: targetId })
+          });
+          const data = await res.json();
+          if (data.passed) {
+            if (cp5Feedback) {
+              cp5Feedback.className = 'text-xs p-3 rounded-xl bg-teal-50 border border-teal-200 text-teal-800 font-medium';
+              cp5Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-teal-600 mr-1.5"></i> Assessment Complete: ${data.message} (+20 points &bull; Final 100/100!)`;
+              cp5Feedback.classList.remove('hidden');
+            }
+            awardCheckpoint(5, 20);
+          } else {
+            if (cp5Feedback) {
+              cp5Feedback.className = 'text-xs p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800';
+              cp5Feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-1.5"></i> Check Failed: ${data.error}`;
+              cp5Feedback.classList.remove('hidden');
+            }
+          }
+        } catch (err) {
+          if (cp5Feedback) {
+            cp5Feedback.className = 'text-xs p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800';
+            cp5Feedback.textContent = err.message;
+            cp5Feedback.classList.remove('hidden');
+          }
+        } finally {
+          checkProgress5Btn.disabled = false;
+          checkProgress5Btn.innerHTML = '<i class="fa-solid fa-circle-check mr-1.5"></i> Check my progress';
+        }
+      });
+    }
 
     // ----------------------------------------------------
     // QUICK CREATE AGENT MODAL
@@ -3054,6 +2876,13 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
                 if (cleanupGqIdInput) cleanupGqIdInput.value = '';
               }
 
+              awardCheckpoint(5, 20);
+              if (cp5Feedback) {
+                cp5Feedback.className = 'text-xs p-3 rounded-xl bg-teal-50 border border-teal-200 text-teal-800 font-medium';
+                cp5Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-teal-600 mr-1.5"></i> Assessment Complete: Lab resources torn down (+20 points &bull; Final 100/100!)`;
+                cp5Feedback.classList.remove('hidden');
+              }
+
               if (resetCreds) {
                 await checkCredentialsStatus();
               }
@@ -3340,16 +3169,28 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
     }
 
     // ----------------------------------------------------
-    // ARGOLIS MODAL & COPY HELPERS
+    // POPUP WINDOW MANAGER & COPY HELPERS
     // ----------------------------------------------------
-    function openArgolisModal() {
-      const modal = document.getElementById('argolisModal');
-      if (modal) modal.classList.remove('hidden');
+    let apiExplorerWindow = null;
+    function openApiExplorer(url) {
+      const windowFeatures = 'width=1280,height=900,left=100,top=50,resizable=yes,scrollbars=yes,status=yes';
+      if (!apiExplorerWindow || apiExplorerWindow.closed) {
+        apiExplorerWindow = window.open(url, 'looker_api_explorer_window', windowFeatures);
+      } else {
+        apiExplorerWindow.location.href = url;
+      }
+      if (apiExplorerWindow) {
+        try { apiExplorerWindow.focus(); } catch (e) {}
+      }
+      return false;
     }
 
-    function closeArgolisModal() {
-      const modal = document.getElementById('argolisModal');
-      if (modal) modal.classList.add('hidden');
+    function updateGoldenQueryLinkingJson() {
+      const gqInput = document.getElementById('step2GqIdInput');
+      const jsonCode = document.getElementById('step2LinkingJsonCode');
+      if (!jsonCode) return;
+      const gqId = (gqInput && gqInput.value.trim()) ? parseInt(gqInput.value.trim(), 10) : 142;
+      jsonCode.textContent = `{\n  "golden_query_ids": [${isNaN(gqId) ? 142 : gqId}]\n}`;
     }
 
     function copyText(text, btn) {

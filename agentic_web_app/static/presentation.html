@@ -117,7 +117,7 @@
             <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
               <div class="text-slate-400 font-medium">Hands-On Goal</div>
               <div class="text-emerald-400 font-bold text-sm mt-1">Custom Agent + Live Web App</div>
-              <div class="text-slate-500 text-[11px] mt-1">4 Checkpoints (100 Points Total)</div>
+              <div class="text-slate-500 text-[11px] mt-1">5 Checkpoints (100 Points Total, 20 pts each)</div>
             </div>
           </div>
         </div>
@@ -573,7 +573,7 @@ cd cymbal_gadgets/agentic_web_app</pre>
                 Built-in workbench in Looker. Click direct links, click the <strong>Run It</strong> tab, paste JSON payload, and click <strong>Run Request</strong>. Zero local coding required!
               </p>
               <div class="pt-1">
-                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" target="looker_api_explorer" class="font-mono text-cyan-300 hover:underline text-[10px] break-all">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="font-mono text-cyan-300 hover:underline text-[10px] break-all">
                   🔗 Open create_agent in API Explorer
                 </a>
               </div>
@@ -653,11 +653,11 @@ agent = sdk.create_agent(body=models40.WriteAgent(
                 <span class="font-mono text-[10px] text-amber-300">create_golden_query</span>
               </div>
               <p class="text-[11px] text-slate-300">
-                1. Run <code class="text-amber-300 font-mono">POST /golden_queries</code> (single question required to avoid HTTP 422).<br>
-                2. In API Explorer, open <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="looker_api_explorer" class="text-cyan-300 underline font-semibold">update_agent</a>, set <code class="text-amber-300 font-mono">agent_id</code>, and send body:
+                1. Run <code class="text-amber-300 font-mono">POST /golden_queries</code> (single question required to avoid HTTP 422). Note down the created integer ID (e.g. 142).<br>
+                2. In API Explorer, open <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-cyan-300 underline font-semibold">update_agent</a>, set <code class="text-amber-300 font-mono">agent_id</code>, and send body replacing the ID with the Golden Query ID you just created:
               </p>
               <div class="text-[10px] text-emerald-400 font-semibold mb-0.5"><i class="fa-brands fa-python mr-1"></i>Alternatively use this Python Code Snippet:</div>
-              <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-amber-300 overflow-x-auto">{"golden_query_ids": [101]}  # Status 200 OK links it!
+              <pre class="bg-slate-950 p-2 rounded font-mono text-[10px] text-amber-300 overflow-x-auto">{"golden_query_ids": [&lt;YOUR_GOLDEN_QUERY_ID&gt;]}  # Status 200 OK links it!
 # Python: client.update_agent(agent_id, {"golden_query_ids": [gq_id]})</pre>
             </div>
 
@@ -940,7 +940,7 @@ client.update_agent(agent_id, {"context": {"instructions": "...", "show_analytic
               </div>
               <p class="text-[11px] text-slate-300">Unlink golden queries (<code class="text-amber-300 font-mono">[]</code>) and reset instructions to default.</p>
               <div class="pt-1">
-                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" target="looker_api_explorer" class="text-cyan-300 hover:underline text-[10px] block truncate">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-cyan-300 hover:underline text-[10px] block truncate">
                   🔗 API Explorer: update_agent
                 </a>
               </div>
@@ -954,7 +954,7 @@ client.update_agent(agent_id, {"context": {"instructions": "...", "show_analytic
               </div>
               <p class="text-[11px] text-slate-300">Delete the created question exemplar via <code class="text-rose-300 font-mono">DELETE /golden_queries/{id}</code>.</p>
               <div class="pt-1">
-                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_golden_query" target="looker_api_explorer" class="text-cyan-300 hover:underline text-[10px] block truncate">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_golden_query" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-cyan-300 hover:underline text-[10px] block truncate">
                   🔗 API Explorer: delete_golden_query
                 </a>
               </div>
@@ -968,7 +968,7 @@ client.update_agent(agent_id, {"context": {"instructions": "...", "show_analytic
               </div>
               <p class="text-[11px] text-slate-300">Close and drop stateful thread via <code class="text-purple-300 font-mono">DELETE /conversations/{id}</code>.</p>
               <div class="pt-1">
-                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_conversation" target="looker_api_explorer" class="text-cyan-300 hover:underline text-[10px] block truncate">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_conversation" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-cyan-300 hover:underline text-[10px] block truncate">
                   🔗 API Explorer: delete_conversation
                 </a>
               </div>
@@ -982,7 +982,7 @@ client.update_agent(agent_id, {"context": {"instructions": "...", "show_analytic
               </div>
               <p class="text-[11px] text-slate-300">Permanently delete custom agent via <code class="text-blue-300 font-mono">DELETE /agents/{agent_id}</code>.</p>
               <div class="pt-1">
-                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_agent" target="looker_api_explorer" class="text-cyan-300 hover:underline text-[10px] block truncate">
+                <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-cyan-300 hover:underline text-[10px] block truncate">
                   🔗 API Explorer: delete_agent
                 </a>
               </div>
@@ -1211,6 +1211,21 @@ client.cleanup_lab_resources(agent_id=AGENT_ID, conversation_id=CONV_ID, golden_
         }
       }
     });
+
+    // API Explorer Popup Window Reuse
+    let apiExplorerWindow = null;
+    function openApiExplorer(url) {
+      const windowFeatures = 'width=1280,height=900,left=100,top=50,resizable=yes,scrollbars=yes,status=yes';
+      if (!apiExplorerWindow || apiExplorerWindow.closed) {
+        apiExplorerWindow = window.open(url, 'looker_api_explorer_window', windowFeatures);
+      } else {
+        apiExplorerWindow.location.href = url;
+      }
+      if (apiExplorerWindow) {
+        try { apiExplorerWindow.focus(); } catch (e) {}
+      }
+      return false;
+    }
 
     // Initialize
     showSlide(0);

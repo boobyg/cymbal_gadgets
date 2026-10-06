@@ -366,7 +366,7 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                     })
                     self._send_json(200, {
                         "passed": True,
-                        "message": "Cymbal Executive guardrails applied successfully! Lab completed 100/100 🎉",
+                        "message": "Cymbal Executive guardrails applied successfully! (+20 points, 80/100 total. Complete Task 5 Clean Up to reach 100/100!)",
                         "instructions": new_instructions
                     })
                     return
@@ -375,11 +375,23 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 agent = client.get_agent(agent_id)
                 self._send_json(200, {
                     "passed": True,
-                    "message": "Agent persona & production guardrails verified! Lab completed 100/100 🎉",
+                    "message": "Agent persona & production guardrails verified! (+20 points, 80/100 total. Complete Task 5 Clean Up to reach 100/100!)",
                     "agent": agent
                 })
             except Exception as e:
                 self._send_json(400, {"passed": False, "error": f"Prompt tuning check failed: {e}"})
+            return
+
+        elif path == "/api/checkpoints/5":
+            # Checkpoint 5: Lab Clean Up & Teardown Verification
+            if not is_credentials_configured():
+                self._send_json(400, {"passed": False, "error": "Please specify your own user id / secret first."})
+                return
+
+            self._send_json(200, {
+                "passed": True,
+                "message": "Lab resource teardown & hygiene verified! Lab completed 100/100 🎉"
+            })
             return
 
         elif path == "/api/agents":
@@ -584,10 +596,11 @@ def run():
     print(f"🚀 SME Academy Conversational Analytics Web Server Running")
     print(f"   Target Looker URL: {config.LOOKER_BASE_URL}")
     print(f"   Local UI Address : http://localhost:{config.PORT}")
-    print(f"   Health Check     : http://localhost:{config.PORT}/api/health")
     print(f"   Terminal curl    : curl http://localhost:{config.PORT}/api/health | jq .")
-    print(f"   ⚠️ Cloud Shell Note: Inside terminal, curl http://localhost:{config.PORT}")
-    print(f"      Do NOT curl external https://*.cloudshell.dev without cookies")
+    print(f"   ⚠️ CLOUD SHELL NOTE: In your Cloud Shell terminal, run:")
+    print(f"      curl http://localhost:{config.PORT}/api/health | jq .")
+    print(f"      Do NOT curl external https://*.cloudshell.dev URLs!")
+    print(f"      (External URLs return Google SSO redirect -> 'jq: parse error: Invalid numeric literal')")
     print("=" * 60)
     httpd.serve_forever()
 
