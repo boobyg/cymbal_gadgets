@@ -1077,7 +1077,7 @@ print("📝 Summary:", result["final_response"])</pre>
           <div class="space-y-2 text-xs">
             <h4 class="font-bold text-slate-800">Verification via curl:</h4>
             <div class="relative group">
-              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono select-all">curl -s http://localhost:8080/api/health | jq .</pre>
+              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono select-all">curl http://localhost:8080/api/health | jq .</pre>
               <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy</button>
             </div>
 

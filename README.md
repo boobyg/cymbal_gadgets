@@ -307,7 +307,7 @@ print("📝 Summary:", result["final_response"])
 > 1. In Google Cloud Shell, click the **`+` (Open new tab)** button in the terminal tab bar.
 > 2. In this fresh second tab, run:
 >    ```bash
->    curl -s http://localhost:8080/api/health | jq .
+>    curl http://localhost:8080/api/health | jq .
 >    ```
 > 3. Expected response:
 >    ```json

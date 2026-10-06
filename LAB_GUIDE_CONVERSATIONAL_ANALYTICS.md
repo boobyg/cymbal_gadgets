@@ -677,7 +677,7 @@ cd /home/user/cymbal_gadgets/agentic_web_app
    * **Do NOT curl external `https://*.cloudshell.dev` URLs** (they return HTML login pages).
    * In your second Cloud Shell terminal:
    ```bash
-   curl -s http://localhost:8080/api/health | jq .
+   curl http://localhost:8080/api/health | jq .
    ```
    **Expected Output:**
    ```json

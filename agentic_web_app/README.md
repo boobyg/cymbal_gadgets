@@ -75,7 +75,7 @@ cd cymbal_gadgets/agentic_web_app
 >
 > In **Task 2 / Checkpoint 2**, students verify server health using:
 > ```bash
-> curl -s http://localhost:8080/api/health | jq .
+> curl http://localhost:8080/api/health | jq .
 > ```
 >
 > ❌ **DO NOT run curl in the first terminal window:**  
@@ -91,7 +91,7 @@ cd cymbal_gadgets/agentic_web_app
 > 1. In Google Cloud Shell, click the **`+` (Open new tab)** button in the terminal tab bar.
 > 2. In this new tab, run:
 >    ```bash
->    curl -s http://localhost:8080/api/health | jq .
+>    curl http://localhost:8080/api/health | jq .
 >    ```
 >
 > ✅ **WHERE TO RUN IT (Option B - Web UI Button - Fastest!):**  

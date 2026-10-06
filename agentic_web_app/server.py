@@ -585,7 +585,7 @@ def run():
     print(f"   Target Looker URL: {config.LOOKER_BASE_URL}")
     print(f"   Local UI Address : http://localhost:{config.PORT}")
     print(f"   Health Check     : http://localhost:{config.PORT}/api/health")
-    print(f"   Terminal curl    : curl -s http://localhost:{config.PORT}/api/health | jq .")
+    print(f"   Terminal curl    : curl http://localhost:{config.PORT}/api/health | jq .")
     print(f"   ⚠️ Cloud Shell Note: Inside terminal, curl http://localhost:{config.PORT}")
     print(f"      Do NOT curl external https://*.cloudshell.dev without cookies")
     print("=" * 60)

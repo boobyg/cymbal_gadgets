@@ -370,7 +370,7 @@ cd /home/user/cymbal_gadgets/agentic_web_app
 * **Option A (Recommended & Fastest):** In the Web UI (`http://localhost:8080`), click the green **Check my progress** button under Task 2 (**+25 Points**).
 * **Option B (Terminal curl):** Open a **SECOND terminal tab** (`+`) in Cloud Shell and run:
   ```bash
-  curl -s http://localhost:8080/api/health | jq .
+  curl http://localhost:8080/api/health | jq .
   ```
 * ❌ **Do NOT run curl on your local laptop** (port 8080 is remote in Cloud Shell).
 * ❌ **Do NOT curl external `https://*.cloudshell.dev` URLs** (they return HTML login pages).
