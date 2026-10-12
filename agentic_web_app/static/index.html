@@ -130,30 +130,35 @@
     <!-- ========================================================== -->
     <section id="guidePane" class="w-full flex flex-col bg-white overflow-hidden transition-all duration-300">
       
-      <!-- Guide Task Navigation Tabs -->
-      <nav class="h-11 bg-slate-50 border-b border-slate-200 px-4 flex items-center space-x-1 overflow-x-auto text-xs shrink-0 custom-scrollbar">
-        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-semibold bg-white text-indigo-700 shadow-sm whitespace-nowrap border border-slate-200" data-target="section-overview">
+      <!-- Guide Task Navigation Bar (Single-Page In-Page Section Navigator) -->
+      <nav class="h-11 bg-slate-50 border-b border-slate-200 px-3 md:px-4 flex items-center space-x-1 overflow-x-auto text-xs shrink-0 custom-scrollbar sticky top-0 z-10 shadow-xs">
+        <div class="flex items-center space-x-1.5 text-[11px] font-bold text-slate-500 mr-2 shrink-0 border-r border-slate-200 pr-2.5">
+          <i class="fa-solid fa-compass text-indigo-600"></i>
+          <span class="hidden sm:inline">Jump to Section:</span>
+          <span class="sm:hidden">Sections:</span>
+        </div>
+        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-bold bg-white text-indigo-700 shadow-sm whitespace-nowrap border border-slate-200 transition-all" data-target="section-overview">
           <i class="fa-solid fa-compass mr-1.5 text-indigo-500"></i>Overview
         </button>
-        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-step0">
+        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap transition-colors" data-target="section-step0">
           <i class="fa-solid fa-key mr-1.5 text-amber-500"></i>Step 0: Credentials
         </button>
-        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-step1">
+        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap transition-colors" data-target="section-step1">
           <i class="fa-solid fa-rocket mr-1.5 text-blue-500"></i>Task 1: Create Agent
         </button>
-        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-step2">
+        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap transition-colors" data-target="section-step2">
           <i class="fa-solid fa-server mr-1.5 text-emerald-500"></i>Task 2: App Setup
         </button>
-        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-step3">
+        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap transition-colors" data-target="section-step3">
           <i class="fa-solid fa-comments mr-1.5 text-purple-500"></i>Task 3: Live Queries
         </button>
-        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-step4">
+        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap transition-colors" data-target="section-step4">
           <i class="fa-solid fa-shield-halved mr-1.5 text-rose-500"></i>Task 4: Tuning
         </button>
-        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-step5">
+        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap transition-colors" data-target="section-step5">
           <i class="fa-solid fa-broom mr-1.5 text-teal-500"></i>Task 5: Cleanup
         </button>
-        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap" data-target="section-wrapup">
+        <button class="guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap transition-colors" data-target="section-wrapup">
           <i class="fa-solid fa-graduation-cap mr-1.5 text-slate-500"></i>Wrap-Up
         </button>
       </nav>
@@ -434,12 +439,10 @@ nano .env</pre>
             </div>
 
             <div class="space-y-1 text-xs text-blue-950">
-              <p class="font-semibold text-slate-800">Step-by-Step Instructions:</p>
+              <p class="font-semibold text-slate-800">Step-by-Step Instructions (Part 1 - Prepare Request):</p>
               <ol class="list-decimal pl-5 space-y-1 text-slate-700">
-                <li>Click <strong>Open create_agent</strong> above (opens/reuses the Looker API Explorer window), then click the <strong>Run It</strong> tab.</li>
-                <li>Paste the JSON payload below into the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>.</li>
-                <li>Click the blue <strong>Run Request</strong> button. Look for status <code class="font-mono bg-emerald-100 text-emerald-800 px-1 rounded">200: OK</code>.</li>
-                <li>Copy the 32-character <code class="font-mono bg-slate-200 text-slate-900 px-1 rounded">"id"</code> property from the response!</li>
+                <li>Click <strong>Open create_agent</strong> above (opens/reuses the Looker API Explorer window), then click the <strong>Run It</strong> tab on the right side.</li>
+                <li>Copy and paste the JSON payload below into the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>:</li>
               </ol>
             </div>
 
@@ -466,6 +469,14 @@ nano .env</pre>
 }</pre>
                 <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy JSON</button>
               </div>
+            </div>
+
+            <div class="space-y-1 text-xs text-blue-950 pt-1">
+              <p class="font-semibold text-slate-800">Step-by-Step Instructions (Part 2 - Execute & Extract ID):</p>
+              <ol start="3" class="list-decimal pl-5 space-y-1 text-slate-700">
+                <li>Click the blue <strong>Run Request</strong> button. Look for status <code class="font-mono bg-emerald-100 text-emerald-800 px-1 rounded">200: OK</code>.</li>
+                <li>Copy the 32-character <code class="font-mono bg-slate-200 text-slate-900 px-1 rounded">"id"</code> property from the response (on the first line of JSON output)!</li>
+              </ol>
             </div>
 
             <!-- Python Snippet for Create Agent -->
@@ -563,19 +574,6 @@ print("Agent ID:", agent["id"])</pre>
               </a>
             </div>
 
-            <!-- Active Agent ID display banner for Step 1.2 -->
-            <div class="bg-amber-100/80 border border-amber-300 rounded-xl p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-              <div class="flex items-center space-x-2 overflow-hidden">
-                <i class="fa-solid fa-link text-amber-700 shrink-0"></i>
-                <span class="font-bold text-amber-950 shrink-0">Your Step 1 Agent ID for Linking:</span>
-                <code class="step-agent-id-pill font-mono bg-white px-2 py-0.5 rounded border border-amber-300 text-indigo-700 font-bold select-all truncate">Awaiting Step 1 Agent ID</code>
-              </div>
-              <button onclick="copyCurrentAgentId(this)" class="bg-amber-600 hover:bg-amber-700 text-white px-2.5 py-1 rounded-lg text-xs font-medium flex items-center justify-center space-x-1 shrink-0">
-                <i class="fa-regular fa-copy"></i>
-                <span>Copy Agent ID</span>
-              </button>
-            </div>
-
             <p class="text-xs text-amber-950 leading-relaxed">
               <strong>Why Golden Queries Matter:</strong> A Golden Query pairs user question variations with an explicit Looker Explore answer URL. This provides ground-truth few-shot examples to eliminate metric hallucinations and join ambiguity.
             </p>
@@ -591,6 +589,14 @@ print("Agent ID:", agent["id"])</pre>
               </p>
             </div>
 
+            <div class="space-y-1 text-xs text-amber-950">
+              <p class="font-semibold text-slate-800">Step-by-Step Instructions (Part 1 - Create Golden Query):</p>
+              <ol class="list-decimal pl-5 space-y-1 text-slate-700">
+                <li>Click <strong>Open create_golden_query</strong> above, then click the <strong>Run It</strong> tab.</li>
+                <li>Copy and paste the JSON payload below into the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>:</li>
+              </ol>
+            </div>
+
             <div class="space-y-1.5 text-xs">
               <span class="font-bold text-slate-800">Golden Query Request Body (<code class="font-mono text-indigo-700">body</code>):</span>
               <div class="relative group">
@@ -604,12 +610,44 @@ print("Agent ID:", agent["id"])</pre>
               </div>
             </div>
 
+            <div class="space-y-2 text-xs text-amber-950 pt-1">
+              <p class="font-semibold text-slate-800">Step-by-Step Instructions (Part 2 - Execute & Extract Golden Query ID):</p>
+              <ol start="3" class="list-decimal pl-5 space-y-1.5 text-slate-700">
+                <li>Click the blue <strong>Run Request</strong> button. Look for status <code class="font-mono bg-emerald-100 text-emerald-800 px-1 rounded">200: OK</code>.</li>
+                <li>
+                  <strong>Extract the Golden Query ID from the response:</strong>
+                  <div class="bg-amber-100/90 border-2 border-amber-400 rounded-xl p-3 my-1 text-[11px] space-y-1.5">
+                    <div class="font-bold text-amber-950 flex items-center space-x-1.5 text-xs">
+                      <i class="fa-solid fa-triangle-exclamation text-amber-700"></i>
+                      <span>CRITICAL: Use "id", NOT "query_id"!</span>
+                    </div>
+                    <p class="text-slate-800">Looker returns two different numeric IDs in the response payload:</p>
+                    <ul class="list-disc pl-4 space-y-1 text-slate-800">
+                      <li><strong class="font-mono text-amber-900 bg-amber-200/80 px-1 py-0.5 rounded">"id": 142</strong> &rarr; <span class="font-bold text-emerald-800">THIS IS THE ONE YOU NEED!</span> (The integer Golden Query record identifier).</li>
+                      <li><strong class="font-mono text-slate-600 bg-slate-200 px-1 py-0.5 rounded">"query_id": 19284</strong> &rarr; <span class="font-bold text-rose-800">DO NOT USE THIS!</span> (This is the underlying Looker Explore query spec ID).</li>
+                    </ul>
+                  </div>
+                </li>
+              </ol>
+            </div>
+
+            <!-- Interactive GQ ID Input placed immediately AFTER Golden Query creation -->
+            <div class="bg-amber-100/60 border border-amber-300 rounded-xl p-3 space-y-2">
+              <label for="step2GqIdInput" class="block font-bold text-amber-950 text-xs">
+                Enter your Golden Query "id" (e.g. 142 — NOT query_id):
+              </label>
+              <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                <input type="number" id="step2GqIdInput" placeholder="Paste integer id (e.g. 142)..." class="w-full sm:w-64 bg-white border border-amber-400 rounded-lg px-3 py-1.5 text-xs font-mono font-bold text-amber-900 focus:ring-2 focus:ring-amber-500 focus:outline-none" oninput="updateGoldenQueryLinkingJson()">
+                <span class="text-[11px] text-slate-600">Auto-updates the linking JSON payload and populates Task 5 cleanup!</span>
+              </div>
+            </div>
+
             <!-- How to Link Golden Queries to Agent via API Explorer -->
             <div class="bg-white border-2 border-amber-300 rounded-xl p-3.5 text-xs space-y-3 shadow-sm">
               <div class="flex items-center justify-between">
                 <span class="font-bold text-amber-900 flex items-center space-x-1.5">
                   <i class="fa-solid fa-link text-amber-600"></i>
-                  <span>How to Link "Golden Queries" to the Agent in API Explorer:</span>
+                  <span>How to Link Golden Query to the Agent in API Explorer:</span>
                 </span>
                 <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="inline-flex items-center space-x-1 text-[11px] font-semibold text-cyan-700 hover:text-cyan-900 underline">
                   <span>Open update_agent in API Explorer</span>
@@ -617,22 +655,23 @@ print("Agent ID:", agent["id"])</pre>
                 </a>
               </div>
 
-              <!-- Interactive GQ ID Input that updates the snippet live -->
-              <div class="bg-amber-50 border border-amber-200 rounded-lg p-2.5 space-y-1.5">
-                <label for="step2GqIdInput" class="block font-bold text-slate-800 text-[11px]">
-                  Enter the Golden Query ID you just created:
-                </label>
-                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                  <input type="number" id="step2GqIdInput" placeholder="Paste integer ID from response (e.g. 142)..." class="w-full sm:w-64 bg-white border border-amber-300 rounded-lg px-2.5 py-1 text-xs font-mono focus:ring-2 focus:ring-amber-500 focus:outline-none" oninput="updateGoldenQueryLinkingJson()">
-                  <span class="text-[11px] text-slate-500">Auto-updates the Request Body payload below</span>
+              <!-- Active Agent ID display banner placed EXACTLY where it's needed for update_agent -->
+              <div class="bg-amber-100/80 border border-amber-300 rounded-xl p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                <div class="flex items-center space-x-2 overflow-hidden">
+                  <i class="fa-solid fa-key text-amber-700 shrink-0"></i>
+                  <span class="font-bold text-amber-950 shrink-0">Your Step 1 Agent ID for Linking:</span>
+                  <code class="step-agent-id-pill font-mono bg-white px-2 py-0.5 rounded border border-amber-300 text-indigo-700 font-bold select-all truncate">Awaiting Step 1 Agent ID</code>
                 </div>
+                <button onclick="copyCurrentAgentId(this)" class="bg-amber-600 hover:bg-amber-700 text-white px-2.5 py-1 rounded-lg text-xs font-medium flex items-center justify-center space-x-1 shrink-0">
+                  <i class="fa-regular fa-copy"></i>
+                  <span>Copy Agent ID</span>
+                </button>
               </div>
 
               <ol class="list-decimal pl-5 space-y-1.5 text-slate-700 text-[11px]">
-                <li>In <code class="font-mono text-amber-800">create_golden_query</code>, click <strong>Run Request</strong> and copy the integer <code class="font-mono bg-slate-100 text-slate-900 px-1 rounded">"id"</code> in the response. Paste it into the box above.</li>
-                <li>Click <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-cyan-700 underline font-medium">Open update_agent in API Explorer</a>.</li>
-                <li>Under <strong>Parameters</strong>, paste your 32-character Agent ID into the <code class="font-mono bg-slate-100 text-slate-900 px-1 rounded">agent_id</code> field.</li>
-                <li>In the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>, paste the JSON below (it contains the Golden Query ID you entered above):
+                <li>Click <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-cyan-700 underline font-medium">Open update_agent in API Explorer</a> above, then click the <strong>Run It</strong> tab.</li>
+                <li>Under <strong>Parameters</strong>, paste your 32-character Agent ID into the <code class="font-mono bg-slate-100 text-slate-900 px-1 rounded">agent_id</code> field (use <strong>Copy Agent ID</strong> above).</li>
+                <li>In the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>, paste the JSON below (it automatically reflects the Golden Query ID you entered above):
                   <div class="relative group mt-1">
                     <pre id="step2LinkingJsonCode" class="bg-slate-900 text-slate-100 p-2.5 rounded text-[11px] font-mono select-all">{
   "golden_query_ids": [142]
@@ -912,37 +951,55 @@ print("📝 Summary:", result["final_response"])</pre>
             <h2 class="text-lg font-bold text-slate-900 mt-1">Web Application Architecture & Local Health</h2>
           </div>
 
-          <p class="text-xs text-slate-600 leading-relaxed">
-            In this step, data engineers inspect how client applications interface with Looker. The local service consumes API 4.0 using a dedicated <code class="text-indigo-600 font-mono">LookerClient</code> wrapper.
-          </p>
+          <!-- Architecture Overview & Purpose Callout -->
+          <div class="bg-indigo-50/80 border-2 border-indigo-200 rounded-xl p-4 space-y-2.5 text-xs text-indigo-950 shadow-sm">
+            <div class="font-bold flex items-center space-x-2 text-indigo-900 text-sm">
+              <i class="fa-solid fa-network-wired text-indigo-600"></i>
+              <span>Understanding the Architecture: Connecting Step 1 to this Web Application</span>
+            </div>
+            <p class="leading-relaxed">
+              In <strong>Step 1</strong>, you used Looker API Explorer to manually inspect Looker's REST primitives: creating an Agent (<code class="font-mono text-indigo-800">POST /agents</code>), grounding with Golden Queries (<code class="font-mono text-indigo-800">POST /golden_queries</code>), and initiating a conversation (<code class="font-mono text-indigo-800">POST /conversations</code>).
+            </p>
+            <p class="leading-relaxed">
+              In enterprise production, business analysts don't interact with raw API Explorers. Instead, <strong>data engineers embed Looker Conversational Analytics into custom web applications</strong> (like this portal!). The web backend communicates with Looker via API 4.0 using the student credentials you configured in Step 0.
+            </p>
+            <div class="bg-white p-3 rounded-lg border border-indigo-200 text-[11px] space-y-1.5 text-slate-700">
+              <span class="font-bold text-indigo-900 flex items-center space-x-1">
+                <i class="fa-solid fa-list-check text-indigo-600"></i>
+                <span>Your 3 Action Steps in Task 2:</span>
+              </span>
+              <ol class="list-decimal pl-4 space-y-1">
+                <li><strong>Verify Server Health (Action 1):</strong> Run the curl command below in Cloud Shell terminal OR click <strong>Check my progress</strong> in Checkpoint 2 to confirm backend connectivity.</li>
+                <li><strong>Display Chat Console (Action 2):</strong> Click the purple <strong>Display Conversational Analytics Window</strong> button at the bottom of Task 2 to unlock the interactive chat UI on the right pane.</li>
+                <li><strong>Proceed to Task 3 (Action 3):</strong> Your web app will automatically bind your Step 1 Agent to interactive conversations, where you will audit thought processes and LookML query specs!</li>
+              </ol>
+            </div>
+          </div>
 
           <div class="space-y-2 text-xs">
-            <h4 class="font-bold text-slate-800">Verification via curl:</h4>
-            <div class="relative group">
-              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono select-all">curl http://localhost:8080/api/health | jq .</pre>
-              <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy</button>
-            </div>
+            <h4 class="font-bold text-slate-800">Local Health Verification via curl:</h4>
 
-            <!-- CRITICAL CLOUD SHELL WARNING & TROUBLESHOOTING -->
-            <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-3.5 text-[11px] text-amber-950 space-y-2 shadow-sm">
-              <div class="font-bold flex items-center space-x-1.5 text-amber-900 text-xs">
-                <i class="fa-solid fa-triangle-exclamation text-amber-600"></i>
-                <span>Cloud Shell Troubleshooting: Fixing "jq: parse error: Invalid numeric literal at line 1, column 3"</span>
+            <!-- PROMINENT CLOUD SHELL WARNING: HTTPS vs HTTP LOOPBACK -->
+            <div class="bg-rose-50 border-2 border-rose-300 rounded-xl p-3.5 text-xs text-rose-950 space-y-2 shadow-sm">
+              <div class="font-bold flex items-center space-x-1.5 text-rose-900">
+                <i class="fa-solid fa-triangle-exclamation text-rose-600 text-sm"></i>
+                <span>CRITICAL: Do NOT curl the browser address bar URL (https://*.cloudshell.dev)!</span>
               </div>
-              <p class="leading-relaxed">
-                If you ran <code class="font-mono bg-rose-100 text-rose-900 px-1 py-0.5 rounded font-bold">curl -s https://8080-cs-...cloudshell.dev/api/health | jq .</code>, you received this error:
+              <p class="text-[11px] leading-relaxed text-rose-900">
+                If you copied the HTTPS Web Preview URL from your browser address bar into terminal curl, you received:
               </p>
               <div class="bg-rose-950 text-rose-200 p-2.5 rounded-lg font-mono text-[11px] border border-rose-800">
                 jq: parse error: Invalid numeric literal at line 1, column 3
               </div>
-              <div class="space-y-1 text-slate-700">
-                <p><strong>Why this happens:</strong> The external <code class="font-mono text-indigo-700">https://8080-cs-*.cloudshell.dev</code> URL is an authenticated Google SSO Web Preview proxy. When accessed via curl without your browser session cookie, it returns an HTTP 302 HTML redirect (<code class="font-mono">&lt;a href="..."&gt;Found&lt;/a&gt;</code>). The <code class="font-mono text-indigo-700">jq</code> utility cannot parse HTML starting with <code class="font-mono">&lt;a</code>, throwing the column 3 numeric literal error.</p>
-                <p><strong>The Fix:</strong> Inside your Cloud Shell terminal, always curl local loopback on port 8080:</p>
-                <div class="relative group mt-1">
-                  <pre class="bg-slate-900 text-emerald-400 p-2 rounded text-[11px] font-mono select-all">curl -s http://localhost:8080/api/health | jq .</pre>
-                  <button onclick="copyCode(this)" class="absolute top-1 right-1 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px] border border-slate-700">Copy</button>
-                </div>
+              <div class="space-y-1 text-[11px] text-slate-700">
+                <p><strong>Why this error occurs:</strong> The external <code class="font-mono text-indigo-700">https://8080-cs-*.cloudshell.dev</code> URL is an external proxy requiring Google SSO session cookies. When accessed via curl without browser cookies, it returns an HTTP 302 HTML redirect (<code class="font-mono">&lt;a href="..."&gt;Found&lt;/a&gt;</code>). The <code class="font-mono text-indigo-700">jq</code> JSON parser crashes on the HTML bracket <code class="font-mono">&lt;</code>.</p>
+                <p><strong>The Fix:</strong> Inside your Cloud Shell terminal, always curl plain <strong>HTTP loopback</strong> on port 8080:</p>
               </div>
+            </div>
+
+            <div class="relative group">
+              <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-xs font-mono select-all font-bold">curl http://localhost:8080/api/health | jq .</pre>
+              <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy</button>
             </div>
 
             <!-- WHERE TO RUN THE CURL COMMAND CALLOUT -->
@@ -952,8 +1009,8 @@ print("📝 Summary:", result["final_response"])</pre>
                 <span>Where do I run this curl command?</span>
               </div>
               <ul class="list-disc pl-4 space-y-1 text-blue-800">
-                <li><strong>In a SECOND terminal window in Cloud Shell:</strong> Your first terminal is currently busy running <code class="font-mono bg-blue-100 px-1 rounded">./run.sh</code>. Open a new terminal tab (or click <code class="font-mono bg-blue-100 px-1 rounded">+</code> in Cloud Shell).</li>
-                <li><strong>Inside Cloud Shell (Not your personal laptop):</strong> The server is running inside your remote Cloud Shell environment. In that Cloud Shell terminal, <code class="font-mono">localhost:8080</code> routes directly to the local Python process.</li>
+                <li><strong>In a SECOND terminal tab in Cloud Shell:</strong> Your first terminal is currently busy running <code class="font-mono bg-blue-100 px-1 rounded">./run.sh</code>. Open a new terminal tab (click <code class="font-mono bg-blue-100 px-1 rounded">+</code> in Cloud Shell).</li>
+                <li><strong>Inside Cloud Shell (Not your personal laptop):</strong> The web server is running inside Cloud Shell, where <code class="font-mono">localhost:8080</code> connects directly to the Python process.</li>
                 <li><strong>Or use the 1-click button below (Fastest!):</strong> You don't even need terminal curl—simply click <strong>Check my progress</strong> below to verify server health directly!</li>
               </ul>
             </div>
@@ -1028,6 +1085,20 @@ print("📝 Summary:", result["final_response"])</pre>
             <p class="text-xs text-purple-950 leading-relaxed">
               With the <strong>Looker Conversational Analytics window displayed on the right pane</strong> (unlocked at the end of Step 2), data engineers interactively run business queries, test session continuity, and audit the real-time execution trace.
             </p>
+          </div>
+
+          <!-- Clear Action Checklist for Task 3 -->
+          <div class="bg-white border-2 border-purple-200 rounded-xl p-3.5 space-y-2 text-xs shadow-sm">
+            <span class="font-bold text-purple-950 flex items-center space-x-1.5 text-xs">
+              <i class="fa-solid fa-list-check text-purple-600"></i>
+              <span>Your 4 Action Steps in Task 3:</span>
+            </span>
+            <ol class="list-decimal pl-5 space-y-1.5 text-slate-700 text-[11px]">
+              <li><strong>Check the Right Pane:</strong> Look at the <strong>Conversational Analytics window</strong> on the right half of your screen. Confirm that your Step 1 Agent is selected in the <code class="font-mono bg-purple-100 text-purple-800 px-1 rounded">My Agent</code> dropdown (the green pill displays your active conversation session ID).</li>
+              <li><strong>Send a Query:</strong> Click any of the <strong>Sample Prompts</strong> below (e.g. <em>"What is the total sales amount across all stores?"</em>) to automatically populate the chat box, then click the blue <strong>Send</strong> button.</li>
+              <li><strong>Audit the Trace:</strong> Beneath the agent's answer, click each of the 3 accordions (<strong>Agent Thought Process</strong>, <strong>Governed Data Result</strong>, and <strong>Query Specification</strong>) to audit LookML field mapping and BigQuery compilation.</li>
+              <li><strong>Earn Checkpoint 3 (+20 Points):</strong> Sending a query through the chat window automatically awards Checkpoint 3! You can also click <strong>Check my progress</strong> below anytime.</li>
+            </ol>
           </div>
 
           <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-start space-x-2">
@@ -1315,7 +1386,7 @@ client.update_agent(agent_id, {
                   API Explorer <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               </div>
-              <p class="text-[11px] text-slate-600">Permanently removes the question exemplar via <code class="text-rose-800 font-mono">DELETE /golden_queries/{id}</code>.</p>
+              <p class="text-[11px] text-slate-600">Permanently removes the question exemplar via <code class="text-rose-800 font-mono">DELETE /golden_queries/{golden_query_id}</code>.</p>
             </div>
 
             <!-- 3. Delete Conversation -->
@@ -1329,7 +1400,7 @@ client.update_agent(agent_id, {
                   API Explorer <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               </div>
-              <p class="text-[11px] text-slate-600">Terminates and drops session memory via <code class="text-purple-800 font-mono">DELETE /conversations/{id}</code>.</p>
+              <p class="text-[11px] text-slate-600">Terminates and drops session memory via <code class="text-purple-800 font-mono">DELETE /conversations?id={conversation_id}</code>.</p>
             </div>
 
             <!-- 4. Delete Agent -->
@@ -1343,7 +1414,7 @@ client.update_agent(agent_id, {
                   API Explorer <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
                 </a>
               </div>
-              <p class="text-[11px] text-slate-600">Deletes the custom agent definition via <code class="text-blue-800 font-mono">DELETE /agents/{agent_id}</code>.</p>
+              <p class="text-[11px] text-slate-600">Deletes the custom agent definition via <code class="text-blue-800 font-mono">DELETE /agents?id={agent_id}</code>.</p>
             </div>
           </div>
 
@@ -1373,8 +1444,8 @@ client.update_agent(agent_id, {
                 <input id="cleanupConvIdInput" type="text" placeholder="Conversation ID" class="w-full font-mono text-[11px] border border-slate-300 rounded-lg p-2 bg-white focus:outline-none focus:ring-1 focus:ring-teal-500">
               </div>
               <div>
-                <label class="block font-semibold text-slate-700 text-[11px] mb-1">Golden Query ID (Optional):</label>
-                <input id="cleanupGqIdInput" type="text" placeholder="Integer ID (e.g. 101)" class="w-full font-mono text-[11px] border border-slate-300 rounded-lg p-2 bg-white focus:outline-none focus:ring-1 focus:ring-teal-500">
+                <label class="block font-semibold text-slate-700 text-[11px] mb-1">Golden Query ID:</label>
+                <input id="cleanupGqIdInput" type="text" placeholder="Integer ID from Step 1.2 (e.g. 142)" class="w-full font-mono text-[11px] border border-slate-300 rounded-lg p-2 bg-white focus:outline-none focus:ring-1 focus:ring-teal-500">
               </div>
             </div>
 
@@ -1829,6 +1900,15 @@ print("Teardown status:", results)</pre>
         if (savedAgentId) {
           setRememberedAgentId(savedAgentId, false);
         }
+        const savedGqId = localStorage.getItem('looker_golden_query_id');
+        if (savedGqId) {
+          currentGoldenQueryId = savedGqId;
+          const gqInput = document.getElementById('step2GqIdInput');
+          if (gqInput && !gqInput.value) gqInput.value = savedGqId;
+          const cleanupGqInput = document.getElementById('cleanupGqIdInput');
+          if (cleanupGqInput && !cleanupGqInput.value) cleanupGqInput.value = savedGqId;
+          updateGoldenQueryLinkingJson();
+        }
       } else {
         clearRememberedAgentId();
       }
@@ -2086,10 +2166,18 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
 
     function clearRememberedAgentId() {
       localStorage.removeItem('looker_agent_id');
+      localStorage.removeItem('looker_golden_query_id');
       currentAgentId = null;
+      currentGoldenQueryId = null;
 
       const task1Input = document.getElementById('task1AgentIdInput');
       if (task1Input) task1Input.value = '';
+
+      const step2GqInput = document.getElementById('step2GqIdInput');
+      if (step2GqInput) step2GqInput.value = '';
+
+      const cleanupGqInput = document.getElementById('cleanupGqIdInput');
+      if (cleanupGqInput) cleanupGqInput.value = '';
 
       const trackerBadge = document.getElementById('agentIdTrackerBadge');
       if (trackerBadge) {
@@ -2730,6 +2818,17 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
           const data = await res.json();
           if (res.ok) {
             appendAssistantMessage(data);
+
+            // Automatically award Checkpoint 3 upon successful query execution
+            if (!completedCheckpoints.has(3)) {
+              awardCheckpoint(3, 20);
+              const cp3Feedback = document.getElementById('cp3Feedback');
+              if (cp3Feedback) {
+                cp3Feedback.className = 'text-xs p-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200';
+                cp3Feedback.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> <strong>Checkpoint 3 Verified!</strong> Successfully queried your agent and audited analytical response.';
+                cp3Feedback.classList.remove('hidden');
+              }
+            }
           } else {
             appendErrorMessage(data.error || "An error occurred querying the agent.");
           }
@@ -2833,10 +2932,26 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
                 });
               }
 
-              const allFailed = r.errors && r.errors.length > 0 && !r.agent_deleted && !r.conversation_deleted && !r.golden_query_deleted && !r.patch_reverted && !r.credentials_reset;
-              const bgClass = allFailed ? 'bg-amber-50 text-amber-950 border-amber-300' : 'bg-emerald-50 text-emerald-950 border-emerald-300';
-              const titleText = allFailed ? 'Teardown Completed with Warnings (Resources might already be deleted)' : 'Teardown Completed Successfully!';
-              const titleIcon = allFailed ? 'fa-triangle-exclamation text-amber-600' : 'fa-circle-check text-emerald-600';
+              const anySuccess = (r.agent_deleted === true) || (r.conversation_deleted === true) || (r.golden_query_deleted === true) || (r.patch_reverted === true) || (r.credentials_reset === true);
+              const allFailed = (r.errors && r.errors.length > 0 && !anySuccess) || (!anySuccess);
+
+              if (allFailed) {
+                cleanupFeedback.className = 'text-xs p-3.5 rounded-xl border space-y-2 bg-rose-50 text-rose-950 border-rose-300';
+                cleanupFeedback.innerHTML = `
+                  <div class="font-bold flex items-center space-x-2 text-rose-900">
+                    <i class="fa-solid fa-triangle-exclamation text-rose-600"></i>
+                    <span>Teardown Incomplete: Resources could not be deleted</span>
+                  </div>
+                  <ul class="space-y-1 text-slate-700 pl-1">${statusItems.join('')}</ul>
+                  <p class="text-rose-800 text-[11px] pt-1">Please verify that the IDs entered are correct and that the resources still exist on the Looker instance.</p>
+                `;
+                return;
+              }
+
+              const hasWarnings = r.errors && r.errors.length > 0;
+              const bgClass = hasWarnings ? 'bg-amber-50 text-amber-950 border-amber-300' : 'bg-emerald-50 text-emerald-950 border-emerald-300';
+              const titleText = hasWarnings ? 'Teardown Completed with Warnings' : 'Teardown Completed Successfully!';
+              const titleIcon = hasWarnings ? 'fa-triangle-exclamation text-amber-600' : 'fa-circle-check text-emerald-600';
 
               cleanupFeedback.className = `text-xs p-3.5 rounded-xl border space-y-2 ${bgClass}`;
               cleanupFeedback.innerHTML = `
@@ -3114,19 +3229,62 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
     }
 
     function setupGuideNavigation() {
-      document.querySelectorAll('.guide-nav-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
+      const guideContent = document.getElementById('guideContent');
+      const navTabs = document.querySelectorAll('.guide-nav-tab');
+      const sections = Array.from(navTabs).map(tab => {
+        const id = tab.getAttribute('data-target');
+        return {
+          id: id,
+          tab: tab,
+          el: document.getElementById(id)
+        };
+      }).filter(s => s.el !== null);
+
+      function setActiveTab(activeTab) {
+        navTabs.forEach(t => {
+          t.className = 'guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap transition-colors';
+        });
+        activeTab.className = 'guide-nav-tab px-3 py-1.5 rounded-lg font-bold bg-white text-indigo-700 shadow-sm whitespace-nowrap border border-slate-200 transition-all';
+        activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      }
+
+      navTabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          e.preventDefault();
           const targetId = tab.getAttribute('data-target');
           const targetEl = document.getElementById(targetId);
-          if (targetEl) {
-            targetEl.scrollIntoView({ behavior: 'smooth' });
+          if (targetEl && guideContent) {
+            const containerTop = guideContent.getBoundingClientRect().top;
+            const elementTop = targetEl.getBoundingClientRect().top;
+            guideContent.scrollBy({
+              top: elementTop - containerTop - 15,
+              behavior: 'smooth'
+            });
+            setActiveTab(tab);
           }
-          document.querySelectorAll('.guide-nav-tab').forEach(t => {
-            t.className = 'guide-nav-tab px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:text-slate-900 whitespace-nowrap';
-          });
-          tab.className = 'guide-nav-tab px-3 py-1.5 rounded-lg font-semibold bg-white text-indigo-700 shadow-sm whitespace-nowrap border border-slate-200';
         });
       });
+
+      // Dynamic Scrollspy: automatically tracks reading position on single page
+      let scrollRaf = null;
+      if (guideContent) {
+        guideContent.addEventListener('scroll', () => {
+          if (scrollRaf) cancelAnimationFrame(scrollRaf);
+          scrollRaf = requestAnimationFrame(() => {
+            const containerTop = guideContent.getBoundingClientRect().top;
+            let currentSection = sections[0];
+            for (let i = 0; i < sections.length; i++) {
+              const rect = sections[i].el.getBoundingClientRect();
+              if (rect.top - containerTop <= 130) {
+                currentSection = sections[i];
+              }
+            }
+            if (currentSection && currentSection.tab) {
+              setActiveTab(currentSection.tab);
+            }
+          });
+        }, { passive: true });
+      }
     }
 
     function setupTimer() {
@@ -3189,8 +3347,20 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
       const gqInput = document.getElementById('step2GqIdInput');
       const jsonCode = document.getElementById('step2LinkingJsonCode');
       if (!jsonCode) return;
-      const gqId = (gqInput && gqInput.value.trim()) ? parseInt(gqInput.value.trim(), 10) : 142;
+      const rawVal = gqInput ? gqInput.value.trim() : '';
+      const gqId = rawVal ? parseInt(rawVal, 10) : 142;
       jsonCode.textContent = `{\n  "golden_query_ids": [${isNaN(gqId) ? 142 : gqId}]\n}`;
+
+      if (rawVal && !isNaN(gqId)) {
+        currentGoldenQueryId = String(gqId);
+        try {
+          localStorage.setItem('looker_golden_query_id', currentGoldenQueryId);
+        } catch (e) {}
+        const cleanupGqInput = document.getElementById('cleanupGqIdInput');
+        if (cleanupGqInput) {
+          cleanupGqInput.value = currentGoldenQueryId;
+        }
+      }
     }
 
     function copyText(text, btn) {

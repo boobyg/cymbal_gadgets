@@ -3,9 +3,9 @@ SME Academy Lab Teardown & Resource Cleanup Script
 --------------------------------------------------
 Cleans up resources created during the Looker Conversational Analytics lab:
 1. Reverts / removes agent patch (resets context instructions and unlinks golden queries)
-2. Deletes golden query record (DELETE /api/4.0/golden_queries/{id})
-3. Deletes conversation session (DELETE /api/4.0/conversations/{id})
-4. Deletes agent (DELETE /api/4.0/agents/{id})
+2. Deletes golden query record (DELETE /api/4.0/golden_queries/{golden_query_id})
+3. Deletes conversation session (DELETE /api/4.0/conversations?id={id})
+4. Deletes agent (DELETE /api/4.0/agents?id={id})
 
 Usage:
   python3 cleanup.py [AGENT_ID] [CONVERSATION_ID] [GOLDEN_QUERY_ID]

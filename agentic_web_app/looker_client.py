@@ -205,21 +205,24 @@ class LookerClient:
         return self._request("POST", "/conversations", payload=payload)
 
     def delete_conversation(self, conversation_id: str) -> dict:
-        """Delete an active conversation session (DELETE /api/4.0/conversations/{id})."""
-        logger.info(f"Deleting conversation session {conversation_id}...")
-        return self._request("DELETE", f"/conversations/{conversation_id}")
+        """Delete an active conversation session (DELETE /api/4.0/conversations?id={id})."""
+        conv_id = str(conversation_id).strip()
+        logger.info(f"Deleting conversation session {conv_id}...")
+        return self._request("DELETE", "/conversations", params={"id": conv_id})
 
     def delete_golden_query(self, golden_query_id: str) -> dict:
-        """Delete a golden query record (DELETE /api/4.0/golden_queries/{id})."""
-        logger.info(f"Deleting golden query {golden_query_id}...")
-        return self._request("DELETE", f"/golden_queries/{golden_query_id}")
+        """Delete a golden query record (DELETE /api/4.0/golden_queries/{golden_query_id})."""
+        gq_id = str(golden_query_id).strip()
+        logger.info(f"Deleting golden query {gq_id}...")
+        return self._request("DELETE", f"/golden_queries/{gq_id}")
 
     def reset_agent_patch(self, agent_id: str) -> dict:
         """
         Revert/remove patch on the agent: clears custom instructions and unlinks golden queries.
         (PATCH /api/4.0/agents/{id} with empty instructions & empty golden_query_ids).
         """
-        logger.info(f"Resetting patch and unlinking golden queries on agent {agent_id}...")
+        tgt_agent_id = str(agent_id).strip()
+        logger.info(f"Resetting patch and unlinking golden queries on agent {tgt_agent_id}...")
         payload = {
             "golden_query_ids": [],
             "context": {
@@ -228,12 +231,13 @@ class LookerClient:
                 "show_debug": False
             }
         }
-        return self._request("PATCH", f"/agents/{agent_id}", payload=payload)
+        return self._request("PATCH", f"/agents/{tgt_agent_id}", payload=payload)
 
     def delete_agent(self, agent_id: str) -> dict:
-        """Delete an agent in Looker (DELETE /api/4.0/agents/{id})."""
-        logger.info(f"Deleting agent {agent_id}...")
-        return self._request("DELETE", f"/agents/{agent_id}")
+        """Delete an agent in Looker (DELETE /api/4.0/agents?id={id})."""
+        tgt_agent_id = str(agent_id).strip()
+        logger.info(f"Deleting agent {tgt_agent_id}...")
+        return self._request("DELETE", "/agents", params={"id": tgt_agent_id})
 
     def cleanup_lab_resources(self, agent_id: str = None, conversation_id: str = None, golden_query_id: str = None) -> dict:
         """

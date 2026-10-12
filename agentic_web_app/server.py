@@ -388,6 +388,21 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 self._send_json(400, {"passed": False, "error": "Please specify your own user id / secret first."})
                 return
 
+            agent_id = data.get("agent_id", "").strip()
+            if agent_id:
+                try:
+                    # If agent still exists, teardown has NOT been executed for it
+                    existing_agent = client.get_agent(agent_id)
+                    if existing_agent and existing_agent.get("id"):
+                        self._send_json(400, {
+                            "passed": False,
+                            "error": f"Agent '{existing_agent.get('name', agent_id)}' still exists in Looker. Run teardown to delete it before completing Checkpoint 5!"
+                        })
+                        return
+                except Exception:
+                    # Agent was not found / 404, meaning it was successfully deleted!
+                    pass
+
             self._send_json(200, {
                 "passed": True,
                 "message": "Lab resource teardown & hygiene verified! Lab completed 100/100 🎉"

@@ -372,8 +372,14 @@ In Looker Conversational Analytics, a **Golden Query** (also officially known as
 ```
 4. Click **Run Request**.  
    * **Status:** `POST /golden_queries (200: OK)` (or `201: Created`).  
-   * **Response Body:** Returns the created golden query object with an integer `"id"` (e.g. `"id": 101`).
-   * **Copy this integer `"id"`!**
+   * **Response Body:** Returns the created golden query object with both `"id"` and `"query_id"`.
+
+> [!IMPORTANT]
+> **CRITICAL: Looker Returns Two IDs — Use `"id"`, NOT `"query_id"`!**  
+> In the response JSON, Looker returns:  
+> * **`"id": 142`** &rarr; **THIS IS THE ONE YOU NEED!** (The integer Golden Query record identifier).  
+> * **`"query_id": 19284`** &rarr; **DO NOT USE THIS!** (This is Looker's underlying Explore SQL query spec ID).  
+> **Copy the integer `"id"`** (e.g. `142`) for linking and teardown!
 
 ---
 
@@ -595,9 +601,17 @@ curl -s -H "Authorization: token $TOKEN" "https://ceworkshops.cloud.looker.com/a
 
 # 💻 Step 2: Web Application Architecture & Health Check (5 Mins)
 
-In your workspace under `/home/user/cymbal_gadgets/agentic_web_app`, a complete data engineering client application has been pre-created.
+### 2.1 Understanding the Architecture: Connecting Step 1 to the Web Application
+* In **Step 1**, you used the Looker API Explorer to manually explore Looker's REST primitives: creating an Agent (`POST /agents`), grounding with Golden Queries (`POST /golden_queries`), and initiating a conversation (`POST /conversations`).
+* In an enterprise production setting, business analysts do not interact with raw API Explorers. Instead, **data engineers embed Looker Conversational Analytics into custom web applications** (such as this training portal).
+* The web backend (`server.py` and `looker_client.py`) interfaces with Looker API 4.0 using the student credentials configured in Step 0. When you chat in the right-pane console, the web app initiates a conversation session (`POST /api/conversations`) bound to your Step 1 agent, maintaining chat context and tracing metadata across turns.
 
-### 2.1 Codebase Structure
+#### Your 3 Action Steps in Task 2:
+1. **Verify Server Health:** Run the curl command below in Cloud Shell terminal OR click **Check my progress** in Checkpoint 2 to confirm backend connectivity.
+2. **Display Chat Console:** Click the purple **Display Conversational Analytics Window** button at the bottom of Task 2 to unlock the interactive chat UI on the right pane.
+3. **Proceed to Task 3:** Your web app will automatically bind your Step 1 Agent to interactive conversations, where you will audit thought processes and LookML query specs!
+
+### 2.2 Codebase Structure
 * **`looker_client.py`**: Zero-dependency Python client implementing Looker 4.0 token caching, agent discovery, conversation management, and response stream parsing.
 * **`server.py`**: Multi-threaded Python HTTP REST API server and static host for the Single-Page Application.
 * **`static/index.html`**: Dual-pane training portal with the Transparency Hub and Assessment Tracker.
@@ -605,7 +619,7 @@ In your workspace under `/home/user/cymbal_gadgets/agentic_web_app`, a complete 
 * **`test_pipeline.py`**: Automated CLI verification script.
 * **`run.sh`**: One-click startup script.
 
-### 2.2 Starting the Web Server
+### 2.3 Starting the Web Server
 If not already running, execute:
 ```bash
 cd /home/user/cymbal_gadgets/agentic_web_app
@@ -864,9 +878,9 @@ In enterprise data platforms and shared training environments, **teardown and re
 
 In this step, you will clean up all four artifacts created during this lab:
 1. **Revert Agent Patch:** Unlink golden queries (`golden_query_ids: []`) and restore default system instructions.
-2. **Delete Golden Query:** Permanently remove the golden query rule via `DELETE /api/4.0/golden_queries/{id}`.
-3. **Delete Conversation Session:** Free server-side token memory and delete the session thread via `DELETE /api/4.0/conversations/{id}`.
-4. **Delete Agent Definition:** Remove your custom agent from Looker via `DELETE /api/4.0/agents/{id}`.
+2. **Delete Golden Query:** Permanently remove the golden query rule via `DELETE /api/4.0/golden_queries/{golden_query_id}`.
+3. **Delete Conversation Session:** Free server-side token memory and delete the session thread via `DELETE /api/4.0/conversations?id={conversation_id}`.
+4. **Delete Agent Definition:** Remove your custom agent from Looker via `DELETE /api/4.0/agents?id={agent_id}`.
 
 ---
 
@@ -876,7 +890,7 @@ In this step, you will clean up all four artifacts created during this lab:
 
 1. **Revert Agent Patch:**
    * 👉 **Direct Link:** [update_agent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)
-   * Set `agent_id`: your Agent ID.
+   * In Parameters, set `agent_id`: your Agent ID.
    * In Request Body, set:
      ```json
      {
@@ -890,18 +904,18 @@ In this step, you will clean up all four artifacts created during this lab:
 
 2. **Delete Golden Query:**
    * 👉 **Direct Link:** [delete_golden_query in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_golden_query)
-   * Set `golden_query_id`: your numeric Golden Query ID (e.g. `101`).
-   * Click **Run Request** (`204 No Content`).
+   * In Parameters, set `golden_query_id`: your numeric Golden Query ID (e.g. `142`).
+   * Click **Run Request** (`204 No Content` or `200 OK`).
 
 3. **Delete Conversation Session:**
    * 👉 **Direct Link:** [delete_conversation in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_conversation)
-   * Set `conversation_id`: your Conversation ID.
-   * Click **Run Request** (`204 No Content`).
+   * In Parameters, set `id`: your Conversation ID (passed as query param `?id=...`).
+   * Click **Run Request** (`204 No Content` or `200 OK`).
 
 4. **Delete Agent Definition:**
    * 👉 **Direct Link:** [delete_agent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/delete_agent)
-   * Set `agent_id`: your Agent ID.
-   * Click **Run Request** (`204 No Content`).
+   * In Parameters, set `id`: your Agent ID (passed as query param `?id=...`).
+   * Click **Run Request** (`204 No Content` or `200 OK`).
 
 ---
 
