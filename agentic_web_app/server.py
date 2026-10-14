@@ -263,20 +263,25 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 self._send_json(400, {"passed": False, "error": "Please specify your own user id / secret first."})
                 return
 
-            agent_id = data.get("agent_id", "").strip()
-            if not agent_id:
+            agent_id = client._clean_id(data.get("agent_id", ""))
+            conversation_id = client._clean_id(data.get("conversation_id", ""))
+            if not agent_id and not conversation_id:
                 self._send_json(400, {
                     "passed": False,
-                    "error": "Please provide your specific Agent ID created in Step 1. Auto-selection is disabled to prevent cross-student conflicts when scaling to 500 users."
+                    "error": "Please provide your specific Agent ID (or Conversation ID) created in Step 1. Auto-selection is disabled to prevent cross-student conflicts when scaling to 500 users."
                 })
                 return
 
             try:
-                agent = client.get_agent(agent_id)
+                agent = client.get_agent(agent_id, conversation_id=conversation_id)
+                resolved_agent_id = agent.get("id") or agent_id
+                resolved_conv_id = agent.get("_resolved_conversation_id") or conversation_id
                 self._send_json(200, {
                     "passed": True,
-                    "message": f"Agent '{agent.get('name')}' ({agent_id[:8]}...) verified on Looker!",
-                    "agent": agent
+                    "message": f"Agent '{agent.get('name', 'Cymbal Retail Analytics Agent')}' ({str(resolved_agent_id)[:8]}...) verified on Looker!",
+                    "agent": agent,
+                    "agent_id": resolved_agent_id,
+                    "conversation_id": resolved_conv_id
                 })
                 return
             except Exception as e:
@@ -311,10 +316,11 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 self._send_json(400, {"passed": False, "error": "Please specify your own user id / secret first."})
                 return
 
-            agent_id = data.get("agent_id", "").strip()
+            agent_id = client._clean_id(data.get("agent_id", ""))
+            conversation_id = client._clean_id(data.get("conversation_id", ""))
             question = data.get("question", "What is the total sales amount?")
 
-            if not agent_id:
+            if not agent_id and not conversation_id:
                 self._send_json(400, {
                     "passed": False,
                     "error": "Please specify the Agent ID created in Step 1. In high-concurrency workshops, you must query your own custom agent."
@@ -322,8 +328,18 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 return
 
             try:
-                conv = client.create_conversation(agent_id=agent_id, name="SkillLabs Assessment Checkpoint 3")
-                res = client.chat(conversation_id=conv["id"], user_message=question)
+                target_conv_id = conversation_id
+                if not target_conv_id:
+                    try:
+                        conv = client.create_conversation(agent_id=agent_id, name="SkillLabs Assessment Checkpoint 3")
+                        target_conv_id = conv.get("id")
+                    except Exception:
+                        resolved = client.get_agent(agent_id, conversation_id=conversation_id)
+                        target_conv_id = resolved.get("_resolved_conversation_id")
+                        if not target_conv_id and resolved.get("id"):
+                            conv = client.create_conversation(agent_id=resolved["id"], name="SkillLabs Assessment Checkpoint 3")
+                            target_conv_id = conv.get("id")
+                res = client.chat(conversation_id=target_conv_id, user_message=question)
                 self._send_json(200, {
                     "passed": True,
                     "message": "Conversational query executed successfully with Looker semantic layer!",
@@ -342,10 +358,11 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 self._send_json(400, {"passed": False, "error": "Please specify your own user id / secret first."})
                 return
 
-            agent_id = data.get("agent_id", "").strip()
+            agent_id = client._clean_id(data.get("agent_id", ""))
+            conversation_id = client._clean_id(data.get("conversation_id", ""))
             apply_tuning = data.get("apply_tuning", False)
 
-            if not agent_id:
+            if not agent_id and not conversation_id:
                 self._send_json(400, {
                     "passed": False,
                     "error": "Please specify the Agent ID created in Step 1 to verify prompt tuning."
@@ -353,6 +370,8 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 return
 
             try:
+                agent = client.get_agent(agent_id, conversation_id=conversation_id)
+                resolved_agent_id = agent.get("id") or agent_id
 
                 if apply_tuning:
                     new_instructions = (
@@ -361,7 +380,7 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                         "- If asked about gross margin, always state the exact percentage with two decimals\n"
                         "- Keep explanations under 3 sentences"
                     )
-                    client._request("PATCH", f"/agents/{agent_id}", payload={
+                    client.update_agent(resolved_agent_id, {
                         "context": {"instructions": new_instructions, "show_analytical_details": True}
                     })
                     self._send_json(200, {
@@ -372,7 +391,6 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                     return
 
                 # Otherwise check if agent has instructions or verify completion
-                agent = client.get_agent(agent_id)
                 self._send_json(200, {
                     "passed": True,
                     "message": "Agent persona & production guardrails verified! (+20 points, 80/100 total. Complete Task 5 Clean Up to reach 100/100!)",
@@ -566,7 +584,7 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 return
             agent_id = path.replace("/api/agents/", "").strip()
             try:
-                updated = client._request("PATCH", f"/agents/{agent_id}", payload=data)
+                updated = client.update_agent(agent_id, data)
                 self._send_json(200, updated)
             except Exception as e:
                 self._send_json(500, {"error": str(e)})

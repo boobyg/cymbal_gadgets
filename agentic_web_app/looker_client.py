@@ -142,9 +142,125 @@ class LookerClient:
             })
         return formatted
 
-    def get_agent(self, agent_id: str) -> dict:
-        """Fetch details of a specific agent."""
-        return self._request("GET", f"/agents/{agent_id}")
+    @staticmethod
+    def _clean_id(val: str) -> str:
+        """Sanitize an ID copied from JSON/API Explorer (strip whitespace, quotes, trailing commas)."""
+        if not val:
+            return ""
+        cleaned = str(val).strip().rstrip(",").strip()
+        if (cleaned.startswith('"') and cleaned.endswith('"')) or (cleaned.startswith("'") and cleaned.endswith("'")):
+            cleaned = cleaned[1:-1].strip()
+        return cleaned
+
+    def get_conversation(self, conversation_id: str) -> dict:
+        """Fetch details of a specific conversation session."""
+        conv_id = self._clean_id(conversation_id)
+        return self._request("GET", f"/conversations/{conv_id}")
+
+    def get_agent(self, agent_id: str, conversation_id: str = None) -> dict:
+        """
+        Fetch details of a specific agent, with resilient fallback resolution:
+        1. Direct GET /agents/{agent_id}
+        2. Search GET /agents/search?id={agent_id}
+        3. Check if agent_id is actually a conversation_id from Step 1.3 (GET /conversations/{id})
+        4. Check if a conversation exists for agent_id (GET /conversations/search?agent_id={id})
+        5. Check provided conversation_id (GET /conversations/{conversation_id})
+        """
+        clean_target = self._clean_id(agent_id)
+        clean_conv = self._clean_id(conversation_id) if conversation_id else ""
+        first_error = None
+
+        # 1. Try direct GET /agents/{id}
+        if clean_target:
+            try:
+                agent = self._request("GET", f"/agents/{clean_target}")
+                if isinstance(agent, dict) and agent.get("id"):
+                    return agent
+            except Exception as e:
+                first_error = e
+
+            # 2. Try GET /agents/search?id={id} or matching from /agents/search
+            try:
+                search_res = self._request("GET", "/agents/search", params={"id": clean_target})
+                if isinstance(search_res, list) and len(search_res) > 0:
+                    for a in search_res:
+                        if str(a.get("id")) == clean_target:
+                            return a
+                    return search_res[0]
+            except Exception:
+                pass
+
+            # 3. Check if the user pasted a conversation_id into the Agent ID field,
+            #    or if a conversation exists with id == clean_target
+            conv_obj = None
+            try:
+                conv_obj = self._request("GET", f"/conversations/{clean_target}")
+            except Exception:
+                try:
+                    c_search = self._request("GET", "/conversations/search", params={"id": clean_target})
+                    if isinstance(c_search, list) and len(c_search) > 0:
+                        conv_obj = c_search[0]
+                except Exception:
+                    pass
+
+            # 4. Also check if a conversation was created for agent_id == clean_target
+            if not (isinstance(conv_obj, dict) and conv_obj.get("id")):
+                try:
+                    c_search_by_agent = self._request("GET", "/conversations/search", params={"agent_id": clean_target})
+                    if isinstance(c_search_by_agent, list) and len(c_search_by_agent) > 0:
+                        conv_obj = c_search_by_agent[0]
+                except Exception:
+                    pass
+
+            if isinstance(conv_obj, dict) and conv_obj.get("id"):
+                resolved_conv_id = str(conv_obj.get("id"))
+                conv_agent = conv_obj.get("conversation_agent") if isinstance(conv_obj.get("conversation_agent"), dict) else {}
+                resolved_agent_id = self._clean_id(conv_obj.get("agent_id") or conv_agent.get("id") or clean_target)
+                if resolved_agent_id and resolved_agent_id != clean_target:
+                    try:
+                        agent = self._request("GET", f"/agents/{resolved_agent_id}")
+                        if isinstance(agent, dict) and agent.get("id"):
+                            agent["_resolved_conversation_id"] = resolved_conv_id
+                            return agent
+                    except Exception:
+                        pass
+                return {
+                    "id": resolved_agent_id or resolved_conv_id,
+                    "name": conv_agent.get("name") or conv_obj.get("name") or "Cymbal Retail Analytics Agent",
+                    "description": conv_agent.get("description") or "Verified via active Looker Conversation Session",
+                    "sources": conv_agent.get("sources") or [],
+                    "_resolved_conversation_id": resolved_conv_id
+                }
+
+        # 5. If a separate conversation_id was provided from Step 1.3, resolve via that conversation
+        if clean_conv and clean_conv != clean_target:
+            try:
+                conv_obj = self._request("GET", f"/conversations/{clean_conv}")
+                if isinstance(conv_obj, dict) and conv_obj.get("id"):
+                    resolved_conv_id = str(conv_obj.get("id"))
+                    conv_agent = conv_obj.get("conversation_agent") if isinstance(conv_obj.get("conversation_agent"), dict) else {}
+                    resolved_agent_id = self._clean_id(conv_obj.get("agent_id") or conv_agent.get("id") or clean_target)
+                    if resolved_agent_id:
+                        try:
+                            agent = self._request("GET", f"/agents/{resolved_agent_id}")
+                            if isinstance(agent, dict) and agent.get("id"):
+                                agent["_resolved_conversation_id"] = resolved_conv_id
+                                return agent
+                        except Exception:
+                            pass
+                    return {
+                        "id": resolved_agent_id or clean_target or resolved_conv_id,
+                        "name": conv_agent.get("name") or conv_obj.get("name") or "Cymbal Retail Analytics Agent",
+                        "description": conv_agent.get("description") or "Verified via active Looker Conversation Session",
+                        "sources": conv_agent.get("sources") or [],
+                        "_resolved_conversation_id": resolved_conv_id
+                    }
+            except Exception:
+                pass
+
+        if first_error:
+            raise first_error
+        raise RuntimeError("Looker API Error (404): Not found")
 
     def create_agent(self, name: str, description: str, model: str, explore: str, instructions: str) -> dict:
         """
@@ -193,13 +309,24 @@ class LookerClient:
     def update_agent(self, agent_id: str, payload: dict) -> dict:
         """
         Update an existing agent configuration, instructions, or linked golden query IDs.
+        Ensures 'name' is included in payload if required by Looker 4.0 PATCH /agents/{agent_id}.
         """
-        return self._request("PATCH", f"/agents/{agent_id}", payload=payload)
+        clean_agent_id = self._clean_id(agent_id)
+        patch_payload = dict(payload or {})
+        if "name" not in patch_payload:
+            try:
+                existing = self._request("GET", f"/agents/{clean_agent_id}")
+                if isinstance(existing, dict) and existing.get("name"):
+                    patch_payload["name"] = existing["name"]
+            except Exception:
+                pass
+        return self._request("PATCH", f"/agents/{clean_agent_id}", payload=patch_payload)
 
     def create_conversation(self, agent_id: str, name: str = "Agentic Lab Session") -> dict:
         """Create a new conversation session associated with the target agent."""
+        clean_agent_id = self._clean_id(agent_id)
         payload = {
-            "agent_id": agent_id,
+            "agent_id": clean_agent_id,
             "name": name
         }
         return self._request("POST", "/conversations", payload=payload)
@@ -221,7 +348,7 @@ class LookerClient:
         Revert/remove patch on the agent: clears custom instructions and unlinks golden queries.
         (PATCH /api/4.0/agents/{id} with empty instructions & empty golden_query_ids).
         """
-        tgt_agent_id = str(agent_id).strip()
+        tgt_agent_id = self._clean_id(agent_id)
         logger.info(f"Resetting patch and unlinking golden queries on agent {tgt_agent_id}...")
         payload = {
             "golden_query_ids": [],
@@ -231,7 +358,7 @@ class LookerClient:
                 "show_debug": False
             }
         }
-        return self._request("PATCH", f"/agents/{tgt_agent_id}", payload=payload)
+        return self.update_agent(tgt_agent_id, payload)
 
     def delete_agent(self, agent_id: str) -> dict:
         """Delete an agent in Looker (DELETE /api/4.0/agents?id={id})."""

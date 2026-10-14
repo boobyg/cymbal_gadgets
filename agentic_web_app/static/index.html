@@ -301,7 +301,7 @@
           </div>
 
           <p class="text-xs text-slate-600 leading-relaxed">
-            Before proceeding, you must configure your personal Looker API credentials provided by the instructor before the lab.
+            Before proceeding, you must configure the personal Looker API3 credentials you have created during the required prework for this lab.
           </p>
 
           <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs space-y-3">
@@ -310,7 +310,7 @@
               <span>Credential Prompt Requirement</span>
             </div>
             <p class="text-amber-800">
-              Please enter your assigned credentials when prompted: <strong>specify your own user id / secret</strong>.
+              <strong>Specify your own user id / secret:</strong> Enter the Looker API3 credentials you have created during the required prework for this lab.
             </p>
             <div class="flex flex-wrap gap-2 pt-1 items-center">
               <button onclick="openCredentialsModal()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-4 py-2 rounded-lg transition shadow-sm flex items-center space-x-1.5">
@@ -682,6 +682,7 @@ print("Agent ID:", agent["id"])
                 <li>In the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>, paste the JSON below (it automatically reflects the Golden Query ID you entered above):
                   <div class="relative group mt-1">
                     <pre id="step2LinkingJsonCode" class="bg-slate-900 text-slate-100 p-2.5 rounded text-[11px] font-mono select-all">{
+  "name": "Cymbal Retail Analytics Agent - Student &lt;YOUR_NAME_OR_ID&gt;",
   "golden_query_ids": [142]
 }</pre>
                     <button onclick="copyCode(this)" class="absolute top-1.5 right-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px] border border-slate-700">Copy JSON</button>
@@ -712,7 +713,7 @@ gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 )
-client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})
+client.update_agent(agent_id, {"name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", "golden_query_ids": [gq["id"]]})
 print("Created & Linked Golden Query ID:", gq["id"])
 
 # Option B: Looker Python SDK (Requires: pip install looker-sdk)
@@ -720,7 +721,7 @@ print("Created & Linked Golden Query ID:", gq["id"])
 # from looker_sdk import models40
 # sdk = looker_sdk.init40()
 # golden_query = sdk.create_golden_query(body=models40.WriteGoldenQuery(questions=["What is our total sales amount across all transactions?"], answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"))
-# sdk.update_agent(agent_id=new_agent.id, body=models40.WriteAgent(golden_query_ids=[golden_query.id]))</pre>
+# sdk.update_agent(agent_id=new_agent.id, body=models40.WriteAgent(name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", golden_query_ids=[golden_query.id]))</pre>
                 <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
               </div>
             </div>
@@ -770,20 +771,16 @@ print("Created & Linked Golden Query ID:", gq["id"])
               <div id="step3ConvStatus" class="hidden text-xs p-2 rounded-lg mt-1 font-medium"></div>
             </div>
 
-            <!-- Interactive Conversation ID Input & 1-Click Session Button in Step 1.3 -->
+            <!-- Interactive Conversation ID Input in Step 1.3 (API Explorer & Python only) -->
             <div class="bg-purple-100/60 border border-purple-300 rounded-xl p-3 space-y-2">
               <div class="flex items-center justify-between">
                 <label for="step3ConvIdInput" class="block font-bold text-purple-950 text-xs">
-                  Active Conversation ID (created in API Explorer, Python, or via 1-Click):
+                  Active Conversation ID (created in API Explorer or Python):
                 </label>
                 <span class="text-[11px] text-purple-800 font-medium">Auto-populates Step 1.4 & Task 5 cleanup</span>
               </div>
               <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <input type="text" id="step3ConvIdInput" placeholder="Paste conversation id (e.g. c1f2e3d4-5678... or conv_123)..." class="flex-1 bg-white border border-purple-400 rounded-lg px-3 py-1.5 text-xs font-mono font-bold text-purple-950 focus:ring-2 focus:ring-purple-500 focus:outline-none" oninput="setRememberedConversationId(this.value)">
-                <button id="step3DirectCreateBtn" type="button" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1.5 transition shadow-sm shrink-0">
-                  <i class="fa-solid fa-play text-[10px]"></i>
-                  <span>Create Session (1-Click)</span>
-                </button>
                 <button onclick="copyCurrentConvId(this)" type="button" class="bg-white hover:bg-purple-50 text-purple-800 border border-purple-300 font-semibold px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1 transition shadow-sm shrink-0" title="Copy Active Conversation ID">
                   <i class="fa-regular fa-copy"></i>
                   <span>Copy</span>
@@ -793,7 +790,6 @@ print("Created & Linked Golden Query ID:", gq["id"])
                   <span>Clear</span>
                 </button>
               </div>
-              <div id="step3DirectConvStatus" class="hidden text-xs p-2 rounded-lg font-medium"></div>
             </div>
 
             <!-- Python Snippet for Create Conversation -->
@@ -932,9 +928,9 @@ print("📝 Summary:", result.get("final_response", ""))
             </summary>
             <div class="p-4 space-y-3 bg-white text-xs border-t border-slate-200">
               <p class="text-slate-600 text-[11px] leading-relaxed">
-                If you prefer to automate any Step 1 API calls without manually executing them in API Explorer or Python, expand these 1-click shortcuts:
+                If you prefer to automate Step 1.1 or Step 1.2 API calls without manually executing them in API Explorer or Python, expand these 1-click shortcuts:
               </p>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div class="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2">
                   <span class="font-bold text-indigo-900 block">1. Quick Create Agent</span>
                   <p class="text-[11px] text-slate-600">Creates an agent on Looker with standard Cymbal Gadgets configuration.</p>
@@ -951,15 +947,6 @@ print("📝 Summary:", result.get("final_response", ""))
                     <span>Supply & Link GQ</span>
                   </button>
                   <span id="step2GoldenQueryStatus" class="hidden text-[11px] block p-1 rounded"></span>
-                </div>
-                <div class="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2">
-                  <span class="font-bold text-purple-900 block">3. Create Session</span>
-                  <p class="text-[11px] text-slate-600">Spawns a conversational session on Looker for your active Agent.</p>
-                  <button id="step3CreateConvBtn" type="button" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1 transition shadow-sm">
-                    <i class="fa-solid fa-play text-white mr-1 text-[10px]"></i>
-                    <span>Create Session</span>
-                  </button>
-                  <div id="step3AccordionConvStatus" class="hidden text-[11px] p-1 rounded font-medium"></div>
                 </div>
               </div>
             </div>
@@ -1719,7 +1706,7 @@ print("Teardown status:", results)</pre>
         <div class="bg-amber-50 border border-amber-200 text-amber-900 p-3 rounded-xl flex items-start space-x-2">
           <i class="fa-solid fa-circle-info text-amber-600 mt-0.5"></i>
           <div>
-            <strong>Specify your own user id / secret:</strong> Enter the Looker API3 credentials assigned to you by the instructor before beginning the lab.
+            <strong>Specify your own user id / secret:</strong> Enter the Looker API3 credentials you have created during the required prework for this lab.
           </div>
         </div>
 
@@ -2202,7 +2189,7 @@ gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 )
-client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})
+client.update_agent("${agentId}", {"name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", "golden_query_ids": [gq["id"]]})
 print("Created & Linked Golden Query ID:", gq["id"])
 
 # Option B: Looker Python SDK (Requires: pip install looker-sdk)
@@ -2215,7 +2202,7 @@ print("Created & Linked Golden Query ID:", gq["id"])
 #         answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 #     )
 # )
-# sdk.update_agent(agent_id="${agentId}", body=models40.WriteAgent(golden_query_ids=[golden_query.id]))
+# sdk.update_agent(agent_id="${agentId}", body=models40.WriteAgent(name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", golden_query_ids=[golden_query.id]))
 # print("Created & Linked Golden Query ID:", golden_query.id)`;
       }
 
@@ -2427,12 +2414,6 @@ print("📝 Summary:", result.get("final_response", ""))
 
       const cleanupConvInput = document.getElementById('cleanupConvIdInput');
       if (cleanupConvInput) cleanupConvInput.value = '';
-
-      const step3DirectConvStatus = document.getElementById('step3DirectConvStatus');
-      if (step3DirectConvStatus) step3DirectConvStatus.classList.add('hidden');
-
-      const step3AccordionConvStatus = document.getElementById('step3AccordionConvStatus');
-      if (step3AccordionConvStatus) step3AccordionConvStatus.classList.add('hidden');
     }
 
     function copyRememberedAgentId(btn) {
@@ -2456,7 +2437,7 @@ print("📝 Summary:", result.get("final_response", ""))
       copyToClipboard(currentConversationId, btn);
     }
 
-    function selectAgent(agentId) {
+    function selectAgent(agentId, preserveExistingConversation = false) {
       if (!agentId) return;
       currentAgentId = agentId;
       setRememberedAgentId(agentId, false);
@@ -2477,7 +2458,9 @@ print("📝 Summary:", result.get("final_response", ""))
         agentBanner.classList.remove('hidden');
       }
 
-      startNewConversation();
+      if (!preserveExistingConversation || !currentConversationId) {
+        startNewConversation();
+      }
     }
 
     async function startNewConversation() {
@@ -2532,8 +2515,10 @@ print("📝 Summary:", result.get("final_response", ""))
 
     // Checkpoint 1 Validation
     checkProgress1Btn.addEventListener('click', async () => {
-      const targetId = cp1AgentIdInput.value.trim() || currentAgentId;
-      if (!targetId) {
+      const step3ConvInputEl = document.getElementById('step3ConvIdInput');
+      const convId = (step3ConvInputEl ? step3ConvInputEl.value.trim() : '') || currentConversationId || '';
+      const targetId = cp1AgentIdInput.value.trim() || currentAgentId || convId;
+      if (!targetId && !convId) {
         cp1Feedback.className = 'text-xs p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800';
         cp1Feedback.classList.remove('hidden');
         cp1Feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-1.5"></i> Please enter your Agent ID created in Step 1. In 500-student workshops, explicit Agent ID is required to prevent collisions.`;
@@ -2550,15 +2535,19 @@ print("📝 Summary:", result.get("final_response", ""))
         const res = await fetch('/api/checkpoints/1', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ agent_id: targetId })
+          body: JSON.stringify({ agent_id: targetId, conversation_id: convId })
         });
         const data = await res.json();
 
         if (data.passed) {
+          const resolvedAgentId = data.agent_id || (data.agent && data.agent.id) || targetId;
+          if (data.conversation_id && !currentConversationId) {
+            setRememberedConversationId(data.conversation_id, true);
+          }
           cp1Feedback.className = 'text-xs p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium';
           cp1Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: ${data.message} (+20 points awarded!)`;
           awardCheckpoint(1, 20);
-          selectAgent(targetId);
+          selectAgent(resolvedAgentId, true);
           await loadAgents();
         } else {
           cp1Feedback.className = 'text-xs p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800';
@@ -2607,15 +2596,15 @@ print("📝 Summary:", result.get("final_response", ""))
       const cp3Input = document.getElementById('cp3AgentIdInput');
       const targetId = (cp3Input ? cp3Input.value.trim() : '') || currentAgentId;
 
-      if (!targetId) {
+      if (!targetId && !currentConversationId) {
         cp3Feedback.className = 'text-xs p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800';
         cp3Feedback.classList.remove('hidden');
         cp3Feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 mr-1.5"></i> Please enter or select the Agent ID created in Step 1 before testing Checkpoint 3.`;
         return;
       }
 
-      if (targetId !== currentAgentId) {
-        selectAgent(targetId);
+      if (targetId && targetId !== currentAgentId) {
+        selectAgent(targetId, true);
       }
 
       checkProgress3Btn.disabled = true;
@@ -2628,7 +2617,7 @@ print("📝 Summary:", result.get("final_response", ""))
         const res = await fetch('/api/checkpoints/3', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ agent_id: targetId })
+          body: JSON.stringify({ agent_id: targetId, conversation_id: currentConversationId || '' })
         });
         const data = await res.json();
 
@@ -2660,7 +2649,7 @@ print("📝 Summary:", result.get("final_response", ""))
         const res = await fetch('/api/checkpoints/4', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ agent_id: currentAgentId, apply_tuning: true })
+          body: JSON.stringify({ agent_id: currentAgentId, conversation_id: currentConversationId || '', apply_tuning: true })
         });
         const data = await res.json();
         if (data.passed) {
@@ -2926,86 +2915,6 @@ print("📝 Summary:", result.get("final_response", ""))
         });
         step3ConvIdInput.addEventListener('change', (e) => {
           setRememberedConversationId(e.target.value.trim());
-        });
-      }
-
-      async function triggerCreateConversation(btnEl, statusEl) {
-        const targetId = currentAgentId || (task1AgentIdInput ? task1AgentIdInput.value.trim() : '');
-        if (!targetId) {
-          alert("Please remember or create an Agent in Step 1 first!");
-          return;
-        }
-
-        const originalBtnHtml = btnEl ? btnEl.innerHTML : '';
-        if (btnEl) {
-          btnEl.disabled = true;
-          btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Creating...';
-        }
-        if (statusEl) {
-          statusEl.className = 'text-xs p-1.5 rounded-lg bg-slate-100 text-slate-700';
-          statusEl.textContent = 'Calling POST /conversations on Looker...';
-          statusEl.classList.remove('hidden');
-        }
-
-        try {
-          const res = await fetch('/api/conversations', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              agent_id: targetId,
-              name: 'Cymbal Retail Session - Student Portal'
-            })
-          });
-          const data = await res.json();
-          if (res.ok && data.id) {
-            setRememberedConversationId(data.id, true);
-
-            if (statusEl) {
-              statusEl.className = 'text-xs p-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold';
-              statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Session created: <span class="font-mono text-purple-700">${data.id}</span> (Populated into Step 4)`;
-            }
-            const otherStatusEl = (statusEl && statusEl.id === 'step3DirectConvStatus') 
-              ? document.getElementById('step3AccordionConvStatus') 
-              : document.getElementById('step3DirectConvStatus');
-            if (otherStatusEl) {
-              otherStatusEl.className = 'text-xs p-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold';
-              otherStatusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Session created: <span class="font-mono text-purple-700">${data.id}</span> (Populated into Step 4)`;
-              otherStatusEl.classList.remove('hidden');
-            }
-          } else {
-            if (statusEl) {
-              statusEl.className = 'text-xs p-1.5 rounded-lg bg-rose-50 text-rose-800 border border-rose-200';
-              statusEl.textContent = data.error || 'Failed to create conversation session';
-            }
-          }
-        } catch (err) {
-          if (statusEl) {
-            statusEl.className = 'text-xs p-1.5 rounded-lg bg-rose-50 text-rose-800 border border-rose-200';
-            statusEl.textContent = err.message;
-          }
-        } finally {
-          if (btnEl) {
-            btnEl.disabled = false;
-            btnEl.innerHTML = originalBtnHtml;
-          }
-        }
-      }
-
-      // Step 3: Direct 1-Click Create Session Button
-      const step3DirectCreateBtn = document.getElementById('step3DirectCreateBtn');
-      const step3DirectConvStatus = document.getElementById('step3DirectConvStatus');
-      if (step3DirectCreateBtn) {
-        step3DirectCreateBtn.addEventListener('click', () => {
-          triggerCreateConversation(step3DirectCreateBtn, step3DirectConvStatus);
-        });
-      }
-
-      // Step 3: Accordion Create Session Button
-      const step3CreateConvBtn = document.getElementById('step3CreateConvBtn');
-      const step3AccordionConvStatus = document.getElementById('step3AccordionConvStatus');
-      if (step3CreateConvBtn) {
-        step3CreateConvBtn.addEventListener('click', () => {
-          triggerCreateConversation(step3CreateConvBtn, step3AccordionConvStatus);
         });
       }
 
@@ -3580,7 +3489,7 @@ print("📝 Summary:", result.get("final_response", ""))
       if (!jsonCode) return;
       const rawVal = gqInput ? gqInput.value.trim() : '';
       const gqId = rawVal ? parseInt(rawVal, 10) : 142;
-      jsonCode.textContent = `{\n  "golden_query_ids": [${isNaN(gqId) ? 142 : gqId}]\n}`;
+      jsonCode.textContent = `{\n  "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",\n  "golden_query_ids": [${isNaN(gqId) ? 142 : gqId}]\n}`;
 
       if (rawVal && !isNaN(gqId)) {
         currentGoldenQueryId = String(gqId);

@@ -133,18 +133,18 @@ When calling `POST /conversational_analytics/chat`, the API does not just return
 
 # 🔑 Step 0: Student Credentials Setup (3 Mins)
 
-Every student must authenticate using their assigned Looker API credentials (`client_id` and `client_secret`) provided by the workshop instructor.
+Every student must authenticate using the Looker API3 credentials (`client_id` and `client_secret`) created during the required prework for this lab.
 
 ### 🧹 Ensuring Fresh Credentials
-Previous test credentials have been cleared from `.env` and the application to ensure every student begins with a clean slate. You will see the yellow prompt: **"Specify your own user id / secret"**.
+Previous test credentials have been cleared from `.env` and the application to ensure every student begins with a clean slate. You will see the yellow prompt: **"Specify your own user id / secret: Enter the Looker API3 credentials you have created during the required prework for this lab."**
 
 ### Option A: Configure in the Interactive Web Portal (Recommended)
 > 💡 **User-Centric Flow:** The web portal does **not** interrupt you with an automatic credentials popup when loaded. Instead, you can comfortably read the instructions first, and when you are ready, simply click the **Open Student Credentials Dialog** button in Step 0 or in the top navigation bar.
 
 1. In the opened portal (`http://localhost:8080`), click the button **Open Student Credentials Dialog** (located in the Step 0 card or the top navigation bar).
-2. Enter your assigned:
-   * **Looker Client ID:** *(enter your assigned client ID)*
-   * **Looker Client Secret:** *(enter your assigned client secret)*
+2. Enter the credentials you created during the required prework for this lab:
+   * **Looker Client ID:** *(enter your client ID)*
+   * **Looker Client Secret:** *(enter your client secret)*
 3. Click **Save & Test Connection**.
 4. The portal authenticates against Looker API 4.0 and displays a green badge: `Looker Connected`.
 
@@ -422,10 +422,11 @@ Once the Golden Query is created, you must link its integer ID to your agent:
 4. In the **Request Body (`body`)** editor, paste:
 ```json
 {
+  "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
   "golden_query_ids": [<YOUR_GOLDEN_QUERY_ID>]
 }
 ```
-*(Replace `<YOUR_GOLDEN_QUERY_ID>` with your actual numeric Golden Query ID returned in the previous step, e.g. `142`).*
+*(Replace `<YOUR_NAME_OR_ID>` with your student ID/name from Step 1.4, and replace `<YOUR_GOLDEN_QUERY_ID>` with your actual numeric Golden Query ID returned in the previous step, e.g. `142`).*
 5. Click **Run Request**.  
    * **Status:** `PATCH /agents/{agent_id} (200: OK)`  
    * **Response Body:** The response contains `"golden_query_ids": [<YOUR_GOLDEN_QUERY_ID>]`, confirming that your agent is now officially anchored by the verified golden query!
@@ -446,7 +447,10 @@ gq = client.create_golden_query(
 print(f"✅ Created Golden Query ID: {gq.get('id')}")
 
 # 2. Link to Agent
-client.update_agent(agent['id'], {"golden_query_ids": [gq["id"]]})
+client.update_agent(agent['id'], {
+    "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
+    "golden_query_ids": [gq["id"]]
+})
 print(f"✅ Linked Golden Query {gq['id']} to Agent {agent['id']}")
 ```
 
@@ -464,7 +468,10 @@ print(f"✅ Created Golden Query ID: {golden_query.id}")
 # 2. Link to Agent
 sdk.update_agent(
     agent_id=new_agent.id,
-    body=models40.WriteAgent(golden_query_ids=[golden_query.id])
+    body=models40.WriteAgent(
+        name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
+        golden_query_ids=[golden_query.id]
+    )
 )
 print(f"✅ Linked Golden Query {golden_query.id} to Agent {new_agent.id}")
 ```
