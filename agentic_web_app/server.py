@@ -410,7 +410,7 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
             if agent_id:
                 try:
                     # If agent still exists, teardown has NOT been executed for it
-                    existing_agent = client.get_agent(agent_id)
+                    existing_agent = client.get_agent(agent_id, auto_provision=False)
                     if existing_agent and existing_agent.get("id"):
                         self._send_json(400, {
                             "passed": False,
@@ -518,7 +518,7 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                     conv = client.create_conversation(agent_id=agent_id, name="Auto-generated Session")
                     conversation_id = conv.get("id")
 
-                result = client.chat(conversation_id=conversation_id, user_message=user_message)
+                result = client.chat(conversation_id=conversation_id, user_message=user_message, agent_id=agent_id)
                 self._send_json(200, result)
             except Exception as e:
                 logger.exception("Error processing chat query")

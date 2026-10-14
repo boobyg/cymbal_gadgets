@@ -493,10 +493,10 @@ Looker manages stateful conversational threads on the server. Instead of forcing
 ```json
 {
   "agent_id": "<YOUR_AGENT_ID_FROM_STEP_1>",
-  "name": "Cymbal Retail Session - Student <YOUR_NAME_OR_ID>"
+  "name": "Cymbal Retail Session - Student <YOUR_NAME>"
 }
 ```
-*(Replace `<YOUR_AGENT_ID_FROM_STEP_1>` with your 32-character Agent ID from Step 1.4).*
+*(Replace `<YOUR_AGENT_ID_FROM_STEP_1>` with your 32-character Agent ID from Step 1.4, and `<YOUR_NAME>` with your name).*
 
 4. Click **Run Request**.
 5. **What to Expect as an Output:**  
@@ -505,7 +505,7 @@ Looker manages stateful conversational threads on the server. Instead of forcing
    ```json
    {
      "id": "c1f2e3d4-5678-90ab-cdef-1234567890ab",
-     "name": "Cymbal Retail Session - Student 42",
+     "name": "Cymbal Retail Session - Student <YOUR_NAME>",
      "agent_id": "a9b6933c74a045de9ed130ad024cca62",
      "created_at": "2026-09-28T17:30:00.000Z"
    }
@@ -677,13 +677,9 @@ cd /home/user/cymbal_gadgets/agentic_web_app
    * **Do NOT curl external `https://*.cloudshell.dev` URLs**:
      > [!CAUTION]
      > **Troubleshooting `jq: parse error: Invalid numeric literal at line 1, column 3`:**  
-     > If you run `curl -s https://<port>-cs-...cloudshell.dev/api/health | jq .`, it fails with:  
-     > `jq: parse error: Invalid numeric literal at line 1, column 3`.  
-     > **Root Cause:** External Cloud Shell Web Preview URLs require Google Single Sign-On (SSO) browser session authentication cookies. A headless terminal `curl` receives an HTTP 302 redirect returning HTML (`<a href="...">Found</a>.`), which fails `jq` parsing at column 3 (`<a `).  
-     > **Solution:** Inside Cloud Shell, always query the loopback address directly:  
-     > ```bash
-     > curl -s http://localhost:8080/api/health | jq .
-     > ```
+     > **If you get the error `jq: parse error: Invalid numeric literal at line 1, column 3`, you can safely ignore it and continue directly to clicking "Check my progress" in Task 2!**  
+     > **Why this happens:** If you run `curl -s https://<port>-cs-...cloudshell.dev/api/health | jq .` (using the external Cloud Shell Web Preview URL instead of `http://localhost:8080`), the Cloud Shell proxy requires browser SSO cookies and returns an HTTP 302 HTML redirect (`<a href="...">Found</a>.`), which fails `jq` parsing at column 3 (`<a `).  
+     > **What to do:** Simply ignore that `jq` error and click **Check my progress** in **Task 2** in the web portal (or run `curl -s http://localhost:8080/api/health | jq .` against local HTTP loopback).
    * In your second Cloud Shell terminal:
    ```bash
    curl -s http://localhost:8080/api/health | jq .
@@ -777,6 +773,24 @@ python3 /home/user/cymbal_gadgets/agentic_web_app/test_pipeline.py YOUR_STEP_1_A
 
 ### 4.1 Tuning Agent Behavior (`PATCH /api/4.0/agents/{agent_id}`)
 Data engineers often need to enforce strict formatting, output length, or business terminology. You can update agent behavior on the fly using `PATCH /agents/{agent_id}`.
+
+#### Cymbal Executive Guardrail Rules (Supply These as Prompts / Instructions)
+**Important:** You need to **supply these rules as prompts** to your agent! You can supply them either as **system prompt instructions** in `context.instructions` (via API Explorer `update_agent`, the Python snippet below, or the **Apply Cymbal Guardrails** button in Task 4) OR **directly as prompt instructions in the Conversational Analytics chat window** on the right pane:
+* Always begin your answer with `'🌟 Cymbal Executive Summary:'`
+* Format all currency metrics in EUR with thousands separators (e.g. `€1,234,567`)
+* If asked about gross margin, always state the exact percentage with two decimals
+* Keep explanations concise (under 3 sentences)
+
+**Example Prompt You Can Paste Directly into the Chat Window or `context.instructions`:**
+```text
+Please follow these Cymbal Executive Guardrail Rules for your response:
+- Always begin your answer with '🌟 Cymbal Executive Summary:'
+- Format all currency metrics in EUR with thousands separators (e.g. €1,234,567)
+- If asked about gross margin, always state the exact percentage with two decimals
+- Keep explanations concise (under 3 sentences)
+
+Question: What is our total sales amount and gross margin percentage across all stores?
+```
 
 👉 **Direct Link:** **[UpdateAgent Method in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)**
 

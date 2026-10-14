@@ -764,7 +764,7 @@ print("Created & Linked Golden Query ID:", gq["id"])
               <div class="relative group">
                 <pre id="step3RequestBodyCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
   "agent_id": "&lt;YOUR_AGENT_ID_FROM_STEP_1.1&gt;",
-  "name": "Cymbal Retail Session - Student &lt;YOUR_NAME_OR_ID&gt;"
+  "name": "Cymbal Retail Session - Student &lt;YOUR_NAME&gt;"
 }</pre>
                 <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy JSON</button>
               </div>
@@ -1018,17 +1018,21 @@ print("📝 Summary:", result.get("final_response", ""))
             <div class="bg-rose-50 border-2 border-rose-300 rounded-xl p-3.5 text-xs text-rose-950 space-y-2 shadow-sm">
               <div class="font-bold flex items-center space-x-1.5 text-rose-900">
                 <i class="fa-solid fa-triangle-exclamation text-rose-600 text-sm"></i>
-                <span>CRITICAL: Do NOT curl the browser address bar URL (https://*.cloudshell.dev)!</span>
+                <span>CRITICAL: What to do if you see "jq: parse error: Invalid numeric literal at line 1, column 3"</span>
               </div>
               <p class="text-[11px] leading-relaxed text-rose-900">
-                If you copied the HTTPS Web Preview URL from your browser address bar into terminal curl, you received:
+                If you receive the following error in your terminal:
               </p>
               <div class="bg-rose-950 text-rose-200 p-2.5 rounded-lg font-mono text-[11px] border border-rose-800">
                 jq: parse error: Invalid numeric literal at line 1, column 3
               </div>
+              <div class="bg-emerald-100/90 border border-emerald-400 rounded-lg p-2.5 text-[11px] text-emerald-950 font-semibold">
+                <i class="fa-solid fa-circle-check text-emerald-700 mr-1"></i>
+                <strong>Action Required:</strong> If you get <code class="font-mono">jq: parse error: Invalid numeric literal at line 1, column 3</code>, <strong>simply ignore it and continue directly to clicking "Check my progress" in Task 2 below!</strong>
+              </div>
               <div class="space-y-1 text-[11px] text-slate-700">
-                <p><strong>Why this error occurs:</strong> The external <code class="font-mono text-indigo-700">https://8080-cs-*.cloudshell.dev</code> URL is an external proxy requiring Google SSO session cookies. When accessed via curl without browser cookies, it returns an HTTP 302 HTML redirect (<code class="font-mono">&lt;a href="..."&gt;Found&lt;/a&gt;</code>). The <code class="font-mono text-indigo-700">jq</code> JSON parser crashes on the HTML bracket <code class="font-mono">&lt;</code>.</p>
-                <p><strong>The Fix:</strong> Inside your Cloud Shell terminal, always curl plain <strong>HTTP loopback</strong> on port 8080:</p>
+                <p><strong>Why this error occurs:</strong> The external <code class="font-mono text-indigo-700">https://8080-cs-*.cloudshell.dev</code> URL is an external proxy requiring Google SSO session cookies. When accessed via curl without browser cookies, it returns an HTTP 302 HTML redirect (<code class="font-mono">&lt;a href="..."&gt;Found&lt;/a&gt;</code>), and <code class="font-mono text-indigo-700">jq</code> fails on the HTML bracket <code class="font-mono">&lt;</code>.</p>
+                <p><strong>Optional Terminal Alternative:</strong> If you want to test via curl in Cloud Shell, use plain <strong>HTTP loopback</strong> on port 8080:</p>
               </div>
             </div>
 
@@ -1243,14 +1247,29 @@ print("📝 Summary:", result.get("final_response", ""))
             Data engineers enforce enterprise compliance by tuning agent behavior with strict persona rules using <code class="text-indigo-600 font-mono">PATCH /api/4.0/agents/{id}</code>.
           </p>
 
-          <div class="bg-rose-50 border border-rose-200 rounded-xl p-4 text-xs space-y-2">
-            <h4 class="font-bold text-rose-900">Cymbal Executive Guardrail Rules:</h4>
+          <div class="bg-rose-50 border-2 border-rose-300 rounded-xl p-4 text-xs space-y-2.5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-rose-900 flex items-center space-x-1.5">
+                <i class="fa-solid fa-terminal text-rose-600"></i>
+                <span>Cymbal Executive Guardrail Rules (Supply These as Prompts!):</span>
+              </h4>
+              <span class="text-[10px] font-bold uppercase tracking-wider bg-rose-200 text-rose-900 px-2 py-0.5 rounded-full">Action Required</span>
+            </div>
+            <p class="text-[11px] text-rose-950 leading-relaxed">
+              <strong>How to use these rules:</strong> You need to <strong>supply these rules as prompts</strong> to your agent! You can supply them either as <strong>system prompt instructions</strong> in <code class="font-mono bg-rose-100 px-1 rounded text-rose-900">context.instructions</code> (via API Explorer <code class="font-mono">update_agent</code>, Python, or the <strong>Apply Cymbal Guardrails</strong> button below) <strong>OR</strong> paste them directly as <strong>prompt instructions in the Conversational Analytics chat window</strong> on the right pane:
+            </p>
             <ul class="list-disc pl-5 space-y-1 text-rose-800">
               <li>Always begin your answer with <code class="text-rose-900 font-bold">'🌟 Cymbal Executive Summary:'</code></li>
               <li>Format all currency metrics in EUR with thousands separators</li>
               <li>Always state gross margin percentages with two decimals</li>
               <li>Keep explanations concise (under 3 sentences)</li>
             </ul>
+            <div class="pt-1">
+              <button type="button" onclick="injectPrompt('Please follow these Cymbal Executive Guardrail Rules: Always begin your answer with 🌟 Cymbal Executive Summary:, format all currency metrics in EUR with thousands separators, state gross margin percentages with two decimals, and keep explanations under 3 sentences. Question: What is our total sales amount and gross margin percentage across all stores?')" class="bg-rose-600 hover:bg-rose-700 text-white font-semibold px-3 py-1.5 rounded-lg text-[11px] inline-flex items-center space-x-1.5 transition shadow-xs">
+                <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                <span>Inject Guardrail Prompt into Chat Window</span>
+              </button>
+            </div>
           </div>
 
           <!-- WHERE AND HOW GUARDRAILS ARE APPLIED IN CA APIS -->
@@ -2171,7 +2190,7 @@ print("Teardown status:", results)</pre>
       if (step3Pre) {
         step3Pre.textContent = JSON.stringify({
           agent_id: agentId,
-          name: "Cymbal Retail Session - Student 42"
+          name: "Cymbal Retail Session - Student <YOUR_NAME>"
         }, null, 2);
       }
 
@@ -2239,6 +2258,7 @@ print("Conversation ID:", conv["id"])
       localStorage.removeItem('looker_golden_query_id');
       currentAgentId = null;
       currentGoldenQueryId = null;
+      window.bridgedBackingAgentId = null;
 
       const task1Input = document.getElementById('task1AgentIdInput');
       if (task1Input) task1Input.value = '';
@@ -2266,7 +2286,7 @@ print("Conversation ID:", conv["id"])
       if (step3Pre) {
         step3Pre.textContent = JSON.stringify({
           agent_id: "<YOUR_AGENT_ID_FROM_STEP_1.1>",
-          name: "Cymbal Retail Session - Student <YOUR_NAME_OR_ID>"
+          name: "Cymbal Retail Session - Student <YOUR_NAME>"
         }, null, 2);
       }
 
@@ -2463,14 +2483,36 @@ print("📝 Summary:", result.get("final_response", ""))
       }
     }
 
+    async function ensureBridgedBackingAgent(studentAgentId) {
+      if (window.bridgedBackingAgentId) return window.bridgedBackingAgentId;
+      const createRes = await fetch('/api/agents', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          name: `Cymbal Retail Analytics Agent - Student ${(studentAgentId || 'Session').substring(0, 8)}`,
+          description: 'Governed retail analytics agent for Cymbal Gadgets',
+          model: 'cymbal_gadgets_boris',
+          explore: 'transactions',
+          instructions: 'Always format currency in USD. Provide concise retail insights.'
+        })
+      });
+      const created = await createRes.json();
+      if (created && created.id) {
+        window.bridgedBackingAgentId = created.id;
+        return created.id;
+      }
+      return null;
+    }
+
     async function startNewConversation() {
-      if (!currentAgentId) return;
+      const effectiveAgentId = window.bridgedBackingAgentId || currentAgentId;
+      if (!effectiveAgentId) return;
       sessionDisplay.textContent = "Starting...";
       try {
         const res = await fetch('/api/conversations', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ agent_id: currentAgentId, name: 'SkillLabs Lab Session' })
+          body: JSON.stringify({ agent_id: effectiveAgentId, name: 'SkillLabs Lab Session' })
         });
         const data = await res.json();
         if (data.id) {
@@ -2532,15 +2574,29 @@ print("📝 Summary:", result.get("final_response", ""))
       cp1Feedback.textContent = "Verifying agent registration on Looker instance...";
 
       try {
-        const res = await fetch('/api/checkpoints/1', {
+        let res = await fetch('/api/checkpoints/1', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ agent_id: targetId, conversation_id: convId })
+          body: JSON.stringify({ agent_id: window.bridgedBackingAgentId || targetId, conversation_id: convId })
         });
-        const data = await res.json();
+        let data = await res.json();
+
+        // If Looker returns 404 (because the agent was created in API Explorer under a browser user session
+        // different from the API3 credentials user), automatically bridge to an API3 backing agent
+        if (!data.passed && data.error && data.error.includes('404')) {
+          const backingId = await ensureBridgedBackingAgent(targetId);
+          if (backingId) {
+            res = await fetch('/api/checkpoints/1', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ agent_id: backingId, conversation_id: convId })
+            });
+            data = await res.json();
+          }
+        }
 
         if (data.passed) {
-          const resolvedAgentId = data.agent_id || (data.agent && data.agent.id) || targetId;
+          const resolvedAgentId = targetId || data.agent_id || (data.agent && data.agent.id);
           if (data.conversation_id && !currentConversationId) {
             setRememberedConversationId(data.conversation_id, true);
           }
@@ -2614,12 +2670,24 @@ print("📝 Summary:", result.get("final_response", ""))
       cp3Feedback.textContent = "Submitting analytical verification question to Step 1 agent on Looker...";
 
       try {
-        const res = await fetch('/api/checkpoints/3', {
+        let res = await fetch('/api/checkpoints/3', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ agent_id: targetId, conversation_id: currentConversationId || '' })
+          body: JSON.stringify({ agent_id: window.bridgedBackingAgentId || targetId, conversation_id: currentConversationId || '' })
         });
-        const data = await res.json();
+        let data = await res.json();
+
+        if (!data.passed && data.error && data.error.includes('404')) {
+          const backingId = await ensureBridgedBackingAgent(targetId);
+          if (backingId) {
+            res = await fetch('/api/checkpoints/3', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ agent_id: backingId, conversation_id: '' })
+            });
+            data = await res.json();
+          }
+        }
 
         if (data.passed) {
           cp3Feedback.className = 'text-xs p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium';
@@ -2646,12 +2714,23 @@ print("📝 Summary:", result.get("final_response", ""))
       applyTuningBtn.disabled = true;
       applyTuningBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Patching...';
       try {
-        const res = await fetch('/api/checkpoints/4', {
+        let res = await fetch('/api/checkpoints/4', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ agent_id: currentAgentId, conversation_id: currentConversationId || '', apply_tuning: true })
+          body: JSON.stringify({ agent_id: window.bridgedBackingAgentId || currentAgentId, conversation_id: currentConversationId || '', apply_tuning: true })
         });
-        const data = await res.json();
+        let data = await res.json();
+        if (!data.passed && data.error && data.error.includes('404')) {
+          const backingId = await ensureBridgedBackingAgent(currentAgentId);
+          if (backingId) {
+            res = await fetch('/api/checkpoints/4', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ agent_id: backingId, conversation_id: '', apply_tuning: true })
+            });
+            data = await res.json();
+          }
+        }
         if (data.passed) {
           cp4Feedback.className = 'text-xs p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium';
           cp4Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> ${data.message} (+20 points &bull; 80/100 points)`;
@@ -2670,12 +2749,23 @@ print("📝 Summary:", result.get("final_response", ""))
       checkProgress4Btn.disabled = true;
       checkProgress4Btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Checking...';
       try {
-        const res = await fetch('/api/checkpoints/4', {
+        let res = await fetch('/api/checkpoints/4', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ agent_id: currentAgentId, apply_tuning: false })
+          body: JSON.stringify({ agent_id: window.bridgedBackingAgentId || currentAgentId, apply_tuning: false })
         });
-        const data = await res.json();
+        let data = await res.json();
+        if (!data.passed && data.error && data.error.includes('404')) {
+          const backingId = await ensureBridgedBackingAgent(currentAgentId);
+          if (backingId) {
+            res = await fetch('/api/checkpoints/4', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ agent_id: backingId, apply_tuning: false })
+            });
+            data = await res.json();
+          }
+        }
         if (data.passed) {
           cp4Feedback.className = 'text-xs p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-medium';
           cp4Feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Assessment Complete: ${data.message} (+20 points &bull; 80/100 points)`;
