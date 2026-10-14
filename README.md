@@ -44,7 +44,7 @@ Generative AI applications that attempt direct **"Text-to-SQL"** on raw database
 
 This lab includes a complete slide deck and presentation for instructors and self-paced students:
 
-* 📊 **[Google Slides Presentation (Standard Google Cloud Style)](https://docs.google.com/presentation/d/1looker-conversational-analytics-standard-gcp-deck/edit?usp=sharing)**: Official presentation deck in **Standard Google Cloud style** for the instructor to present and guide the session.
+* 📊 **[Google Slides Presentation (Standard Google Cloud Style)](https://docs.google.com/presentation/d/1Bl7_ApzMmlsCay9NbthnulxUMKXBpLlbUplNXAdqvsk/edit?slide=id.h1097fa95fc4670d5_0_647&resourcekey=0-G10zZ62rbmyYF_-4_1K6JA#slide=id.h1097fa95fc4670d5_0_647)**: Official presentation deck in **Standard Google Cloud style** for the instructor to present and guide the session.
 * 🌐 **[Interactive Web Presentation](http://localhost:8080/presentation.html)**: Standalone, browser-based slide deck with arrow navigation, table of contents, and speaker notes. Accessible directly through the web application.
 * 📄 **[Markdown Presentation Deck (PRESENTATION_LOOKER_CONVERSATIONAL_ANALYTICS.md)](PRESENTATION_LOOKER_CONVERSATIONAL_ANALYTICS.md)**: Standard markdown format compatible with GitHub, Marp, and presentation generators.
 * 📖 **[Detailed Student Lab Guide (LAB_GUIDE_CONVERSATIONAL_ANALYTICS.md)](LAB_GUIDE_CONVERSATIONAL_ANALYTICS.md)**: Full 30-minute step-by-step curriculum with deep dives and troubleshooting.

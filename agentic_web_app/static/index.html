@@ -191,7 +191,7 @@
               <span><strong>New to Looker?</strong> View the visual slide deck.</span>
             </div>
             <div class="flex items-center space-x-2">
-              <a href="https://docs.google.com/presentation/d/1looker-conversational-analytics-standard-gcp-deck/edit?usp=sharing" target="_blank" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold px-2.5 py-1.5 rounded-lg text-xs transition shadow-sm flex items-center space-x-1">
+              <a href="https://docs.google.com/presentation/d/1Bl7_ApzMmlsCay9NbthnulxUMKXBpLlbUplNXAdqvsk/edit?slide=id.h1097fa95fc4670d5_0_647&resourcekey=0-G10zZ62rbmyYF_-4_1K6JA#slide=id.h1097fa95fc4670d5_0_647" target="_blank" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold px-2.5 py-1.5 rounded-lg text-xs transition shadow-sm flex items-center space-x-1">
                 <i class="fa-solid fa-file-powerpoint text-amber-500"></i>
                 <span>Google Slides (Standard Style)</span>
                 <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-70"></i>
@@ -489,24 +489,32 @@ nano .env</pre>
                 <span class="text-[11px] text-slate-500 font-normal">Execute in Cloud Shell (<code class="text-indigo-600 font-mono">python3</code>) instead of API Explorer</span>
               </div>
               <div class="relative group">
-                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
-import looker_sdk
-from looker_sdk import models40
-sdk = looker_sdk.init40()
-new_agent = sdk.create_agent(
-    body=models40.WriteAgent(
-        name="Cymbal Retail Analytics Agent - Student 42",
-        sources=[models40.AgentSource(model="cymbal_gadgets_boris", explore="transactions")],
-        context=models40.AgentContext(instructions="...", show_analytical_details=True)
-    )
-)
-print("Agent ID:", new_agent.id)
+                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency Python Script (Recommended - Works in Cloud Shell out of the box!)
+# In Cloud Shell terminal, simply run:
+python3 create_agent.py
 
-# Option B: Zero-Dependency LookerClient
+# Or in Python 3 interactive shell:
+import sys
+sys.path.append("/home/user/cymbal_gadgets/agentic_web_app")
+import config
 from looker_client import LookerClient
+
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-agent = client.create_agent(name="Cymbal Agent", model="cymbal_gadgets_boris", explore="transactions")
-print("Agent ID:", agent["id"])</pre>
+agent = client.create_agent(
+    name="Cymbal Retail Analytics Agent - Student",
+    description="Conversational BI agent providing governed retail insights for Cymbal Gadgets",
+    model="cymbal_gadgets_boris",
+    explore="transactions",
+    instructions="- Always use Gross Margin Percentage for profitability questions.\n- Group by transaction date for trends."
+)
+print("Agent ID:", agent["id"])
+
+# Option B: Official Looker Python SDK (Requires pip install looker-sdk)
+# Run in terminal first: pip install looker-sdk
+# import looker_sdk
+# from looker_sdk import models40
+# sdk = looker_sdk.init40()
+# new_agent = sdk.create_agent(body=models40.WriteAgent(...))</pre>
                 <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
               </div>
             </div>
@@ -693,22 +701,26 @@ print("Agent ID:", agent["id"])</pre>
                 <span class="text-[11px] text-slate-500 font-normal">Execute in Cloud Shell (<code class="text-indigo-600 font-mono">python3</code>)</span>
               </div>
               <div class="relative group">
-                <pre id="step2PythonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
-golden_query = sdk.create_golden_query(
-    body=models40.WriteGoldenQuery(
-        questions=["What is our total sales amount across all transactions?"],
-        answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
-    )
-)
-sdk.update_agent(agent_id=new_agent.id, body=models40.WriteAgent(golden_query_ids=[golden_query.id]))
-print("Created & Linked Golden Query ID:", golden_query.id)
+                <pre id="step2PythonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell)
+import sys
+sys.path.append("/home/user/cymbal_gadgets/agentic_web_app")
+import config
+from looker_client import LookerClient
 
-# Option B: Zero-Dependency LookerClient
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 )
-client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})</pre>
+client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})
+print("Created & Linked Golden Query ID:", gq["id"])
+
+# Option B: Looker Python SDK (Requires: pip install looker-sdk)
+# import looker_sdk
+# from looker_sdk import models40
+# sdk = looker_sdk.init40()
+# golden_query = sdk.create_golden_query(body=models40.WriteGoldenQuery(questions=["What is our total sales amount across all transactions?"], answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"))
+# sdk.update_agent(agent_id=new_agent.id, body=models40.WriteAgent(golden_query_ids=[golden_query.id]))</pre>
                 <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
               </div>
             </div>
@@ -758,6 +770,32 @@ client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})</pre>
               <div id="step3ConvStatus" class="hidden text-xs p-2 rounded-lg mt-1 font-medium"></div>
             </div>
 
+            <!-- Interactive Conversation ID Input & 1-Click Session Button in Step 1.3 -->
+            <div class="bg-purple-100/60 border border-purple-300 rounded-xl p-3 space-y-2">
+              <div class="flex items-center justify-between">
+                <label for="step3ConvIdInput" class="block font-bold text-purple-950 text-xs">
+                  Active Conversation ID (created in API Explorer, Python, or via 1-Click):
+                </label>
+                <span class="text-[11px] text-purple-800 font-medium">Auto-populates Step 1.4 & Task 5 cleanup</span>
+              </div>
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                <input type="text" id="step3ConvIdInput" placeholder="Paste conversation id (e.g. c1f2e3d4-5678... or conv_123)..." class="flex-1 bg-white border border-purple-400 rounded-lg px-3 py-1.5 text-xs font-mono font-bold text-purple-950 focus:ring-2 focus:ring-purple-500 focus:outline-none" oninput="setRememberedConversationId(this.value)">
+                <button id="step3DirectCreateBtn" type="button" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1.5 transition shadow-sm shrink-0">
+                  <i class="fa-solid fa-play text-[10px]"></i>
+                  <span>Create Session (1-Click)</span>
+                </button>
+                <button onclick="copyCurrentConvId(this)" type="button" class="bg-white hover:bg-purple-50 text-purple-800 border border-purple-300 font-semibold px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1 transition shadow-sm shrink-0" title="Copy Active Conversation ID">
+                  <i class="fa-regular fa-copy"></i>
+                  <span>Copy</span>
+                </button>
+                <button onclick="clearRememberedConversationId()" type="button" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-semibold px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1 transition shadow-sm shrink-0" title="Clear saved Conversation ID">
+                  <i class="fa-solid fa-arrows-rotate text-slate-500"></i>
+                  <span>Clear</span>
+                </button>
+              </div>
+              <div id="step3DirectConvStatus" class="hidden text-xs p-2 rounded-lg font-medium"></div>
+            </div>
+
             <!-- Python Snippet for Create Conversation -->
             <div class="space-y-1.5 text-xs pt-2 border-t border-purple-200">
               <div class="flex items-center justify-between">
@@ -768,18 +806,22 @@ client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})</pre>
                 <span class="text-[11px] text-slate-500 font-normal">Execute in Cloud Shell (<code class="text-indigo-600 font-mono">python3</code>)</span>
               </div>
               <div class="relative group">
-                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
-conversation = sdk.create_conversation(
-    body=models40.WriteConversation(
-        agent_id=new_agent.id,
-        name="Cymbal Analysis Session"
-    )
-)
-print("Conversation ID:", conversation.id)
+                <pre id="step3PythonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell)
+import sys
+sys.path.append("/home/user/cymbal_gadgets/agentic_web_app")
+import config
+from looker_client import LookerClient
 
-# Option B: Zero-Dependency LookerClient
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 conv = client.create_conversation(agent_id=agent_id, name="Cymbal Analysis Session")
-print("Conversation ID:", conv["id"])</pre>
+print("Conversation ID:", conv["id"])
+
+# Option B: Looker Python SDK (Requires: pip install looker-sdk)
+# import looker_sdk
+# from looker_sdk import models40
+# sdk = looker_sdk.init40()
+# conversation = sdk.create_conversation(body=models40.WriteConversation(agent_id=new_agent.id, name="Cymbal Analysis Session"))
+# print("Conversation ID:", conversation.id)</pre>
                 <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
               </div>
             </div>
@@ -849,23 +891,29 @@ print("Conversation ID:", conv["id"])</pre>
                 <span class="text-[11px] text-slate-500 font-normal">Execute in Cloud Shell (<code class="text-indigo-600 font-mono">python3</code>)</span>
               </div>
               <div class="relative group">
-                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Looker Python SDK (looker_sdk)
-response_stream = sdk.conversational_analytics_chat(
-    body=models40.ConversationalAnalyticsChatRequest(
-        conversation_id=conversation.id,
-        user_message="What is our total sales amount across all transactions?"
-    )
-)
-for msg in response_stream:
-    if msg.system_message and msg.system_message.text:
-        print(f"[{msg.system_message.text.text_type}]:", msg.system_message.text.parts)
+                <pre id="step4PythonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell)
+import sys
+sys.path.append("/home/user/cymbal_gadgets/agentic_web_app")
+import config
+from looker_client import LookerClient
 
-# Option B: Zero-Dependency LookerClient
-result = client.chat(conversation_id=conv["id"], user_message="What is our total sales amount?")
-print("🧠 Thoughts:", result["thoughts"])
-print("💻 Query Spec:", result["query"])
-print("📊 Data:", result["data"])
-print("📝 Summary:", result["final_response"])</pre>
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+result = client.chat(conversation_id=conv["id"], user_message="What is our total sales amount across all transactions?")
+print("🧠 Thoughts:", result.get("thoughts", []))
+print("💻 Query Spec:", result.get("query", ""))
+print("📊 Data:", result.get("data", []))
+print("📝 Summary:", result.get("final_response", ""))
+
+# Option B: Looker Python SDK (Requires: pip install looker-sdk)
+# response_stream = sdk.conversational_analytics_chat(
+#     body=models40.ConversationalAnalyticsChatRequest(
+#         conversation_id=conversation.id,
+#         user_message="What is our total sales amount across all transactions?"
+#     )
+# )
+# for msg in response_stream:
+#     if msg.system_message and msg.system_message.text:
+#         print(f"[{msg.system_message.text.text_type}]:", msg.system_message.text.parts)</pre>
                 <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
               </div>
             </div>
@@ -911,7 +959,7 @@ print("📝 Summary:", result["final_response"])</pre>
                     <i class="fa-solid fa-play text-white mr-1 text-[10px]"></i>
                     <span>Create Session</span>
                   </button>
-                  <div id="step3ConvStatus" class="hidden text-[11px] p-1 rounded font-medium"></div>
+                  <div id="step3AccordionConvStatus" class="hidden text-[11px] p-1 rounded font-medium"></div>
                 </div>
               </div>
             </div>
@@ -1909,6 +1957,10 @@ print("Teardown status:", results)</pre>
           if (cleanupGqInput && !cleanupGqInput.value) cleanupGqInput.value = savedGqId;
           updateGoldenQueryLinkingJson();
         }
+        const savedConvId = localStorage.getItem('looker_conversation_id');
+        if (savedConvId) {
+          setRememberedConversationId(savedConvId, false);
+        }
       } else {
         clearRememberedAgentId();
       }
@@ -2139,22 +2191,53 @@ print("Teardown status:", results)</pre>
       // Dynamically update Step 2 Python code snippet
       const step2Py = document.getElementById('step2PythonCode');
       if (step2Py) {
-        step2Py.textContent = `# Option A: Looker Python SDK (looker_sdk)
-golden_query = sdk.create_golden_query(
-    body=models40.WriteGoldenQuery(
-        questions=["What is our total sales amount across all transactions?"],
-        answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
-    )
-)
-sdk.update_agent(agent_id="${agentId}", body=models40.WriteAgent(golden_query_ids=[golden_query.id]))
-print("Created & Linked Golden Query ID:", golden_query.id)
+        step2Py.textContent = `# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell)
+import sys
+sys.path.append("/home/user/cymbal_gadgets/agentic_web_app")
+import config
+from looker_client import LookerClient
 
-# Option B: Zero-Dependency LookerClient
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 )
-client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
+client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})
+print("Created & Linked Golden Query ID:", gq["id"])
+
+# Option B: Looker Python SDK (Requires: pip install looker-sdk)
+# import looker_sdk
+# from looker_sdk import models40
+# sdk = looker_sdk.init40()
+# golden_query = sdk.create_golden_query(
+#     body=models40.WriteGoldenQuery(
+#         questions=["What is our total sales amount across all transactions?"],
+#         answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
+#     )
+# )
+# sdk.update_agent(agent_id="${agentId}", body=models40.WriteAgent(golden_query_ids=[golden_query.id]))
+# print("Created & Linked Golden Query ID:", golden_query.id)`;
+      }
+
+      // Dynamically update Step 3 Python code snippet
+      const step3Py = document.getElementById('step3PythonCode');
+      if (step3Py) {
+        step3Py.textContent = `# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell)
+import sys
+sys.path.append("/home/user/cymbal_gadgets/agentic_web_app")
+import config
+from looker_client import LookerClient
+
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+conv = client.create_conversation(agent_id="${agentId}", name="Cymbal Analysis Session")
+print("Conversation ID:", conv["id"])
+
+# Option B: Looker Python SDK (Requires: pip install looker-sdk)
+# import looker_sdk
+# from looker_sdk import models40
+# sdk = looker_sdk.init40()
+# conversation = sdk.create_conversation(body=models40.WriteConversation(agent_id="${agentId}", name="Cymbal Analysis Session"))
+# print("Conversation ID:", conversation.id)`;
       }
 
       if (triggerSelect && agentSelect) {
@@ -2194,16 +2277,167 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
 
       const step3Pre = document.getElementById('step3RequestBodyCode');
       if (step3Pre) {
-        step3Pre.textContent = '{\\n  "agent_id": "<YOUR_AGENT_ID_FROM_STEP_1.1>",\\n  "name": "Cymbal Retail Session - Student <YOUR_NAME_OR_ID>"\\n}';
+        step3Pre.textContent = JSON.stringify({
+          agent_id: "<YOUR_AGENT_ID_FROM_STEP_1.1>",
+          name: "Cymbal Retail Session - Student <YOUR_NAME_OR_ID>"
+        }, null, 2);
       }
+
+      clearRememberedConversationId();
+    }
+
+    function setRememberedConversationId(convId, persist = true) {
+      if (!convId || !convId.trim()) {
+        clearRememberedConversationId();
+        return;
+      }
+      convId = convId.trim();
+      currentConversationId = convId;
+
+      if (persist) {
+        try {
+          localStorage.setItem('looker_conversation_id', convId);
+        } catch (e) {}
+      }
+
+      // Sync Step 1.3 Active Conversation ID input field
+      const step3ConvIdInput = document.getElementById('step3ConvIdInput');
+      if (step3ConvIdInput && step3ConvIdInput.value !== convId) {
+        step3ConvIdInput.value = convId;
+      }
+
+      // Sync Step 1.4 Active Conversation ID display and copy button
+      const step4ConvIdDisplay = document.getElementById('step4ConvIdDisplay');
+      if (step4ConvIdDisplay) {
+        step4ConvIdDisplay.textContent = convId;
+        step4ConvIdDisplay.className = 'font-mono bg-white px-2 py-0.5 rounded border border-emerald-400 text-emerald-800 font-bold select-all truncate';
+      }
+      const copyStep4ConvBtn = document.getElementById('copyStep4ConvBtn');
+      if (copyStep4ConvBtn) {
+        copyStep4ConvBtn.classList.remove('hidden');
+      }
+
+      // Sync Step 1.4 Request Body JSON
+      const step4RequestBodyCode = document.getElementById('step4RequestBodyCode');
+      if (step4RequestBodyCode) {
+        step4RequestBodyCode.textContent = JSON.stringify({
+          conversation_id: convId,
+          user_message: "What is our total sales amount across all transactions?"
+        }, null, 2);
+      }
+
+      // Sync Step 1.4 Python Code snippet
+      const step4Py = document.getElementById('step4PythonCode');
+      if (step4Py) {
+        step4Py.textContent = `# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell)
+import sys
+sys.path.append("/home/user/cymbal_gadgets/agentic_web_app")
+import config
+from looker_client import LookerClient
+
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+result = client.chat(conversation_id="${convId}", user_message="What is our total sales amount across all transactions?")
+print("🧠 Thoughts:", result.get("thoughts", []))
+print("💻 Query Spec:", result.get("query", ""))
+print("📊 Data:", result.get("data", []))
+print("📝 Summary:", result.get("final_response", ""))
+
+# Option B: Looker Python SDK (Requires: pip install looker-sdk)
+# response_stream = sdk.conversational_analytics_chat(
+#     body=models40.ConversationalAnalyticsChatRequest(
+#         conversation_id="${convId}",
+#         user_message="What is our total sales amount across all transactions?"
+#     )
+# )
+# for msg in response_stream:
+#     if msg.system_message and msg.system_message.text:
+#         print(f"[{msg.system_message.text.text_type}]:", msg.system_message.text.parts)`;
+      }
+
+      // Sync Top Session Banner
+      if (sessionDisplay) {
+        sessionDisplay.textContent = `${convId.substring(0, 10)}...`;
+        sessionDisplay.title = convId;
+      }
+
+      // Sync Task 5 Resource Cleanup input
+      const cleanupConvInput = document.getElementById('cleanupConvIdInput');
+      if (cleanupConvInput && cleanupConvInput.value !== convId) {
+        cleanupConvInput.value = convId;
+      }
+    }
+
+    function clearRememberedConversationId() {
+      try {
+        localStorage.removeItem('looker_conversation_id');
+      } catch (e) {}
+      currentConversationId = null;
+
+      const step3ConvIdInput = document.getElementById('step3ConvIdInput');
+      if (step3ConvIdInput) step3ConvIdInput.value = '';
+
+      const step4ConvIdDisplay = document.getElementById('step4ConvIdDisplay');
+      if (step4ConvIdDisplay) {
+        step4ConvIdDisplay.textContent = 'Not created yet (run Step 3)';
+        step4ConvIdDisplay.className = 'font-mono bg-white px-1.5 py-0.5 rounded border border-emerald-200 text-slate-800 truncate';
+      }
+
+      const copyStep4ConvBtn = document.getElementById('copyStep4ConvBtn');
+      if (copyStep4ConvBtn) copyStep4ConvBtn.classList.add('hidden');
+
+      const step4RequestBodyCode = document.getElementById('step4RequestBodyCode');
+      if (step4RequestBodyCode) {
+        step4RequestBodyCode.textContent = JSON.stringify({
+          conversation_id: "<YOUR_CONVERSATION_ID_FROM_STEP_1.3>",
+          user_message: "What is our total sales amount across all transactions?"
+        }, null, 2);
+      }
+
+      const step4Py = document.getElementById('step4PythonCode');
+      if (step4Py) {
+        step4Py.textContent = `# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell)
+import sys
+sys.path.append("/home/user/cymbal_gadgets/agentic_web_app")
+import config
+from looker_client import LookerClient
+
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+result = client.chat(conversation_id=conv["id"], user_message="What is our total sales amount across all transactions?")
+print("🧠 Thoughts:", result.get("thoughts", []))
+print("💻 Query Spec:", result.get("query", ""))
+print("📊 Data:", result.get("data", []))
+print("📝 Summary:", result.get("final_response", ""))
+
+# Option B: Looker Python SDK (Requires: pip install looker-sdk)
+# response_stream = sdk.conversational_analytics_chat(
+#     body=models40.ConversationalAnalyticsChatRequest(
+#         conversation_id=conversation.id,
+#         user_message="What is our total sales amount across all transactions?"
+#     )
+# )
+# for msg in response_stream:
+#     if msg.system_message and msg.system_message.text:
+#         print(f"[{msg.system_message.text.text_type}]:", msg.system_message.text.parts)`;
+      }
+
+      if (sessionDisplay) {
+        sessionDisplay.textContent = 'None';
+        sessionDisplay.removeAttribute('title');
+      }
+
+      const cleanupConvInput = document.getElementById('cleanupConvIdInput');
+      if (cleanupConvInput) cleanupConvInput.value = '';
+
+      const step3DirectConvStatus = document.getElementById('step3DirectConvStatus');
+      if (step3DirectConvStatus) step3DirectConvStatus.classList.add('hidden');
+
+      const step3AccordionConvStatus = document.getElementById('step3AccordionConvStatus');
+      if (step3AccordionConvStatus) step3AccordionConvStatus.classList.add('hidden');
     }
 
     function copyRememberedAgentId(btn) {
       if (!currentAgentId) return;
-      navigator.clipboard.writeText(currentAgentId);
-      const original = btn.innerHTML;
-      btn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Copied!</span>';
-      setTimeout(() => btn.innerHTML = original, 2000);
+      copyToClipboard(currentAgentId, btn);
     }
 
     function copyCurrentAgentId(btn) {
@@ -2211,18 +2445,15 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
         alert("Please set or create an Agent in Step 1 first!");
         return;
       }
-      navigator.clipboard.writeText(currentAgentId);
-      const original = btn.innerHTML;
-      btn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Copied!</span>';
-      setTimeout(() => btn.innerHTML = original, 2000);
+      copyToClipboard(currentAgentId, btn);
     }
 
     function copyCurrentConvId(btn) {
-      if (!currentConversationId) return;
-      navigator.clipboard.writeText(currentConversationId);
-      const original = btn.innerHTML;
-      btn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Copied!</span>';
-      setTimeout(() => btn.innerHTML = original, 2000);
+      if (!currentConversationId) {
+        alert("No active conversation session yet. Please create or paste a Conversation ID in Step 1.3 first!");
+        return;
+      }
+      copyToClipboard(currentConversationId, btn);
     }
 
     function selectAgent(agentId) {
@@ -2260,25 +2491,9 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
         });
         const data = await res.json();
         if (data.id) {
-          currentConversationId = data.id;
-          sessionDisplay.textContent = `${data.id.substring(0, 10)}...`;
-
-          const step4ConvIdDisplay = document.getElementById('step4ConvIdDisplay');
-          if (step4ConvIdDisplay) step4ConvIdDisplay.textContent = data.id;
-          const copyStep4ConvBtn = document.getElementById('copyStep4ConvBtn');
-          if (copyStep4ConvBtn) copyStep4ConvBtn.classList.remove('hidden');
-          const step4RequestBodyCode = document.getElementById('step4RequestBodyCode');
-          if (step4RequestBodyCode) {
-            step4RequestBodyCode.textContent = JSON.stringify({
-              conversation_id: data.id,
-              user_message: "What is our total sales amount across all transactions?"
-            }, null, 2);
-          }
-
-          const cleanupConvInput = document.getElementById('cleanupConvIdInput');
-          if (cleanupConvInput) {
-            cleanupConvInput.value = data.id;
-          }
+          setRememberedConversationId(data.id, true);
+        } else {
+          sessionDisplay.textContent = "Error";
         }
       } catch (err) {
         sessionDisplay.textContent = "Error";
@@ -2703,78 +2918,94 @@ client.update_agent("${agentId}", {"golden_query_ids": [gq["id"]]})`;
         });
       }
 
-      // Step 3: 1-Click Create Session Listener
+      // Step 3: Conversation Session Creator & Input Listeners
+      const step3ConvIdInput = document.getElementById('step3ConvIdInput');
+      if (step3ConvIdInput) {
+        step3ConvIdInput.addEventListener('input', (e) => {
+          setRememberedConversationId(e.target.value.trim());
+        });
+        step3ConvIdInput.addEventListener('change', (e) => {
+          setRememberedConversationId(e.target.value.trim());
+        });
+      }
+
+      async function triggerCreateConversation(btnEl, statusEl) {
+        const targetId = currentAgentId || (task1AgentIdInput ? task1AgentIdInput.value.trim() : '');
+        if (!targetId) {
+          alert("Please remember or create an Agent in Step 1 first!");
+          return;
+        }
+
+        const originalBtnHtml = btnEl ? btnEl.innerHTML : '';
+        if (btnEl) {
+          btnEl.disabled = true;
+          btnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Creating...';
+        }
+        if (statusEl) {
+          statusEl.className = 'text-xs p-1.5 rounded-lg bg-slate-100 text-slate-700';
+          statusEl.textContent = 'Calling POST /conversations on Looker...';
+          statusEl.classList.remove('hidden');
+        }
+
+        try {
+          const res = await fetch('/api/conversations', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              agent_id: targetId,
+              name: 'Cymbal Retail Session - Student Portal'
+            })
+          });
+          const data = await res.json();
+          if (res.ok && data.id) {
+            setRememberedConversationId(data.id, true);
+
+            if (statusEl) {
+              statusEl.className = 'text-xs p-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold';
+              statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Session created: <span class="font-mono text-purple-700">${data.id}</span> (Populated into Step 4)`;
+            }
+            const otherStatusEl = (statusEl && statusEl.id === 'step3DirectConvStatus') 
+              ? document.getElementById('step3AccordionConvStatus') 
+              : document.getElementById('step3DirectConvStatus');
+            if (otherStatusEl) {
+              otherStatusEl.className = 'text-xs p-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold';
+              otherStatusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Session created: <span class="font-mono text-purple-700">${data.id}</span> (Populated into Step 4)`;
+              otherStatusEl.classList.remove('hidden');
+            }
+          } else {
+            if (statusEl) {
+              statusEl.className = 'text-xs p-1.5 rounded-lg bg-rose-50 text-rose-800 border border-rose-200';
+              statusEl.textContent = data.error || 'Failed to create conversation session';
+            }
+          }
+        } catch (err) {
+          if (statusEl) {
+            statusEl.className = 'text-xs p-1.5 rounded-lg bg-rose-50 text-rose-800 border border-rose-200';
+            statusEl.textContent = err.message;
+          }
+        } finally {
+          if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.innerHTML = originalBtnHtml;
+          }
+        }
+      }
+
+      // Step 3: Direct 1-Click Create Session Button
+      const step3DirectCreateBtn = document.getElementById('step3DirectCreateBtn');
+      const step3DirectConvStatus = document.getElementById('step3DirectConvStatus');
+      if (step3DirectCreateBtn) {
+        step3DirectCreateBtn.addEventListener('click', () => {
+          triggerCreateConversation(step3DirectCreateBtn, step3DirectConvStatus);
+        });
+      }
+
+      // Step 3: Accordion Create Session Button
       const step3CreateConvBtn = document.getElementById('step3CreateConvBtn');
-      const step3ConvStatus = document.getElementById('step3ConvStatus');
-      const step4ConvIdDisplay = document.getElementById('step4ConvIdDisplay');
-      const copyStep4ConvBtn = document.getElementById('copyStep4ConvBtn');
-      const step4RequestBodyCode = document.getElementById('step4RequestBodyCode');
-
+      const step3AccordionConvStatus = document.getElementById('step3AccordionConvStatus');
       if (step3CreateConvBtn) {
-        step3CreateConvBtn.addEventListener('click', async () => {
-          const targetId = currentAgentId || (task1AgentIdInput ? task1AgentIdInput.value.trim() : '');
-          if (!targetId) {
-            alert("Please remember or create an Agent in Step 1 first!");
-            return;
-          }
-
-          step3CreateConvBtn.disabled = true;
-          step3CreateConvBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating...';
-          if (step3ConvStatus) {
-            step3ConvStatus.className = 'text-xs p-1.5 rounded-lg bg-slate-100 text-slate-700';
-            step3ConvStatus.textContent = 'Calling POST /conversations on Looker...';
-            step3ConvStatus.classList.remove('hidden');
-          }
-
-          try {
-            const res = await fetch('/api/conversations', {
-              method: 'POST',
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify({
-                agent_id: targetId,
-                name: 'Cymbal Retail Session - Student Portal'
-              })
-            });
-            const data = await res.json();
-            if (res.ok && data.id) {
-              currentConversationId = data.id;
-              sessionDisplay.textContent = `${data.id.substring(0, 10)}...`;
-
-              const cleanupConvInput = document.getElementById('cleanupConvIdInput');
-              if (cleanupConvInput) cleanupConvInput.value = data.id;
-
-              if (step4ConvIdDisplay) {
-                step4ConvIdDisplay.textContent = data.id;
-              }
-              if (copyStep4ConvBtn) {
-                copyStep4ConvBtn.classList.remove('hidden');
-              }
-              if (step4RequestBodyCode) {
-                step4RequestBodyCode.textContent = JSON.stringify({
-                  conversation_id: data.id,
-                  user_message: "What is our total sales amount across all transactions?"
-                }, null, 2);
-              }
-
-              if (step3ConvStatus) {
-                step3ConvStatus.className = 'text-xs p-1.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold';
-                step3ConvStatus.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Session created: <span class="font-mono text-purple-700">${data.id}</span> (Populated into Step 4)`;
-              }
-            } else {
-              if (step3ConvStatus) {
-                step3ConvStatus.className = 'text-xs p-1.5 rounded-lg bg-rose-50 text-rose-800 border border-rose-200';
-                step3ConvStatus.textContent = data.error || 'Failed to create conversation session';
-              }
-            }
-          } catch (err) {
-            if (step3ConvStatus) {
-              step3ConvStatus.className = 'text-xs p-1.5 rounded-lg bg-rose-50 text-rose-800 border border-rose-200';
-              step3ConvStatus.textContent = err.message;
-            }
-          } finally {
-            step3CreateConvBtn.disabled = false;
-            step3CreateConvBtn.innerHTML = '<i class="fa-solid fa-play text-[10px] mr-1"></i> Create Session (1-Click)';
-          }
+        step3CreateConvBtn.addEventListener('click', () => {
+          triggerCreateConversation(step3CreateConvBtn, step3AccordionConvStatus);
         });
       }
 

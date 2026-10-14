@@ -4,7 +4,7 @@
 **Prerequisites:** Familiarity with SQL, REST APIs, and basic JSON. **Zero prior Looker or LookML experience required!**  
 **Duration:** ~30 Minutes  
 **Track:** Google Cloud SME Academy &bull; Agentic & Data Analytics Track  
-**Companion Presentations:** [Google Slides (Standard Google Cloud Style)](https://docs.google.com/presentation/d/1looker-conversational-analytics-standard-gcp-deck/edit?usp=sharing) | [Interactive Presentation Slides](http://localhost:8080/presentation.html) | [Markdown Presentation Deck](PRESENTATION_LOOKER_CONVERSATIONAL_ANALYTICS.md)  
+**Companion Presentations:** [Google Slides (Standard Google Cloud Style)](https://docs.google.com/presentation/d/1Bl7_ApzMmlsCay9NbthnulxUMKXBpLlbUplNXAdqvsk/edit?slide=id.h1097fa95fc4670d5_0_647&resourcekey=0-G10zZ62rbmyYF_-4_1K6JA#slide=id.h1097fa95fc4670d5_0_647) | [Interactive Presentation Slides](http://localhost:8080/presentation.html) | [Markdown Presentation Deck](PRESENTATION_LOOKER_CONVERSATIONAL_ANALYTICS.md)  
 **Walkthrough Video:** [Looker Conversational Analytics API (YouTube)](https://www.youtube.com/watch?v=XyU90O49p8o) by Looker EMEA Customer Engineering  
 
 ## 🧭 Introduction for Data Engineers: Why Looker Conversational Analytics?
@@ -198,25 +198,44 @@ Students have **two completely equivalent pathways** to execute every step of Ta
 | **Pathway 2: Python Code Snippets** | Terminal / Script / Notebook | Programmatic execution using `looker_sdk` or zero-dependency `LookerClient`. | Students who want hands-on experience scripting against Looker CA APIs. |
 
 #### 📌 Where to Paste and Execute the Python Code:
-If you choose Pathway 2, you can run the provided Python snippets in any of these three places:
-1. **Google Cloud Shell Interactive REPL (Fastest):**
+If you choose Pathway 2, you can run the Python code in any of these convenient ways:
+
+1. **Ready-to-Run Standalone Script (Fastest & Zero Dependencies):**
+   * Execute the included standalone script directly in Cloud Shell (uses only standard Python libraries):
+     ```bash
+     cd /home/user/cymbal_gadgets
+     python3 create_agent.py
+     ```
+   * Or pass your custom name or credentials:
+     ```bash
+     python3 create_agent.py --name "Cymbal Retail Agent - Student 42"
+     ```
+2. **Google Cloud Shell Interactive REPL:**
    * In your Cloud Shell terminal, start an interactive Python 3 session:
      ```bash
      python3
      ```
-   * Copy the snippet from the guide or portal and paste it directly into the Python REPL prompt (`>>>`).
-2. **Cloud Shell Script File:**
+   * Copy **Option A (Zero-Dependency `LookerClient`)** snippet and paste it directly into the Python REPL prompt (`>>>`).
+3. **Cloud Shell Script File:**
    * In Cloud Shell, create a test script file:
      ```bash
      cd /home/user/cymbal_gadgets/agentic_web_app
      nano test_task1.py
      ```
-   * Paste the Python code, save (`Ctrl+O`, `Enter`, `Ctrl+X`), and execute:
+   * Paste Option A Python code, save (`Ctrl+O`, `Enter`, `Ctrl+X`), and execute:
      ```bash
      python3 test_task1.py
      ```
-3. **Jupyter / Vertex AI Workbench Notebook:**
+4. **Jupyter / Vertex AI Workbench Notebook:**
    * Create a new Python 3 notebook cell, paste the code snippet, and run the cell (`Shift+Enter`).
+
+> 💡 **Fixing `ModuleNotFoundError: No module named 'looker_sdk'` in Cloud Shell:**  
+> The default Cloud Shell environment does not include the third-party `looker-sdk` package. If you attempt `import looker_sdk` without installing it, Python throws `ModuleNotFoundError: No module named 'looker_sdk'`.  
+> * **Zero-Dependency Solution (Recommended):** Use **Option A (`LookerClient`)** or run `python3 create_agent.py`. It uses Python standard library `urllib` and works out-of-the-box without installing anything.  
+> * **SDK Solution:** If you wish to use the official Looker SDK, install it first via:  
+>   ```bash
+>   pip install looker-sdk
+>   ```
 
 ---
 
@@ -278,7 +297,37 @@ Clicking the direct link takes you directly to the `create_agent` method under t
 
 If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to create your agent:
 
-#### Option A: Using the Official Looker Python SDK (`looker_sdk`)
+#### Option A: Zero-Dependency LookerClient (Recommended — Works in Cloud Shell)
+This option uses Python's standard library (`urllib`) and requires **no external packages or pip installs**:
+
+```python
+import sys
+sys.path.append("/home/user/cymbal_gadgets/agentic_web_app")
+import config
+from looker_client import LookerClient
+
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+
+agent = client.create_agent(
+    name="Cymbal Retail Analytics Agent - Student 42",
+    description="Conversational BI agent providing governed retail insights",
+    model="cymbal_gadgets_boris",
+    explore="transactions",
+    instructions="- Always use Gross Margin Percentage for profitability questions."
+)
+
+print(f"✅ Created Agent ID: {agent['id']}")
+```
+
+> ⚡ **Even Simpler: Run the Standalone Script!**  
+> You can also run the ready-to-use script directly from your Cloud Shell prompt without copying Python code:  
+> ```bash
+> python3 create_agent.py
+> ```
+
+#### Option B: Looker Python SDK (Requires `pip install looker-sdk`)
+> ⚠️ **Note:** If you run this option without installing the SDK first, Python will report `ModuleNotFoundError: No module named 'looker_sdk'`. Run `pip install looker-sdk` before executing:
+
 ```python
 import looker_sdk
 from looker_sdk import models40
@@ -311,26 +360,6 @@ new_agent = sdk.create_agent(
 
 print(f"✅ Created Agent ID: {new_agent.id}")
 print(f"   Name: {new_agent.name}")
-```
-
-#### Option B: Using Zero-Dependency LookerClient (`urllib` / REST API)
-```python
-import sys
-sys.path.append("/home/user/cymbal_gadgets/agentic_web_app")
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-
-agent = client.create_agent(
-    name="Cymbal Retail Analytics Agent - Student 42",
-    description="Conversational BI agent providing governed retail insights",
-    model="cymbal_gadgets_boris",
-    explore="transactions",
-    instructions="- Always use Gross Margin Percentage for profitability questions."
-)
-
-print(f"✅ Created Agent ID: {agent['id']}")
 ```
 
 ---
@@ -407,7 +436,21 @@ Once the Golden Query is created, you must link its integer ID to your agent:
 
 If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to create and link the golden query:
 
-##### Option A: Using Official Looker Python SDK (`looker_sdk`)
+##### Option A: Zero-Dependency LookerClient (Recommended — Works in Cloud Shell)
+```python
+# 1. Create Golden Query
+gq = client.create_golden_query(
+    questions=["What is our total sales amount across all transactions?"],
+    answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
+)
+print(f"✅ Created Golden Query ID: {gq.get('id')}")
+
+# 2. Link to Agent
+client.update_agent(agent['id'], {"golden_query_ids": [gq["id"]]})
+print(f"✅ Linked Golden Query {gq['id']} to Agent {agent['id']}")
+```
+
+##### Option B: Looker Python SDK (Requires `pip install looker-sdk`)
 ```python
 # 1. Create Golden Query (Single question strictly required by Looker 4.0)
 golden_query = sdk.create_golden_query(
@@ -424,20 +467,6 @@ sdk.update_agent(
     body=models40.WriteAgent(golden_query_ids=[golden_query.id])
 )
 print(f"✅ Linked Golden Query {golden_query.id} to Agent {new_agent.id}")
-```
-
-##### Option B: Using Zero-Dependency LookerClient
-```python
-# 1. Create Golden Query
-gq = client.create_golden_query(
-    questions=["What is our total sales amount across all transactions?"],
-    answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
-)
-print(f"✅ Created Golden Query ID: {gq.get('id')}")
-
-# 2. Link to Agent
-client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})
-print(f"✅ Linked Golden Query {gq['id']} to Agent {agent_id}")
 ```
 
 ---
@@ -483,24 +512,24 @@ Looker manages stateful conversational threads on the server. Instead of forcing
 
 If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to initialize the session:
 
-##### Option A: Using Official Looker Python SDK (`looker_sdk`)
+##### Option A: Zero-Dependency LookerClient (Recommended — Works in Cloud Shell)
+```python
+conv = client.create_conversation(
+    agent_id=agent["id"],  # Or replace with your Step 1 Agent ID
+    name="Cymbal Gadgets Data Analysis Session"
+)
+print(f"✅ Created Conversation Session ID: {conv['id']}")
+```
+
+##### Option B: Looker Python SDK (Requires `pip install looker-sdk`)
 ```python
 conversation = sdk.create_conversation(
     body=models40.WriteConversation(
-        agent_id="YOUR_AGENT_ID",  # Replace with your Step 1 Agent ID
+        agent_id=new_agent.id,  # Or replace with your Step 1 Agent ID
         name="Cymbal Gadgets Data Analysis Session"
     )
 )
 print(f"✅ Created Conversation Session ID: {conversation.id}")
-```
-
-##### Option B: Using Zero-Dependency LookerClient
-```python
-conv = client.create_conversation(
-    agent_id="YOUR_AGENT_ID",  # Replace with your Step 1 Agent ID
-    name="Cymbal Gadgets Data Analysis Session"
-)
-print(f"✅ Created Conversation Session ID: {conv['id']}")
 ```
 
 ---
@@ -514,10 +543,10 @@ Before displaying the interactive web application chat interface, data engineers
 #### Step-by-Step: Run `conversational_analytics_chat` in API Explorer
 1. Navigate to `ConversationalAnalytics > conversational_analytics_chat` in Looker API Explorer.
 2. Click the **Run It** tab.
-3. In the **Request Body (`body`)** editor, paste your **`conversation_id` from Step 1.6** and a question:
+3. In the **Request Body (`body`)** editor, paste your **`conversation_id` from Step 1.7** and a question:
 ```json
 {
-  "conversation_id": "<YOUR_CONVERSATION_ID_FROM_STEP_1.6>",
+  "conversation_id": "<YOUR_CONVERSATION_ID_FROM_STEP_1.7>",
   "user_message": "What is our total sales amount across all transactions?"
 }
 ```
@@ -543,11 +572,24 @@ The API returns an array of structured event objects. Notice how Looker exposes 
 
 If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to submit your question and parse the 5-stage stream:
 
-##### Option A: Using Official Looker Python SDK (`looker_sdk`)
+##### Option A: Zero-Dependency LookerClient (Stream Parser — Recommended)
+```python
+result = client.chat(
+    conversation_id=conv["id"],  # Or pass conversation ID string
+    user_message="What is our total sales amount across all transactions?"
+)
+
+print("🧠 Agent Thought Steps :", len(result["thoughts"]))
+print("💻 Generated LookML Query:", result["query"])
+print("📊 Verified BigQuery Data:", result["data"])
+print("\n📝 Final Response:\n", result["final_response"])
+```
+
+##### Option B: Looker Python SDK (Requires `pip install looker-sdk`)
 ```python
 chat_messages = sdk.conversational_analytics_chat(
     body=models40.ConversationalAnalyticsChatRequest(
-        conversation_id="YOUR_CONVERSATION_ID",
+        conversation_id=conversation.id,
         user_message="What is our total sales amount across all transactions?"
     )
 )
@@ -563,22 +605,9 @@ for msg in chat_messages:
             print("Verified BigQuery Data:", sys_m.data.result)
 ```
 
-##### Option B: Using Zero-Dependency LookerClient (Stream Parser)
-```python
-result = client.chat(
-    conversation_id="YOUR_CONVERSATION_ID",
-    user_message="What is our total sales amount across all transactions?"
-)
-
-print("🧠 Agent Thought Steps :", len(result["thoughts"]))
-print("💻 Generated LookML Query:", result["query"])
-print("📊 Verified BigQuery Data:", result["data"])
-print("\n📝 Final Response:\n", result["final_response"])
-```
-
 ---
 
-### 1.8 🚩 CHECKPOINT 1: Verify Agent Creation (20 Points)
+### 1.9 🚩 CHECKPOINT 1: Verify Agent Creation (20 Points)
 **Goal:** Confirm your agent exists and is queryable on the Looker instance.
 
 * **In the Web App:** Navigate to `http://localhost:8080`, enter your generated **Agent ID** into the **Task 1** checkpoint field, and click **Check my progress** to earn **+20 points**!
