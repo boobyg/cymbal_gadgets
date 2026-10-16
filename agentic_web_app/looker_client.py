@@ -22,22 +22,54 @@ logger = logging.getLogger("LookerClient")
 PLACEHOLDER_CRED = "specify your own user id / secret"
 
 
+class _FallbackConfig:
+    """Fallback config object so referencing config.LOOKER_* never raises NameError."""
+    LOOKER_BASE_URL = os.environ.get("LOOKER_BASE_URL", "https://ceworkshops.cloud.looker.com")
+    LOOKER_CLIENT_ID = os.environ.get("LOOKER_CLIENT_ID", "")
+    LOOKER_CLIENT_SECRET = os.environ.get("LOOKER_CLIENT_SECRET", "")
+
+
+try:
+    import builtins
+    if not hasattr(builtins, "config"):
+        try:
+            import config as _cfg
+            builtins.config = _cfg
+        except Exception:
+            builtins.config = _FallbackConfig
+except Exception:
+    pass
+
+
 class LookerClient:
-    def __init__(self, base_url: str, client_id: str, client_secret: str):
-        self.base_url = (base_url or "https://ceworkshops.cloud.looker.com").rstrip("/")
-        self.client_id = (client_id or "").strip()
-        self.client_secret = (client_secret or "").strip()
+    def __init__(self, base_url: str = "", client_id: str = "", client_secret: str = ""):
+        self.base_url = (base_url or os.environ.get("LOOKER_BASE_URL", "https://ceworkshops.cloud.looker.com")).rstrip("/")
+        self.client_id = (client_id or os.environ.get("LOOKER_CLIENT_ID", "")).strip()
+        self.client_secret = (client_secret or os.environ.get("LOOKER_CLIENT_SECRET", "")).strip()
         self.access_token = None
         self.token_expiry = 0
         self._current_user = None
         self._agent_id_bridge = {}
         self._conv_id_bridge = {}
         self._deleted_agent_ids = set()
+        if (
+            not self.client_id
+            or not self.client_secret
+            or self.client_id == PLACEHOLDER_CRED
+            or self.client_secret == PLACEHOLDER_CRED
+        ):
+            self._reload_credentials_from_env()
+
+    @classmethod
+    def from_env(cls) -> "LookerClient":
+        """Create a LookerClient instance automatically configured from .env or environment."""
+        return cls()
 
     def _reload_credentials_from_env(self):
         """Reload credentials from agentic_web_app/.env if current credentials are empty or placeholders."""
         env_candidates = [
             Path(__file__).resolve().parent / ".env",
+            Path.home() / "cymbal_gadgets" / "agentic_web_app" / ".env",
             Path.cwd() / ".env",
             Path.cwd() / "agentic_web_app" / ".env"
         ]

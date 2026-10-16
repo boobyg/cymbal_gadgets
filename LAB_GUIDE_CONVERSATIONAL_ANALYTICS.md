@@ -306,13 +306,7 @@ This option uses Python's standard library (`urllib`) and requires **no external
 
 ```python
 # Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; agent = client.create_agent(
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; agent = client.create_agent(
     name=f"Cymbal Retail Analytics Agent - {student_name}",
     description="Conversational BI agent providing governed retail insights",
     model="cymbal_gadgets_boris",
@@ -445,17 +439,10 @@ If you prefer programmatic execution rather than using API Explorer, **alternati
 ##### Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 ```python
 # Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-gq = client.create_golden_query(
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); agent_id = globals().get("agent_id") or input("Enter your Step 1 Agent ID: ").strip(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
-)
-student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; client.update_agent(agent_id, {
+); client.update_agent(agent_id, {
     "name": f"Cymbal Retail Analytics Agent - {student_name}",
     "golden_query_ids": [gq["id"]],
     "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}]
@@ -529,16 +516,10 @@ If you prefer programmatic execution rather than using API Explorer, **alternati
 ##### Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 ```python
 # Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; conv = client.create_conversation(
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); agent_id = globals().get("agent_id") or input("Enter your Step 1 Agent ID: ").strip(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; conv = client.create_conversation(
     agent_id=agent_id,
     name=f"Cymbal Retail Session - {student_name}"
-); print("Conversation ID:", conv["id"])
+); conv_id = conv["id"]; print("Conversation ID:", conv_id)
 ```
 
 ##### Option B: Looker Python SDK (Requires `pip install looker-sdk`)
@@ -594,15 +575,10 @@ If you prefer programmatic execution rather than using API Explorer, **alternati
 ##### Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 ```python
 # Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-result = client.chat(
-    conversation_id=conv["id"],  # Or pass conversation ID string
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); conv_id = globals().get("conv_id") or globals().get("conv", {}).get("id") or input("Enter your Step 3 Conversation ID: ").strip(); result = client.chat(
+    conversation_id=conv_id,
     user_message="What is our total sales amount across all transactions?"
-)
-
-print("🧠 Agent Thought Steps :", len(result["thoughts"]))
-print("💻 Generated LookML Query:", result["query"])
-print("📊 Verified BigQuery Data:", result["data"])
-print("\n📝 Final Response:\n", result["final_response"])
+); print("🧠 Thoughts:", result.get("thoughts", [])); print("💻 Query Spec:", result.get("query", "")); print("📊 Data:", result.get("data", [])); print("📝 Summary:", result.get("final_response", ""))
 ```
 
 ##### Option B: Looker Python SDK (Requires `pip install looker-sdk`)
@@ -814,25 +790,15 @@ If you prefer programmatic execution rather than using API Explorer, **alternati
 ##### Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 ```python
 # Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser('~/cymbal_gadgets/agentic_web_app'))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-agent_id = 'YOUR_AGENT_ID'  # Or leave as agent_id if already set in your session
-
-new_instructions = """
-- Always begin your answer with '🌟 Cymbal Executive Summary:'
-- Format all currency metrics in EUR with thousands separators (e.g. €1,234,567)
-- If asked about gross margin, always state the exact percentage with two decimals
-- Keep explanations under 3 sentences
-"""
-
-student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; updated = client.update_agent(agent_id, {
-    'name': f'Cymbal Retail Analytics Agent - {student_name}',
-    'sources': [{'model': 'cymbal_gadgets_boris', 'explore': 'transactions'}],
-    'context': {'instructions': new_instructions, 'show_analytical_details': True}
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); agent_id = globals().get("agent_id") or input("Enter your Agent ID: ").strip(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; new_instructions = (
+    "- Always begin your answer with '🌟 Cymbal Executive Summary:'\n"
+    "- Format all currency metrics in EUR with thousands separators (e.g. €1,234,567)\n"
+    "- If asked about gross margin, always state the exact percentage with two decimals\n"
+    "- Keep explanations under 3 sentences"
+); updated = client.update_agent(agent_id, {
+    "name": f"Cymbal Retail Analytics Agent - {student_name}",
+    "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}],
+    "context": {"instructions": new_instructions, "show_analytical_details": True}
 }); print(f"✅ Successfully updated instructions for: {updated.get('name')}")
 ```
 
@@ -867,10 +833,10 @@ student_name = input("Enter your First Name, Last Name: ").strip() or "First Nam
 ```bash
 python3 -c "
 import os, sys; sys.path.insert(0, os.path.expanduser('~/cymbal_gadgets/agentic_web_app'))
-import config; from looker_client import LookerClient
+from looker_client import LookerClient
+agent_id = input('Enter your Agent ID: ').strip()
 student_name = input('Enter your First Name, Last Name: ').strip() or 'First Name Last Name'
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-agent_id = 'YOUR_AGENT_ID'
+client = LookerClient()
 new_instructions = '''- Always begin your answer with \'🌟 Cymbal Executive Summary:\'
 - Format all currency metrics in EUR with thousands separators (e.g. €1,234,567)
 - If asked about gross margin, always state the exact percentage with two decimals

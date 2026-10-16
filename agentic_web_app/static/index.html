@@ -502,13 +502,7 @@ LOOKER_CLIENT_SECRET=your_prework_looker_api_client_secret</pre>
               </div>
               <div class="relative group">
                 <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; agent = client.create_agent(
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; agent = client.create_agent(
     name=f"Cymbal Retail Analytics Agent - {student_name}",
     description="Conversational BI agent providing governed retail insights for Cymbal Gadgets",
     model="cymbal_gadgets_boris",
@@ -709,17 +703,10 @@ student_name = input("Enter your First Name, Last Name: ").strip() or "First Nam
               </div>
               <div class="relative group">
                 <pre id="step2PythonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-gq = client.create_golden_query(
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); agent_id = globals().get("agent_id") or input("Enter your Step 1 Agent ID: ").strip(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
-)
-student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; client.update_agent(agent_id, {
+); client.update_agent(agent_id, {
     "name": f"Cymbal Retail Analytics Agent - {student_name}",
     "golden_query_ids": [gq["id"]],
     "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}]
@@ -784,16 +771,10 @@ student_name = input("Enter your First Name, Last Name: ").strip() or "First Nam
               </div>
               <div class="relative group">
                 <pre id="step3PythonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; conv = client.create_conversation(
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); agent_id = globals().get("agent_id") or input("Enter your Step 1 Agent ID: ").strip(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; conv = client.create_conversation(
     agent_id=agent_id,
     name=f"Cymbal Retail Session - {student_name}"
-); print("Conversation ID:", conv["id"])</pre>
+); conv_id = conv["id"]; print("Conversation ID:", conv_id)</pre>
                 <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
               </div>
             </div>
@@ -885,28 +866,10 @@ student_name = input("Enter your First Name, Last Name: ").strip() or "First Nam
               </div>
               <div class="relative group">
                 <pre id="step4PythonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-result = client.chat(conversation_id=conv["id"], user_message="What is our total sales amount across all transactions?")
-print("🧠 Thoughts:", result.get("thoughts", []))
-print("💻 Query Spec:", result.get("query", ""))
-print("📊 Data:", result.get("data", []))
-print("📝 Summary:", result.get("final_response", ""))
-
-# Option B: Looker Python SDK (Requires: pip install looker-sdk)
-# response_stream = sdk.conversational_analytics_chat(
-#     body=models40.ConversationalAnalyticsChatRequest(
-#         conversation_id=conversation.id,
-#         user_message="What is our total sales amount across all transactions?"
-#     )
-# )
-# for msg in response_stream:
-#     if msg.system_message and msg.system_message.text:
-#         print(f"[{msg.system_message.text.text_type}]:", msg.system_message.text.parts)</pre>
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); conv_id = globals().get("conv_id") or globals().get("conv", {}).get("id") or input("Enter your Step 3 Conversation ID: ").strip(); result = client.chat(
+    conversation_id=conv_id,
+    user_message="What is our total sales amount across all transactions?"
+); print("🧠 Thoughts:", result.get("thoughts", [])); print("💻 Query Spec:", result.get("query", "")); print("📊 Data:", result.get("data", [])); print("📝 Summary:", result.get("final_response", ""))</pre>
                 <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
               </div>
             </div>
@@ -1342,14 +1305,8 @@ print("📝 Summary:", result.get("final_response", ""))
               <span class="text-[11px] text-rose-800 font-normal">Execute in Cloud Shell (<code class="text-indigo-600 font-mono">python3</code>)</span>
             </div>
             <div class="relative group">
-              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; client.update_agent(agent_id, {
+              <pre id="step4TuningPythonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); agent_id = globals().get("agent_id") or input("Enter your Step 1 Agent ID: ").strip(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; client.update_agent(agent_id, {
     "name": f"Cymbal Retail Analytics Agent - {student_name}",
     "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}],
     "context": {
@@ -1523,22 +1480,13 @@ student_name = input("Enter your First Name, Last Name: ").strip() or "First Nam
               <span class="text-[11px] text-slate-500 font-normal">Cloud Shell CLI (<code class="text-teal-700 font-mono">python3 cleanup.py</code>) or Python REPL</span>
             </div>
             <div class="relative group">
-              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-from looker_client import LookerClient
-import config
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-results = client.cleanup_lab_resources(
-    agent_id="&lt;YOUR_AGENT_ID&gt;",
-    conversation_id="&lt;YOUR_CONVERSATION_ID&gt;",
-    golden_query_id=None  # or pass integer GQ ID
-)
-print("Teardown status:", results)
-
-# Option B: Run the standalone cleanup script in Cloud Shell bash:
-# python3 cleanup.py &lt;AGENT_ID&gt; &lt;CONVERSATION_ID&gt; &lt;GOLDEN_QUERY_ID&gt;</pre>
+              <pre id="step5CleanupPythonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
+# (Or in bash: python3 cleanup.py &lt;AGENT_ID&gt; &lt;CONVERSATION_ID&gt; &lt;GOLDEN_QUERY_ID&gt;)
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); results = client.cleanup_lab_resources(
+    agent_id=globals().get("agent_id") or input("Enter Agent ID to delete: ").strip(),
+    conversation_id=globals().get("conv_id") or globals().get("conv", {}).get("id") or None,
+    golden_query_id=globals().get("gq", {}).get("id") or None
+); print("Teardown status:", results)</pre>
               <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
             </div>
           </div>
@@ -2188,17 +2136,10 @@ print("Teardown status:", results)
       const step2Py = document.getElementById('step2PythonCode');
       if (step2Py) {
         step2Py.textContent = `# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-gq = client.create_golden_query(
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
-)
-student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; client.update_agent("${agentId}", {
+); client.update_agent("${agentId}", {
     "name": f"Cymbal Retail Analytics Agent - {student_name}",
     "golden_query_ids": [gq["id"]],
     "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}]
@@ -2209,16 +2150,26 @@ student_name = input("Enter your First Name, Last Name: ").strip() or "First Nam
       const step3Py = document.getElementById('step3PythonCode');
       if (step3Py) {
         step3Py.textContent = `# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; conv = client.create_conversation(
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; conv = client.create_conversation(
     agent_id="${agentId}",
     name=f"Cymbal Retail Session - {student_name}"
-); print("Conversation ID:", conv["id"])`;
+); conv_id = conv["id"]; print("Conversation ID:", conv_id)`;
+      }
+
+      // Dynamically update Task 4 Tuning Python code snippet
+      const step4TuningPy = document.getElementById('step4TuningPythonCode');
+      if (step4TuningPy) {
+        step4TuningPy.textContent = `# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); agent_id = "${agentId}"; student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; new_instructions = (
+    "- Always begin your answer with '🌟 Cymbal Executive Summary:'\\n"
+    "- Format all currency metrics in EUR with thousands separators (e.g. €1,234,567)\\n"
+    "- If asked about gross margin, always state the exact percentage with two decimals\\n"
+    "- Keep explanations under 3 sentences"
+); updated = client.update_agent(agent_id, {
+    "name": f"Cymbal Retail Analytics Agent - {student_name}",
+    "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}],
+    "context": {"instructions": new_instructions, "show_analytical_details": True}
+}); print(f"✅ Successfully updated instructions for: {updated.get('name')}")`;
       }
 
       if (agentSelect) {
@@ -2295,17 +2246,10 @@ student_name = input("Enter your First Name, Last Name: ").strip() or "First Nam
       const step2Py = document.getElementById('step2PythonCode');
       if (step2Py) {
         step2Py.textContent = `# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-gq = client.create_golden_query(
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); agent_id = globals().get("agent_id") or input("Enter your Step 1 Agent ID: ").strip(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
-)
-student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; client.update_agent(agent_id, {
+); client.update_agent(agent_id, {
     "name": f"Cymbal Retail Analytics Agent - {student_name}",
     "golden_query_ids": [gq["id"]],
     "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}]
@@ -2315,16 +2259,25 @@ student_name = input("Enter your First Name, Last Name: ").strip() or "First Nam
       const step3Py = document.getElementById('step3PythonCode');
       if (step3Py) {
         step3Py.textContent = `# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; conv = client.create_conversation(
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); agent_id = globals().get("agent_id") or input("Enter your Step 1 Agent ID: ").strip(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; conv = client.create_conversation(
     agent_id=agent_id,
     name=f"Cymbal Retail Session - {student_name}"
-); print("Conversation ID:", conv["id"])`;
+); conv_id = conv["id"]; print("Conversation ID:", conv_id)`;
+      }
+
+      const step4TuningPy = document.getElementById('step4TuningPythonCode');
+      if (step4TuningPy) {
+        step4TuningPy.textContent = `# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); agent_id = globals().get("agent_id") or input("Enter your Agent ID: ").strip(); student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"; new_instructions = (
+    "- Always begin your answer with '🌟 Cymbal Executive Summary:'\\n"
+    "- Format all currency metrics in EUR with thousands separators (e.g. €1,234,567)\\n"
+    "- If asked about gross margin, always state the exact percentage with two decimals\\n"
+    "- Keep explanations under 3 sentences"
+); updated = client.update_agent(agent_id, {
+    "name": f"Cymbal Retail Analytics Agent - {student_name}",
+    "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}],
+    "context": {"instructions": new_instructions, "show_analytical_details": True}
+}); print(f"✅ Successfully updated instructions for: {updated.get('name')}")`;
       }
 
       clearRememberedConversationId();
@@ -2374,28 +2327,10 @@ student_name = input("Enter your First Name, Last Name: ").strip() or "First Nam
       const step4Py = document.getElementById('step4PythonCode');
       if (step4Py) {
         step4Py.textContent = `# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-result = client.chat(conversation_id="${convId}", user_message="What is our total sales amount across all transactions?")
-print("🧠 Thoughts:", result.get("thoughts", []))
-print("💻 Query Spec:", result.get("query", ""))
-print("📊 Data:", result.get("data", []))
-print("📝 Summary:", result.get("final_response", ""))
-
-# Option B: Looker Python SDK (Requires: pip install looker-sdk)
-# response_stream = sdk.conversational_analytics_chat(
-#     body=models40.ConversationalAnalyticsChatRequest(
-#         conversation_id="${convId}",
-#         user_message="What is our total sales amount across all transactions?"
-#     )
-# )
-# for msg in response_stream:
-#     if msg.system_message and msg.system_message.text:
-#         print(f"[{msg.system_message.text.text_type}]:", msg.system_message.text.parts)`;
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); result = client.chat(
+    conversation_id="${convId}",
+    user_message="What is our total sales amount across all transactions?"
+); print("🧠 Thoughts:", result.get("thoughts", [])); print("💻 Query Spec:", result.get("query", "")); print("📊 Data:", result.get("data", [])); print("📝 Summary:", result.get("final_response", ""))`;
       }
 
       // Sync Top Session Banner
@@ -2440,28 +2375,10 @@ print("📝 Summary:", result.get("final_response", ""))
       const step4Py = document.getElementById('step4PythonCode');
       if (step4Py) {
         step4Py.textContent = `# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-result = client.chat(conversation_id=conv["id"], user_message="What is our total sales amount across all transactions?")
-print("🧠 Thoughts:", result.get("thoughts", []))
-print("💻 Query Spec:", result.get("query", ""))
-print("📊 Data:", result.get("data", []))
-print("📝 Summary:", result.get("final_response", ""))
-
-# Option B: Looker Python SDK (Requires: pip install looker-sdk)
-# response_stream = sdk.conversational_analytics_chat(
-#     body=models40.ConversationalAnalyticsChatRequest(
-#         conversation_id=conversation.id,
-#         user_message="What is our total sales amount across all transactions?"
-#     )
-# )
-# for msg in response_stream:
-#     if msg.system_message and msg.system_message.text:
-#         print(f"[{msg.system_message.text.text_type}]:", msg.system_message.text.parts)`;
+import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app")); from looker_client import LookerClient; client = LookerClient(); conv_id = globals().get("conv_id") or globals().get("conv", {}).get("id") or input("Enter your Step 3 Conversation ID: ").strip(); result = client.chat(
+    conversation_id=conv_id,
+    user_message="What is our total sales amount across all transactions?"
+); print("🧠 Thoughts:", result.get("thoughts", [])); print("💻 Query Spec:", result.get("query", "")); print("📊 Data:", result.get("data", [])); print("📝 Summary:", result.get("final_response", ""))`;
       }
 
       if (sessionDisplay) {
