@@ -63,7 +63,13 @@ def main():
 
     model_name = config.DEFAULT_MODEL or "cymbal_gadgets_boris"
     explore_name = config.DEFAULT_EXPLORE or "transactions"
-    agent_name = "Cymbal Retail Analytics Agent - Student"
+    try:
+        student_name = input("\nPlease enter your First Name, Last Name: ").strip()
+    except (KeyboardInterrupt, EOFError):
+        student_name = ""
+    if not student_name:
+        student_name = "First Name Last Name"
+    agent_name = f"Cymbal Retail Analytics Agent - {student_name}"
     instructions = (
         "- Always use Gross Margin Percentage when asked about profitability, margin, or sales performance.\n"
         "- When asked for trends over time, group by transaction date or transaction month.\n"

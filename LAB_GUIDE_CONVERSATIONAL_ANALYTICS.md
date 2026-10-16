@@ -299,7 +299,7 @@ Clicking the direct link takes you directly to the `create_agent` method under t
 
 ### 1.5 🐍 Alternatively use this Python Code Snippet: Create Agent
 
-If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to create your agent:
+If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to create your agent (you will be prompted to enter your First Name, Last Name before the script creates the agent):
 
 #### Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 This option uses Python's standard library (`urllib`) and requires **no external packages or pip installs**:
@@ -311,10 +311,12 @@ sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
 import config
 from looker_client import LookerClient
 
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 
 agent = client.create_agent(
-    name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
+    name=f"Cymbal Retail Analytics Agent - {student_name}",
     description="Conversational BI agent providing governed retail insights",
     model="cymbal_gadgets_boris",
     explore="transactions",
@@ -325,7 +327,7 @@ print(f"✅ Created Agent ID: {agent['id']}")
 ```
 
 > ⚡ **Even Simpler: Run the Standalone Script!**  
-> You can also run the ready-to-use script directly from your Cloud Shell prompt without copying Python code:  
+> You can also run the ready-to-use script directly from your Cloud Shell prompt without copying Python code (it will prompt you for your First Name, Last Name):  
 > ```bash
 > python3 ~/cymbal_gadgets/create_agent.py
 > ```
@@ -337,12 +339,14 @@ print(f"✅ Created Agent ID: {agent['id']}")
 import looker_sdk
 from looker_sdk import models40
 
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+
 # Initialize Looker SDK (reads credentials from looker.ini or environment variables)
 sdk = looker_sdk.init40()
 
 new_agent = sdk.create_agent(
     body=models40.WriteAgent(
-        name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
+        name=f"Cymbal Retail Analytics Agent - {student_name}",
         description="Conversational BI agent providing governed retail insights for Cymbal Gadgets",
         sources=[
             models40.AgentSource(
@@ -428,6 +432,12 @@ Once the Golden Query is created, you must link its integer ID to your agent:
 ```json
 {
   "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
+  "sources": [
+    {
+      "model": "cymbal_gadgets_boris",
+      "explore": "transactions"
+    }
+  ],
   "golden_query_ids": [<YOUR_GOLDEN_QUERY_ID>]
 }
 ```
@@ -440,11 +450,13 @@ Once the Golden Query is created, you must link its integer ID to your agent:
 
 #### 🐍 Alternatively use this Python Code Snippet: Create & Link Golden Query
 
-If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to create and link the golden query:
+If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to create and link the golden query (it will prompt for your First Name, Last Name if not already set):
 
 ##### Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 ```python
 # Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+
 # 1. Create Golden Query
 gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
@@ -454,7 +466,8 @@ print(f"✅ Created Golden Query ID: {gq.get('id')}")
 
 # 2. Link to Agent
 client.update_agent(agent['id'], {
-    "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
+    "name": f"Cymbal Retail Analytics Agent - {student_name}",
+    "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}],
     "golden_query_ids": [gq["id"]]
 })
 print(f"✅ Linked Golden Query {gq['id']} to Agent {agent['id']}")
@@ -462,6 +475,8 @@ print(f"✅ Linked Golden Query {gq['id']} to Agent {agent['id']}")
 
 ##### Option B: Looker Python SDK (Requires `pip install looker-sdk`)
 ```python
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+
 # 1. Create Golden Query (Single question strictly required by Looker 4.0)
 golden_query = sdk.create_golden_query(
     body=models40.WriteGoldenQuery(
@@ -475,7 +490,8 @@ print(f"✅ Created Golden Query ID: {golden_query.id}")
 sdk.update_agent(
     agent_id=new_agent.id,
     body=models40.WriteAgent(
-        name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
+        name=f"Cymbal Retail Analytics Agent - {student_name}",
+        sources=[models40.AgentSource(model="cymbal_gadgets_boris", explore="transactions")],
         golden_query_ids=[golden_query.id]
     )
 )
@@ -523,24 +539,28 @@ Looker manages stateful conversational threads on the server. Instead of forcing
 
 #### 🐍 Alternatively use this Python Code Snippet: Create Conversation
 
-If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to initialize the session:
+If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to initialize the session (it will prompt for your First Name, Last Name):
 
 ##### Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 ```python
 # Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+
 conv = client.create_conversation(
     agent_id=agent["id"],  # Or replace with your Step 1 Agent ID
-    name="Cymbal Retail Session - Student <YOUR_NAME>"
+    name=f"Cymbal Retail Session - {student_name}"
 )
 print(f"✅ Created Conversation Session ID: {conv['id']}")
 ```
 
 ##### Option B: Looker Python SDK (Requires `pip install looker-sdk`)
 ```python
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+
 conversation = sdk.create_conversation(
     body=models40.WriteConversation(
         agent_id=new_agent.id,  # Or replace with your Step 1 Agent ID
-        name="Cymbal Retail Session - Student <YOUR_NAME>"
+        name=f"Cymbal Retail Session - {student_name}"
     )
 )
 print(f"✅ Created Conversation Session ID: {conversation.id}")
@@ -814,6 +834,8 @@ sys.path.insert(0, os.path.expanduser('~/cymbal_gadgets/agentic_web_app'))
 import config
 from looker_client import LookerClient
 
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 agent_id = 'YOUR_AGENT_ID'  # Replace with your Step 1 Agent ID
 
@@ -825,6 +847,8 @@ new_instructions = """
 """
 
 updated = client.update_agent(agent_id, {
+    'name': f'Cymbal Retail Analytics Agent - {student_name}',
+    'sources': [{'model': 'cymbal_gadgets_boris', 'explore': 'transactions'}],
     'context': {'instructions': new_instructions, 'show_analytical_details': True}
 })
 print(f"✅ Successfully updated instructions for: {updated.get('name')}")
@@ -834,6 +858,8 @@ print(f"✅ Successfully updated instructions for: {updated.get('name')}")
 ```python
 import looker_sdk
 from looker_sdk import models40
+
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 
 sdk = looker_sdk.init40()
 
@@ -847,6 +873,8 @@ new_instructions = (
 updated_agent = sdk.update_agent(
     agent_id="YOUR_AGENT_ID",  # Replace with your Step 1 Agent ID
     body=models40.WriteAgent(
+        name=f"Cymbal Retail Analytics Agent - {student_name}",
+        sources=[models40.AgentSource(model="cymbal_gadgets_boris", explore="transactions")],
         context=models40.AgentContext(
             instructions=new_instructions,
             show_analytical_details=True
@@ -861,13 +889,14 @@ print(f"✅ Successfully updated instructions for: {updated_agent.name}")
 python3 -c "
 import os, sys; sys.path.insert(0, os.path.expanduser('~/cymbal_gadgets/agentic_web_app'))
 import config; from looker_client import LookerClient
+student_name = input('Enter your First Name, Last Name: ').strip() or 'First Name Last Name'
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 agent_id = 'YOUR_AGENT_ID'
 new_instructions = '''- Always begin your answer with \'🌟 Cymbal Executive Summary:\'
 - Format all currency metrics in EUR with thousands separators (e.g. €1,234,567)
 - If asked about gross margin, always state the exact percentage with two decimals
 - Keep explanations under 3 sentences'''
-updated = client.update_agent(agent_id, {'context': {'instructions': new_instructions, 'show_analytical_details': True}})
+updated = client.update_agent(agent_id, {'name': f'Cymbal Retail Analytics Agent - {student_name}', 'sources': [{'model': 'cymbal_gadgets_boris', 'explore': 'transactions'}], 'context': {'instructions': new_instructions, 'show_analytical_details': True}})
 print('Successfully updated instructions for:', updated.get('name'))
 "
 ```

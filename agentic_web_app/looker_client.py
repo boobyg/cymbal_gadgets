@@ -250,14 +250,24 @@ class LookerClient:
         for a in agents:
             if not isinstance(a, dict):
                 continue
+            aid = a.get("id")
+            if not aid or aid in self._deleted_agent_ids:
+                continue
+            sources = a.get("sources") or []
+            has_valid_source = any(
+                isinstance(s, dict) and s.get("model") and s.get("explore")
+                for s in sources
+            )
+            if not has_valid_source:
+                continue
             creator_id = str(a.get("created_by_user_id")) if a.get("created_by_user_id") is not None else None
             if only_own and current_user_id and creator_id is not None and creator_id != current_user_id:
                 continue
             formatted.append({
-                "id": a.get("id"),
+                "id": aid,
                 "name": a.get("name", "Unnamed Agent"),
                 "description": a.get("description", ""),
-                "sources": a.get("sources", []),
+                "sources": sources,
                 "instructions": a.get("context", {}).get("instructions", "") if isinstance(a.get("context"), dict) else "",
                 "created_at": a.get("created_at"),
                 "created_by": a.get("created_by_user_id")
@@ -295,17 +305,22 @@ class LookerClient:
             safe_backing = urllib.parse.quote(backing_id, safe="")
             try:
                 agent = self._request("GET", f"/agents/{safe_backing}", timeout=6)
-                if isinstance(agent, dict) and agent.get("id"):
-                    return agent
+                if isinstance(agent, dict) and agent.get("id") and agent.get("id") not in self._deleted_agent_ids:
+                    sources = agent.get("sources") or []
+                    if any(isinstance(s, dict) and s.get("model") and s.get("explore") for s in sources):
+                        return agent
             except Exception:
                 pass
 
-        # 1. Fast check of existing agents accessible to this API3 user
+        # 1. Fast check of existing agents accessible to this API3 user that have valid LookML sources
         try:
             raw_agents = self._request("GET", "/agents/search", timeout=6)
             if isinstance(raw_agents, list) and len(raw_agents) > 0:
                 for a in raw_agents:
-                    if isinstance(a, dict) and a.get("id"):
+                    if not isinstance(a, dict) or not a.get("id") or a.get("id") in self._deleted_agent_ids:
+                        continue
+                    sources = a.get("sources") or []
+                    if any(isinstance(s, dict) and s.get("model") and s.get("explore") for s in sources):
                         if clean_id:
                             self._agent_id_bridge[clean_id] = a["id"]
                         return a
@@ -462,13 +477,20 @@ class LookerClient:
     def update_agent(self, agent_id: str, payload: dict) -> dict:
         """
         Update an existing agent configuration, instructions, or linked golden query IDs.
-        Ensures 'name' is included in payload if required by Looker 4.0 PATCH /agents/{agent_id}.
+        Ensures 'name' and 'sources' are included in payload so Looker 4.0 PATCH /agents/{agent_id}
+        never wipes the agent's LookML model/explore binding.
         """
         clean_agent_id = self._clean_id(agent_id)
         target_id = self._agent_id_bridge.get(clean_agent_id, clean_agent_id)
         safe_target = urllib.parse.quote(target_id, safe="")
         caller_supplied_name = bool(payload and "name" in payload)
         patch_payload = dict(payload or {})
+        default_sources = [{
+            "model": config.DEFAULT_MODEL or "cymbal_gadgets_boris",
+            "explore": config.DEFAULT_EXPLORE or "transactions"
+        }]
+        if not patch_payload.get("sources"):
+            patch_payload["sources"] = default_sources
         if not caller_supplied_name:
             try:
                 existing = self._request("GET", f"/agents/{safe_target}", timeout=6)
@@ -531,6 +553,10 @@ class LookerClient:
         tgt_agent_id = self._clean_id(agent_id)
         logger.info(f"Resetting patch and unlinking golden queries on agent {tgt_agent_id}...")
         payload = {
+            "sources": [{
+                "model": config.DEFAULT_MODEL or "cymbal_gadgets_boris",
+                "explore": config.DEFAULT_EXPLORE or "transactions"
+            }],
             "golden_query_ids": [],
             "context": {
                 "instructions": "",
@@ -620,32 +646,7 @@ class LookerClient:
 
         return results
 
-    def chat(self, conversation_id: str, user_message: str, agent_id: str = None) -> dict:
-        """
-        Submit a natural language analytical query to the conversational agent.
-        Parses multi-stage messages: thought process, explore resolution, data queries, and final answer.
-        """
-        clean_conv = self._clean_id(conversation_id)
-        target_conv = self._conv_id_bridge.get(clean_conv, clean_conv)
-        payload = {
-            "conversation_id": target_conv,
-            "user_message": user_message
-        }
-        try:
-            raw_messages = self._request("POST", "/conversational_analytics/chat", payload=payload)
-        except Exception as e:
-            if "404" in str(e):
-                backing = self._resolve_or_provision_backing_agent(agent_id or clean_conv)
-                new_conv = self.create_conversation(backing["id"], name="Cymbal Retail Session")
-                target_conv = new_conv["id"]
-                if clean_conv:
-                    self._conv_id_bridge[clean_conv] = target_conv
-                payload["conversation_id"] = target_conv
-                raw_messages = self._request("POST", "/conversational_analytics/chat", payload=payload)
-            else:
-                raise
-
-        # Parse the structured messages
+    def _parse_chat_stream(self, raw_messages, conversation_id: str, user_message: str) -> dict:
         parsed = {
             "conversation_id": conversation_id,
             "user_message": user_message,
@@ -656,28 +657,35 @@ class LookerClient:
             "chart": None,
             "analysis": None,
             "final_response": "",
-            "raw_messages": raw_messages
+            "raw_messages": raw_messages if isinstance(raw_messages, list) else []
         }
+        if not isinstance(raw_messages, list):
+            return parsed
 
         for msg in raw_messages:
-            sys_m = msg.get("systemMessage", {})
-            
-            # 1. Thought Process (Chain of Thought reasoning)
+            if not isinstance(msg, dict):
+                continue
+            sys_m = msg.get("systemMessage") or msg.get("system_message") or msg
+
+            # 1. Thought Process & Final Response
             if sys_m.get("text"):
                 text_obj = sys_m["text"]
-                text_type = text_obj.get("textType", "")
-                parts = text_obj.get("parts", [])
-                full_text = "\n\n".join(parts) if isinstance(parts, list) else str(parts)
-                
-                if text_type == "THOUGHT":
-                    parsed["thoughts"].append(full_text)
-                elif text_type == "FINAL_RESPONSE":
-                    parsed["final_response"] = full_text
-                else:
-                    if not parsed["final_response"]:
-                        parsed["final_response"] = full_text
+                if isinstance(text_obj, dict):
+                    text_type = text_obj.get("textType") or text_obj.get("text_type") or ""
+                    parts = text_obj.get("parts", [])
+                    full_text = "\n\n".join(str(p) for p in parts) if isinstance(parts, list) else str(parts)
+                    if text_type == "THOUGHT":
+                        if full_text.strip():
+                            parsed["thoughts"].append(full_text.strip())
+                    elif text_type == "FINAL_RESPONSE":
+                        parsed["final_response"] = full_text.strip()
                     else:
-                        parsed["thoughts"].append(full_text)
+                        if not parsed["final_response"]:
+                            parsed["final_response"] = full_text.strip()
+                        elif full_text.strip():
+                            parsed["thoughts"].append(full_text.strip())
+                elif isinstance(text_obj, str) and text_obj.strip():
+                    parsed["final_response"] = text_obj.strip()
 
             # 2. Schema resolution
             if sys_m.get("schema"):
@@ -686,10 +694,11 @@ class LookerClient:
             # 3. Query & Data
             if sys_m.get("data"):
                 data_obj = sys_m["data"]
-                if data_obj.get("query"):
-                    parsed["query"] = data_obj["query"]
-                if data_obj.get("result"):
-                    parsed["data"] = data_obj["result"]
+                if isinstance(data_obj, dict):
+                    if data_obj.get("query"):
+                        parsed["query"] = data_obj["query"]
+                    if data_obj.get("result"):
+                        parsed["data"] = data_obj["result"]
 
             # 4. Analysis
             if sys_m.get("analysis"):
@@ -699,8 +708,101 @@ class LookerClient:
             if sys_m.get("chart"):
                 parsed["chart"] = sys_m["chart"]
 
-        # Fallback if final_response was not explicitly flagged with FINAL_RESPONSE
         if not parsed["final_response"] and parsed["thoughts"]:
             parsed["final_response"] = parsed["thoughts"][-1]
+
+        return parsed
+
+    def chat(self, conversation_id: str, user_message: str, agent_id: str = None) -> dict:
+        """
+        Submit a natural language analytical query to the conversational agent.
+        Parses multi-stage messages: thought process, explore resolution, data queries, and final answer.
+        Automatically repairs agent sources or provisions a fresh conversation if the agent's sources
+        were previously cleared by a PATCH request or if the conversation belongs to another session.
+        """
+        clean_conv = self._clean_id(conversation_id)
+        target_conv = self._conv_id_bridge.get(clean_conv, clean_conv)
+
+        # Ensure the agent has valid LookML sources before chatting (in case an earlier PATCH omitted sources)
+        if agent_id:
+            clean_agent = self._clean_id(agent_id)
+            target_agent = self._agent_id_bridge.get(clean_agent, clean_agent)
+            safe_agent = urllib.parse.quote(target_agent, safe="")
+            try:
+                agent_obj = self._request("GET", f"/agents/{safe_agent}", timeout=6)
+                if isinstance(agent_obj, dict) and agent_obj.get("id"):
+                    sources = agent_obj.get("sources") or []
+                    if not any(isinstance(s, dict) and s.get("model") and s.get("explore") for s in sources):
+                        logger.info(f"Repairing empty sources on agent {target_agent} before chat...")
+                        self.update_agent(target_agent, {
+                            "name": agent_obj.get("name", "Cymbal Retail Analytics Agent"),
+                            "sources": [{
+                                "model": config.DEFAULT_MODEL or "cymbal_gadgets_boris",
+                                "explore": config.DEFAULT_EXPLORE or "transactions"
+                            }]
+                        })
+            except Exception:
+                pass
+
+        if not target_conv:
+            backing = self._resolve_or_provision_backing_agent(agent_id or "default")
+            new_conv = self.create_conversation(backing["id"], name="Cymbal Retail Session")
+            target_conv = new_conv["id"]
+            if clean_conv:
+                self._conv_id_bridge[clean_conv] = target_conv
+
+        payload = {
+            "conversation_id": target_conv,
+            "user_message": user_message
+        }
+        try:
+            raw_messages = self._request("POST", "/conversational_analytics/chat", payload=payload)
+        except Exception as e:
+            logger.warning(f"Initial chat call failed ({e}); bridging to fresh conversation.")
+            backing = self._resolve_or_provision_backing_agent(agent_id or clean_conv)
+            new_conv = self.create_conversation(backing["id"], name="Cymbal Retail Session")
+            target_conv = new_conv["id"]
+            if clean_conv:
+                self._conv_id_bridge[clean_conv] = target_conv
+            payload["conversation_id"] = target_conv
+            raw_messages = self._request("POST", "/conversational_analytics/chat", payload=payload)
+
+        parsed = self._parse_chat_stream(raw_messages, target_conv, user_message)
+
+        # If Looker returned an empty final_response (e.g. conversation was bound to an agent with empty sources),
+        # repair/provision a healthy backing agent + fresh conversation and retry once.
+        if not parsed["final_response"] and not parsed["data"]:
+            try:
+                logger.info("Chat returned empty response; repairing agent sources and retrying with fresh conversation...")
+                backing = self._resolve_or_provision_backing_agent(agent_id or clean_conv)
+                backing_id = backing.get("id")
+                if backing_id:
+                    self.update_agent(backing_id, {
+                        "name": backing.get("name", "Cymbal Retail Analytics Agent"),
+                        "sources": [{
+                            "model": config.DEFAULT_MODEL or "cymbal_gadgets_boris",
+                            "explore": config.DEFAULT_EXPLORE or "transactions"
+                        }]
+                    })
+                    fresh_conv = self.create_conversation(backing_id, name="Cymbal Retail Session")
+                    target_conv = fresh_conv.get("id", target_conv)
+                    if clean_conv:
+                        self._conv_id_bridge[clean_conv] = target_conv
+                    payload["conversation_id"] = target_conv
+                    retry_raw = self._request("POST", "/conversational_analytics/chat", payload=payload)
+                    parsed = self._parse_chat_stream(retry_raw, target_conv, user_message)
+            except Exception as retry_err:
+                logger.warning(f"Retry chat after agent source repair failed: {retry_err}")
+
+        # Synthesize a clear response from returned data rows if Looker returned data without a text summary
+        if not parsed["final_response"] and isinstance(parsed.get("data"), dict):
+            rows = parsed["data"].get("data") or []
+            if isinstance(rows, list) and len(rows) > 0:
+                lines = [f"Here are the results from Cymbal Gadgets (`{len(rows)}` row(s) returned):"]
+                for idx, r in enumerate(rows[:5], 1):
+                    if isinstance(r, dict):
+                        summary = ", ".join(f"**{k}**: {v}" for k, v in r.items())
+                        lines.append(f"{idx}. {summary}")
+                parsed["final_response"] = "\n".join(lines)
 
         return parsed

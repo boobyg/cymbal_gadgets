@@ -507,9 +507,10 @@ sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
 import config
 from looker_client import LookerClient
 
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 agent = client.create_agent(
-    name="Cymbal Retail Analytics Agent - Student <YOUR_NAME>",
+    name=f"Cymbal Retail Analytics Agent - {student_name}",
     description="Conversational BI agent providing governed retail insights for Cymbal Gadgets",
     model="cymbal_gadgets_boris",
     explore="transactions",
@@ -524,7 +525,8 @@ print("Agent ID:", agent["id"])
 # import looker_sdk
 # from looker_sdk import models40
 # sdk = looker_sdk.init40()
-# new_agent = sdk.create_agent(body=models40.WriteAgent(...))</pre>
+# student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+# new_agent = sdk.create_agent(body=models40.WriteAgent(name=f"Cymbal Retail Analytics Agent - {student_name}", ...))</pre>
                 <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
               </div>
             </div>
@@ -693,7 +695,13 @@ print("Agent ID:", agent["id"])
                   <div class="relative group mt-1">
                     <pre id="step2LinkingJsonCode" class="bg-slate-900 text-slate-100 p-2.5 rounded text-[11px] font-mono select-all">{
   "name": "Cymbal Retail Analytics Agent - Student &lt;YOUR_NAME_OR_ID&gt;",
-  "golden_query_ids": [142]
+  "golden_query_ids": [142],
+  "sources": [
+    {
+      "model": "cymbal_gadgets_boris",
+      "explore": "transactions"
+    }
+  ]
 }</pre>
                     <button onclick="copyCode(this)" class="absolute top-1.5 right-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-0.5 rounded text-[10px] border border-slate-700">Copy JSON</button>
                   </div>
@@ -718,20 +726,26 @@ sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
 import config
 from looker_client import LookerClient
 
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 )
-client.update_agent(agent_id, {"name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", "golden_query_ids": [gq["id"]]})
+client.update_agent(agent_id, {
+    "name": f"Cymbal Retail Analytics Agent - {student_name}",
+    "golden_query_ids": [gq["id"]],
+    "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}]
+})
 print("Created & Linked Golden Query ID:", gq["id"])
 
 # Option B: Looker Python SDK (Requires: pip install looker-sdk)
 # import looker_sdk
 # from looker_sdk import models40
 # sdk = looker_sdk.init40()
+# student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 # golden_query = sdk.create_golden_query(body=models40.WriteGoldenQuery(questions=["What is our total sales amount across all transactions?"], answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"))
-# sdk.update_agent(agent_id=new_agent.id, body=models40.WriteAgent(name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", golden_query_ids=[golden_query.id]))</pre>
+# sdk.update_agent(agent_id=new_agent.id, body=models40.WriteAgent(name=f"Cymbal Retail Analytics Agent - {student_name}", golden_query_ids=[golden_query.id]))</pre>
                 <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
               </div>
             </div>
@@ -781,7 +795,39 @@ print("Created & Linked Golden Query ID:", gq["id"])
               <div id="step3ConvStatus" class="hidden text-xs p-2 rounded-lg mt-1 font-medium"></div>
             </div>
 
-            <!-- Interactive Conversation ID Input in Step 1.3 (API Explorer & Python only) -->
+            <!-- Python Snippet for Create Conversation -->
+            <div class="space-y-1.5 text-xs pt-2 border-t border-purple-200">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-800 flex items-center space-x-1.5">
+                  <i class="fa-brands fa-python text-purple-600"></i>
+                  <span>Alternatively use this Python Code Snippet:</span>
+                </span>
+                <span class="text-[11px] text-slate-500 font-normal">Execute in Cloud Shell (<code class="text-indigo-600 font-mono">python3</code>)</span>
+              </div>
+              <div class="relative group">
+                <pre id="step3PythonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
+import os, sys
+sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
+import config
+from looker_client import LookerClient
+
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+conv = client.create_conversation(agent_id=agent_id, name=f"Cymbal Retail Session - {student_name}")
+print("Conversation ID:", conv["id"])
+
+# Option B: Looker Python SDK (Requires: pip install looker-sdk)
+# import looker_sdk
+# from looker_sdk import models40
+# sdk = looker_sdk.init40()
+# student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+# conversation = sdk.create_conversation(body=models40.WriteConversation(agent_id=new_agent.id, name=f"Cymbal Retail Session - {student_name}"))
+# print("Conversation ID:", conversation.id)</pre>
+                <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
+              </div>
+            </div>
+
+            <!-- Interactive Conversation ID Input in Step 1.3 (placed after API Explorer & Python snippet) -->
             <div class="bg-purple-100/60 border border-purple-300 rounded-xl p-3 space-y-2">
               <div class="flex items-center justify-between">
                 <label for="step3ConvIdInput" class="block font-bold text-purple-950 text-xs">
@@ -799,36 +845,6 @@ print("Created & Linked Golden Query ID:", gq["id"])
                   <i class="fa-solid fa-arrows-rotate text-slate-500"></i>
                   <span>Clear</span>
                 </button>
-              </div>
-            </div>
-
-            <!-- Python Snippet for Create Conversation -->
-            <div class="space-y-1.5 text-xs pt-2 border-t border-purple-200">
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-slate-800 flex items-center space-x-1.5">
-                  <i class="fa-brands fa-python text-purple-600"></i>
-                  <span>Alternatively use this Python Code Snippet:</span>
-                </span>
-                <span class="text-[11px] text-slate-500 font-normal">Execute in Cloud Shell (<code class="text-indigo-600 font-mono">python3</code>)</span>
-              </div>
-              <div class="relative group">
-                <pre id="step3PythonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
-import os, sys
-sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-conv = client.create_conversation(agent_id=agent_id, name="Cymbal Retail Session - Student <YOUR_NAME>")
-print("Conversation ID:", conv["id"])
-
-# Option B: Looker Python SDK (Requires: pip install looker-sdk)
-# import looker_sdk
-# from looker_sdk import models40
-# sdk = looker_sdk.init40()
-# conversation = sdk.create_conversation(body=models40.WriteConversation(agent_id=new_agent.id, name="Cymbal Retail Session - Student <YOUR_NAME>"))
-# print("Conversation ID:", conversation.id)</pre>
-                <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy Python</button>
               </div>
             </div>
           </div>
@@ -1361,8 +1377,11 @@ sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
 import config
 from looker_client import LookerClient
 
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 client.update_agent(agent_id, {
+    "name": f"Cymbal Retail Analytics Agent - {student_name}",
+    "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}],
     "context": {
         "instructions": "- Always begin your answer with '🌟 Cymbal Executive Summary:'\n- Format all currency in EUR...",
         "show_analytical_details": True
@@ -1373,9 +1392,11 @@ client.update_agent(agent_id, {
 # import looker_sdk
 # from looker_sdk import models40
 # sdk = looker_sdk.init40()
+# student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 # sdk.update_agent(
 #     agent_id=agent_id,
 #     body=models40.WriteAgent(
+#         name=f"Cymbal Retail Analytics Agent - {student_name}",
 #         context=models40.AgentContext(
 #             instructions="- Always begin your answer with '🌟 Cymbal Executive Summary:'\n- Format all currency in EUR...",
 #             show_analytical_details=True
@@ -1656,9 +1677,6 @@ print("Teardown status:", results)
           <select id="agentSelect" class="flex-1 bg-slate-50 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none truncate">
             <option value="">Loading your agents...</option>
           </select>
-          <button id="openQuickCreateBtn" title="Create Agent in Looker" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold px-2.5 py-1.5 rounded-lg border border-indigo-200 transition shrink-0">
-            <i class="fa-solid fa-plus"></i>
-          </button>
         </div>
         
         <div class="flex items-center space-x-2 text-[11px] text-slate-500">
@@ -2113,21 +2131,33 @@ print("Teardown status:", results)
         const res = await fetch('/api/agents');
         if (!res.ok) return;
         const data = await res.json();
-        availableAgents = data.agents || [];
+        const fetchedAgents = data.agents || [];
+
+        if (currentAgentId) {
+          const matching = fetchedAgents.filter(a => a.id === currentAgentId);
+          if (matching.length > 0) {
+            availableAgents = matching;
+          } else {
+            availableAgents = [{
+              id: currentAgentId,
+              name: "Cymbal Retail Analytics Agent",
+              description: "Conversational BI agent providing governed retail insights for Cymbal Gadgets",
+              sources: [{ model: "cymbal_gadgets_boris", explore: "transactions" }]
+            }];
+          }
+        } else {
+          // Only show the most recently created valid agent if no Step 1 Agent ID is remembered yet
+          availableAgents = fetchedAgents.length > 0 ? [fetchedAgents[fetchedAgents.length - 1]] : [];
+        }
 
         agentSelect.innerHTML = '';
         if (availableAgents.length === 0) {
           const opt = document.createElement('option');
           opt.value = "";
-          opt.textContent = "No agents found for your user. Create one in Step 1!";
+          opt.textContent = "No agent selected yet — complete Step 1 first!";
           agentSelect.appendChild(opt);
           return;
         }
-
-        const placeholder = document.createElement('option');
-        placeholder.value = "";
-        placeholder.textContent = `Select your Step 1 Agent (${availableAgents.length} created by you)...`;
-        agentSelect.appendChild(placeholder);
 
         availableAgents.forEach(a => {
           const opt = document.createElement('option');
@@ -2138,6 +2168,8 @@ print("Teardown status:", results)
 
         if (currentAgentId && availableAgents.some(a => a.id === currentAgentId)) {
           agentSelect.value = currentAgentId;
+        } else if (availableAgents.length === 1) {
+          agentSelect.value = availableAgents[0].id;
         }
       } catch (err) {
         console.error("Failed to load agents:", err);
@@ -2207,25 +2239,31 @@ sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
 import config
 from looker_client import LookerClient
 
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 )
-client.update_agent("${agentId}", {"name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", "golden_query_ids": [gq["id"]]})
+client.update_agent("${agentId}", {
+    "name": f"Cymbal Retail Analytics Agent - {student_name}",
+    "golden_query_ids": [gq["id"]],
+    "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}]
+})
 print("Created & Linked Golden Query ID:", gq["id"])
 
 # Option B: Looker Python SDK (Requires: pip install looker-sdk)
 # import looker_sdk
 # from looker_sdk import models40
 # sdk = looker_sdk.init40()
+# student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 # golden_query = sdk.create_golden_query(
 #     body=models40.WriteGoldenQuery(
 #         questions=["What is our total sales amount across all transactions?"],
 #         answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 #     )
 # )
-# sdk.update_agent(agent_id="${agentId}", body=models40.WriteAgent(name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", golden_query_ids=[golden_query.id]))
+# sdk.update_agent(agent_id="${agentId}", body=models40.WriteAgent(name=f"Cymbal Retail Analytics Agent - {student_name}", golden_query_ids=[golden_query.id]))
 # print("Created & Linked Golden Query ID:", golden_query.id)`;
       }
 
@@ -2238,20 +2276,35 @@ sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
 import config
 from looker_client import LookerClient
 
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-conv = client.create_conversation(agent_id="${agentId}", name="Cymbal Retail Session - Student <YOUR_NAME>")
+conv = client.create_conversation(agent_id="${agentId}", name=f"Cymbal Retail Session - {student_name}")
 print("Conversation ID:", conv["id"])
 
 # Option B: Looker Python SDK (Requires: pip install looker-sdk)
 # import looker_sdk
 # from looker_sdk import models40
 # sdk = looker_sdk.init40()
-# conversation = sdk.create_conversation(body=models40.WriteConversation(agent_id="${agentId}", name="Cymbal Retail Session - Student <YOUR_NAME>"))
+# student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+# conversation = sdk.create_conversation(body=models40.WriteConversation(agent_id="${agentId}", name=f"Cymbal Retail Session - {student_name}"))
 # print("Conversation ID:", conversation.id)`;
       }
 
-      if (triggerSelect && agentSelect) {
-        if (availableAgents.some(a => a.id === agentId)) {
+      if (agentSelect) {
+        if (!availableAgents.some(a => a.id === agentId)) {
+          availableAgents = [{
+            id: agentId,
+            name: "Cymbal Retail Analytics Agent",
+            description: "Conversational BI agent providing governed retail insights for Cymbal Gadgets",
+            sources: [{ model: "cymbal_gadgets_boris", explore: "transactions" }]
+          }];
+          agentSelect.innerHTML = '';
+          const opt = document.createElement('option');
+          opt.value = agentId;
+          opt.textContent = `Cymbal Retail Analytics Agent (${agentId.substring(0, 8)}...)`;
+          agentSelect.appendChild(opt);
+        }
+        if (triggerSelect) {
           agentSelect.value = agentId;
         }
       }
@@ -2316,25 +2369,31 @@ sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
 import config
 from looker_client import LookerClient
 
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 )
-client.update_agent(agent["id"], {"name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", "golden_query_ids": [gq["id"]]})
+client.update_agent(agent["id"], {
+    "name": f"Cymbal Retail Analytics Agent - {student_name}",
+    "golden_query_ids": [gq["id"]],
+    "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}]
+})
 print("Created & Linked Golden Query ID:", gq["id"])
 
 # Option B: Looker Python SDK (Requires: pip install looker-sdk)
 # import looker_sdk
 # from looker_sdk import models40
 # sdk = looker_sdk.init40()
+# student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 # golden_query = sdk.create_golden_query(
 #     body=models40.WriteGoldenQuery(
 #         questions=["What is our total sales amount across all transactions?"],
 #         answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 #     )
 # )
-# sdk.update_agent(agent_id=agent.id, body=models40.WriteAgent(name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", golden_query_ids=[golden_query.id]))
+# sdk.update_agent(agent_id=agent.id, body=models40.WriteAgent(name=f"Cymbal Retail Analytics Agent - {student_name}", golden_query_ids=[golden_query.id]))
 # print("Created & Linked Golden Query ID:", golden_query.id)`;
       }
 
@@ -2346,15 +2405,17 @@ sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
 import config
 from looker_client import LookerClient
 
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-conv = client.create_conversation(agent_id=agent["id"], name="Cymbal Retail Session - Student <YOUR_NAME>")
+conv = client.create_conversation(agent_id=agent["id"], name=f"Cymbal Retail Session - {student_name}")
 print("Conversation ID:", conv["id"])
 
 # Option B: Looker Python SDK (Requires: pip install looker-sdk)
 # import looker_sdk
 # from looker_sdk import models40
 # sdk = looker_sdk.init40()
-# conversation = sdk.create_conversation(body=models40.WriteConversation(agent_id=agent.id, name="Cymbal Retail Session - Student <YOUR_NAME>"))
+# student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+# conversation = sdk.create_conversation(body=models40.WriteConversation(agent_id=agent.id, name=f"Cymbal Retail Session - {student_name}"))
 # print("Conversation ID:", conversation.id)`;
       }
 
@@ -2527,7 +2588,11 @@ print("📝 Summary:", result.get("final_response", ""))
 
     function selectAgent(agentId, preserveExistingConversation = false) {
       if (!agentId) return;
+      const agentChanged = (currentAgentId !== agentId);
       currentAgentId = agentId;
+      if (agentChanged) {
+        window.bridgedBackingAgentId = null;
+      }
       setRememberedAgentId(agentId, false);
       agentSelect.value = agentId;
       if (cp1AgentIdInput) cp1AgentIdInput.value = agentId;
@@ -2538,15 +2603,16 @@ print("📝 Summary:", result.get("final_response", ""))
       if (agent) {
         bannerAgentName.textContent = agent.name;
         bannerAgentDesc.textContent = agent.description || "No description";
-        bannerAgentSources.innerHTML = (agent.sources || []).map(s => `${s.model}/${s.explore}`).join(', ');
+        bannerAgentSources.innerHTML = (agent.sources || [{ model: "cymbal_gadgets_boris", explore: "transactions" }]).map(s => `${s.model}/${s.explore}`).join(', ');
         agentBanner.classList.remove('hidden');
       } else {
-        bannerAgentName.textContent = `Custom Agent`;
+        bannerAgentName.textContent = `Cymbal Retail Analytics Agent`;
         bannerAgentDesc.textContent = agentId;
+        bannerAgentSources.innerHTML = `cymbal_gadgets_boris/transactions`;
         agentBanner.classList.remove('hidden');
       }
 
-      if (!preserveExistingConversation || !currentConversationId) {
+      if (agentChanged || !preserveExistingConversation || !currentConversationId) {
         startNewConversation();
       }
     }
@@ -3017,7 +3083,10 @@ print("📝 Summary:", result.get("final_response", ""))
 
     function setupEventListeners() {
       agentSelect.addEventListener('change', (e) => {
-        if (e.target.value) selectAgent(e.target.value);
+        if (e.target.value) {
+          window.bridgedBackingAgentId = null;
+          selectAgent(e.target.value, false);
+        }
       });
 
       newConvBtn.addEventListener('click', () => {
@@ -3025,7 +3094,6 @@ print("📝 Summary:", result.get("final_response", ""))
       });
 
       openCredentialsBtn.addEventListener('click', openCredentialsModal);
-      document.getElementById('openQuickCreateBtn').addEventListener('click', openCreateAgentModal);
 
       // Task 1 Agent ID Tracker Listeners
       const task1SaveAgentBtn = document.getElementById('task1SaveAgentBtn');
@@ -3149,6 +3217,9 @@ print("📝 Summary:", result.get("final_response", ""))
         sendBtn.disabled = true;
 
         try {
+          if (!currentConversationId) {
+            await startNewConversation();
+          }
           const res = await fetch('/api/chat', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -3161,6 +3232,9 @@ print("📝 Summary:", result.get("final_response", ""))
 
           const data = await res.json();
           if (res.ok) {
+            if (data.conversation_id && data.conversation_id !== currentConversationId) {
+              setRememberedConversationId(data.conversation_id, true);
+            }
             appendAssistantMessage(data);
 
             // Automatically award Checkpoint 3 upon successful query execution
@@ -3516,7 +3590,7 @@ print("📝 Summary:", result.get("final_response", ""))
       }
     }
 
-    function unlockAndShowConsole() {
+    async function unlockAndShowConsole() {
       consoleUnlocked = true;
       guidePane.style.display = 'flex';
       consolePane.style.display = 'flex';
@@ -3526,7 +3600,10 @@ print("📝 Summary:", result.get("final_response", ""))
       updateConsoleUnlockStatus();
 
       if (messagesContainer) messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      if (availableAgents.length > 0 && !currentAgentId) {
+      await loadAgents();
+      if (currentAgentId) {
+        selectAgent(currentAgentId, true);
+      } else if (availableAgents.length > 0) {
         selectAgent(availableAgents[0].id);
       }
     }
@@ -3693,7 +3770,7 @@ print("📝 Summary:", result.get("final_response", ""))
       if (!jsonCode) return;
       const rawVal = gqInput ? gqInput.value.trim() : '';
       const gqId = rawVal ? parseInt(rawVal, 10) : 142;
-      jsonCode.textContent = `{\n  "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",\n  "golden_query_ids": [${isNaN(gqId) ? 142 : gqId}]\n}`;
+      jsonCode.textContent = `{\n  "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",\n  "golden_query_ids": [${isNaN(gqId) ? 142 : gqId}],\n  "sources": [\n    {\n      "model": "cymbal_gadgets_boris",\n      "explore": "transactions"\n    }\n  ]\n}`;
 
       if (rawVal && !isNaN(gqId)) {
         currentGoldenQueryId = String(gqId);
