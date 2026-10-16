@@ -133,12 +133,17 @@ Launch the application using the startup script:
 3. A new browser tab opens loading the **Interactive SkillLabs Training Portal**!
 
 ### Step 5: Configure Your Student Credentials
-In the opened web portal:
-1. Click the yellow **Student Credentials** button in the top navigation bar.
-2. Enter your assigned:
-   * **Looker Client ID:** *(provided by instructor)*
-   * **Looker Client Secret:** *(provided by instructor)*
+#### Option A: In the Opened Web Portal (Recommended)
+1. Click the yellow **Student Credentials** button in the top navigation bar (or **Open Student Credentials Dialog** in Step 0).
+2. Enter the **Looker Client ID** and **Looker Client Secret** that you configured during the required prework for this lab:
+   * **Looker Client ID:** *(from your prework)*
+   * **Looker Client Secret:** *(from your prework)*
 3. Click **Save & Test Connection**. When verified, the status indicator turns green (`Looker Connected`).
+
+#### Option B: Via Terminal (`.env`)
+1. **Open another Cloud Shell terminal tab first** (click the **`+`** icon in the Cloud Shell terminal bar so you do not stop the running web server in your first terminal).
+2. Navigate to `cd ~/cymbal_gadgets/agentic_web_app` and run `nano .env`.
+3. Supply your **Looker Client ID** (`LOOKER_CLIENT_ID`) and **Looker Client Secret** (`LOOKER_CLIENT_SECRET`) that you configured during the prework, then save and exit (`Ctrl+O`, `Enter`, `Ctrl+X`).
 
 ---
 
@@ -192,37 +197,38 @@ In enterprise applications, interacting with Looker's Conversational Analytics A
 
 **🐍 Python Snippets for Create Agent:**
 ```python
-# Option A: Looker Python SDK (looker_sdk)
+# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell)
+import os, sys
+sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
+import config
+from looker_client import LookerClient
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+agent = client.create_agent(name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", model="cymbal_gadgets_boris", explore="transactions")
+print("Agent ID:", agent["id"])
+
+# Option B: Looker Python SDK (looker_sdk)
 import looker_sdk
 from looker_sdk import models40
 sdk = looker_sdk.init40()
 new_agent = sdk.create_agent(
     body=models40.WriteAgent(
-        name="Cymbal Retail Analytics Agent - Student 42",
+        name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
         sources=[models40.AgentSource(model="cymbal_gadgets_boris", explore="transactions")],
         context=models40.AgentContext(instructions="...", show_analytical_details=True)
     )
 )
 print("Agent ID:", new_agent.id)
-
-# Option B: Zero-Dependency LookerClient
-from looker_client import LookerClient
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-agent = client.create_agent(name="Cymbal Agent", model="cymbal_gadgets_boris", explore="transactions")
-print("Agent ID:", agent["id"])
 ```
 
 ---
 
 ### Step 1.2: Supplying a Golden Query Example (`POST /golden_queries`)
 1. **Open Method:** 👉 **[CreateGoldenQuery in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query)**
-2. Click **Run It** &rarr; paste into **Request Body (`body`)**:
+2. Click **Run It** &rarr; paste into **Request Body (`body`)** (single question in `questions` array as required by Looker 4.0):
 ```json
 {
   "questions": [
-    "What is our total sales amount across all transactions?",
-    "Total sales across all stores",
-    "What is our overall sales revenue?"
+    "What is our total sales amount across all transactions?"
   ],
   "answer": "https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 }
@@ -236,7 +242,7 @@ gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 )
-client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})
+client.update_agent(agent_id, {"name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", "golden_query_ids": [gq["id"]]})
 ```
 
 ---
@@ -247,14 +253,14 @@ client.update_agent(agent_id, {"golden_query_ids": [gq["id"]]})
 ```json
 {
   "agent_id": "<YOUR_AGENT_ID_FROM_STEP_1.1>",
-  "name": "Cymbal Retail Session - Student <YOUR_NAME_OR_ID>"
+  "name": "Cymbal Retail Session - Student <YOUR_NAME>"
 }
 ```
 3. Click **Run Request** and copy the returned `"id"` (`conversation_id`).
 
 **🐍 Python Snippets for Create Conversation:**
 ```python
-conv = client.create_conversation(agent_id=agent_id, name="Cymbal Analysis Session")
+conv = client.create_conversation(agent_id=agent_id, name="Cymbal Retail Session - Student <YOUR_NAME>")
 print("Conversation ID:", conv["id"])
 ```
 
@@ -281,7 +287,7 @@ print("📊 Data:", result["data"])
 print("📝 Summary:", result["final_response"])
 ```
 
-**🚩 Checkpoint 1:** Paste your Agent ID into the **Assessment Checkpoint 1** field on the portal (`http://localhost:8080`) and click **Check my progress** (+25 Points).
+**🚩 Checkpoint 1:** Paste your Agent ID into the **Assessment Checkpoint 1** field on the portal (`http://localhost:8080`) and click **Check my progress** (+20 Points).
 
 ---
 
@@ -290,7 +296,9 @@ print("📝 Summary:", result["final_response"])
 > [!CAUTION]
 > ### ❓ Crucial Instruction: Where and How to Run the Task 2 curl Command
 >
-> In **Task 2 / Checkpoint 2**, students verify server health. Many students get stuck here. Here is exactly what you need to know:
+> **⚠️ Note on `jq: parse error: Invalid numeric literal at line 1, column 3`:**  
+> **If you get the error `jq: parse error: Invalid numeric literal at line 1, column 3`, you should safely ignore it and continue directly to clicking "Check my progress" in Task 2!**  
+> *(This happens when `curl` hits the external `https://*.cloudshell.dev` Web Preview URL, which returns an HTML login redirect `<a href="...">` instead of JSON).*
 >
 > #### 1. DO NOT Run curl in the First Terminal Window
 > In Step 3, you ran `./run.sh`. That terminal is **currently busy** running the Python web server in the foreground.
@@ -301,13 +309,13 @@ print("📝 Summary:", result["final_response"])
 > If you open Terminal / PowerShell on your personal laptop and run `curl http://localhost:8080/api/health`, it will fail with `Connection refused` because `localhost:8080` is running in your **remote Argolis Cloud Shell container**.
 >
 > #### 3. DO NOT curl Your External Cloud Shell Preview URL (`https://*.cloudshell.dev`)
-> The external Cloud Shell preview URL requires Google SSO browser cookies. Terminal `curl` receives an HTML login redirect, which `jq` cannot parse as JSON.
+> The external Cloud Shell preview URL requires Google SSO browser cookies. Terminal `curl` receives an HTML login redirect, which `jq` cannot parse as JSON (`jq: parse error: Invalid numeric literal at line 1, column 3`). If you see this error, ignore it and proceed to **Check my progress** in Task 2.
 >
 > #### 4. The Correct Way: Open a SECOND Terminal Tab in Cloud Shell
 > 1. In Google Cloud Shell, click the **`+` (Open new tab)** button in the terminal tab bar.
 > 2. In this fresh second tab, run:
 >    ```bash
->    curl http://localhost:8080/api/health | jq .
+>    curl -s http://localhost:8080/api/health | jq .
 >    ```
 > 3. Expected response:
 >    ```json
@@ -323,7 +331,7 @@ print("📝 Summary:", result["final_response"])
 > In the interactive web portal (`http://localhost:8080` via Web Preview):
 > 1. Scroll to **Task 2: Assessment Checkpoint 2** in the left lab guide panel.
 > 2. Click the green **Check my progress** button.
-> 3. The portal directly queries `/api/health` and automatically awards **+25 points**!
+> 3. The portal directly queries `/api/health` and automatically awards **+20 points**!
 
 ---
 

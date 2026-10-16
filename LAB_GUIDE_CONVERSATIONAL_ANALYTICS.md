@@ -154,16 +154,18 @@ Previous test credentials have been cleared from `.env` and the application to e
 
 ### Option B: Configure via Terminal (`.env`)
 If you prefer configuring credentials in the command line:
+1. **Open another Cloud Shell terminal tab first** (click the **`+`** icon in the Cloud Shell terminal bar so you do not stop the running web server in your first terminal).
+2. Navigate to the `agentic_web_app` directory and open the `.env` file:
 ```bash
-cd /home/user/cymbal_gadgets/agentic_web_app
+cd ~/cymbal_gadgets/agentic_web_app
 nano .env
 ```
-Update the lines:
+3. **Supply the Looker Client ID and Looker Client Secret that you configured during the required prework for this lab:**
 ```env
-LOOKER_CLIENT_ID=your_assigned_client_id
-LOOKER_CLIENT_SECRET=your_assigned_client_secret
+LOOKER_CLIENT_ID=<YOUR_PREWORK_LOOKER_CLIENT_ID>
+LOOKER_CLIENT_SECRET=<YOUR_PREWORK_LOOKER_CLIENT_SECRET>
 ```
-Save and exit (`Ctrl+O`, `Enter`, `Ctrl+X`).
+4. Save and exit (`Ctrl+O`, `Enter`, `Ctrl+X`).
 
 ---
 
@@ -203,12 +205,12 @@ If you choose Pathway 2, you can run the Python code in any of these convenient 
 1. **Ready-to-Run Standalone Script (Fastest & Zero Dependencies):**
    * Execute the included standalone script directly in Cloud Shell (uses only standard Python libraries):
      ```bash
-     cd /home/user/cymbal_gadgets
+     cd ~/cymbal_gadgets
      python3 create_agent.py
      ```
    * Or pass your custom name or credentials:
      ```bash
-     python3 create_agent.py --name "Cymbal Retail Agent - Student 42"
+     python3 create_agent.py --name "Cymbal Retail Agent - Student <YOUR_NAME>"
      ```
 2. **Google Cloud Shell Interactive REPL:**
    * In your Cloud Shell terminal, start an interactive Python 3 session:
@@ -219,7 +221,7 @@ If you choose Pathway 2, you can run the Python code in any of these convenient 
 3. **Cloud Shell Script File:**
    * In Cloud Shell, create a test script file:
      ```bash
-     cd /home/user/cymbal_gadgets/agentic_web_app
+     cd ~/cymbal_gadgets/agentic_web_app
      nano test_task1.py
      ```
    * Paste Option A Python code, save (`Ctrl+O`, `Enter`, `Ctrl+X`), and execute:
@@ -251,7 +253,7 @@ Clicking the direct link takes you directly to the `create_agent` method under t
 ### 1.4 Step-by-Step: How to Run `CreateAgent` in API Explorer
 
 > ⚡ **Multi-Student Naming Rule (500 Concurrent Students):**  
-> Because students share the workshop Looker instance, **you MUST provide a unique name** for your agent (e.g. appending your name, initials, or student ID, such as `Student 42`). This ensures you can easily find and query your agent!
+> Because students share the workshop Looker instance, **you MUST provide a unique name** for your agent (e.g. appending your name, initials, or student ID, such as `Student <YOUR_NAME>`). This ensures you can easily find and query your agent!
 
 1. **Open the "Run It" Tab:**  
    In the API Explorer view for `create_agent`, click on the **Run It** tab on the right side of the screen.
@@ -276,7 +278,7 @@ Clicking the direct link takes you directly to the `create_agent` method under t
   }
 }
 ```
-*(Replace `<YOUR_NAME_OR_ID>` with your unique identifier, e.g. `Student 42`).*
+*(Replace `<YOUR_NAME_OR_ID>` with your unique identifier, e.g. `Student <YOUR_NAME>`).*
 
 #### Detailed Explanation of What We Are Doing:
 * **`name`**: Unique display name for identifying your agent among peers.
@@ -301,15 +303,15 @@ If you prefer programmatic execution rather than using API Explorer, **alternati
 This option uses Python's standard library (`urllib`) and requires **no external packages or pip installs**:
 
 ```python
-import sys
-sys.path.append("/home/user/cymbal_gadgets/agentic_web_app")
+import os, sys
+sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
 import config
 from looker_client import LookerClient
 
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 
 agent = client.create_agent(
-    name="Cymbal Retail Analytics Agent - Student 42",
+    name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
     description="Conversational BI agent providing governed retail insights",
     model="cymbal_gadgets_boris",
     explore="transactions",
@@ -322,7 +324,7 @@ print(f"✅ Created Agent ID: {agent['id']}")
 > ⚡ **Even Simpler: Run the Standalone Script!**  
 > You can also run the ready-to-use script directly from your Cloud Shell prompt without copying Python code:  
 > ```bash
-> python3 create_agent.py
+> python3 ~/cymbal_gadgets/create_agent.py
 > ```
 
 #### Option B: Looker Python SDK (Requires `pip install looker-sdk`)
@@ -337,7 +339,7 @@ sdk = looker_sdk.init40()
 
 new_agent = sdk.create_agent(
     body=models40.WriteAgent(
-        name="Cymbal Retail Analytics Agent - Student 42",
+        name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
         description="Conversational BI agent providing governed retail insights for Cymbal Gadgets",
         sources=[
             models40.AgentSource(
@@ -523,7 +525,7 @@ If you prefer programmatic execution rather than using API Explorer, **alternati
 ```python
 conv = client.create_conversation(
     agent_id=agent["id"],  # Or replace with your Step 1 Agent ID
-    name="Cymbal Gadgets Data Analysis Session"
+    name="Cymbal Retail Session - Student <YOUR_NAME>"
 )
 print(f"✅ Created Conversation Session ID: {conv['id']}")
 ```
@@ -533,7 +535,7 @@ print(f"✅ Created Conversation Session ID: {conv['id']}")
 conversation = sdk.create_conversation(
     body=models40.WriteConversation(
         agent_id=new_agent.id,  # Or replace with your Step 1 Agent ID
-        name="Cymbal Gadgets Data Analysis Session"
+        name="Cymbal Retail Session - Student <YOUR_NAME>"
     )
 )
 print(f"✅ Created Conversation Session ID: {conversation.id}")
@@ -658,7 +660,7 @@ curl -s -H "Authorization: token $TOKEN" "https://ceworkshops.cloud.looker.com/a
 ### 2.3 Starting the Web Server
 If not already running, execute:
 ```bash
-cd /home/user/cymbal_gadgets/agentic_web_app
+cd ~/cymbal_gadgets/agentic_web_app
 ./run.sh
 ```
 
@@ -764,7 +766,7 @@ Now test analytical queries in the right-hand chat window and inspect the real-t
 * **In the Web App:** Enter your Step 1 `agent_id` into the **Task 3** checkpoint field and click **Check my progress** to earn **+20 points**!
 * **Via Automated CLI Script:**
 ```bash
-python3 /home/user/cymbal_gadgets/agentic_web_app/test_pipeline.py YOUR_STEP_1_AGENT_ID
+python3 ~/cymbal_gadgets/agentic_web_app/test_pipeline.py YOUR_STEP_1_AGENT_ID
 ```
 
 ---
@@ -826,8 +828,8 @@ print(f"✅ Successfully updated instructions for: {updated_agent.name}")
 
 ##### Option B: Using Zero-Dependency LookerClient
 ```python
-import sys
-sys.path.append('/home/user/cymbal_gadgets/agentic_web_app')
+import os, sys
+sys.path.insert(0, os.path.expanduser('~/cymbal_gadgets/agentic_web_app'))
 import config
 from looker_client import LookerClient
 
@@ -850,7 +852,7 @@ print(f"✅ Successfully updated instructions for: {updated.get('name')}")
 ##### Run in Cloud Shell Terminal:
 ```bash
 python3 -c "
-import sys; sys.path.append('/home/user/cymbal_gadgets/agentic_web_app')
+import os, sys; sys.path.insert(0, os.path.expanduser('~/cymbal_gadgets/agentic_web_app'))
 import config; from looker_client import LookerClient
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
 agent_id = 'YOUR_AGENT_ID'
@@ -975,7 +977,7 @@ If you prefer executing the teardown programmatically, you can run the provided 
 
 #### Option A: Run the Standalone CLI Teardown Script in Cloud Shell
 ```bash
-cd /home/user/cymbal_gadgets/agentic_web_app
+cd ~/cymbal_gadgets/agentic_web_app
 
 # Usage: python3 cleanup.py <agent_id> <conversation_id> [golden_query_id] [--clear-creds]
 python3 cleanup.py YOUR_AGENT_ID YOUR_CONVERSATION_ID YOUR_GOLDEN_QUERY_ID
@@ -1018,7 +1020,7 @@ If you are using the interactive portal (`http://localhost:8080`):
 * **In the Web App:** Navigate to Task 5: Checkpoint 5 and click **Check my progress** (or click **Run Complete Lab Cleanup** in the 1-click teardown card) to earn your final **+20 points** and reach **100/100 Total Score**! The final completion celebration modal will unlock upon completing Checkpoint 5.
 * **Via Automated CLI Check:**
 ```bash
-python3 /home/user/cymbal_gadgets/agentic_web_app/cleanup.py YOUR_AGENT_ID YOUR_CONVERSATION_ID YOUR_GOLDEN_QUERY_ID
+python3 ~/cymbal_gadgets/agentic_web_app/cleanup.py YOUR_AGENT_ID YOUR_CONVERSATION_ID YOUR_GOLDEN_QUERY_ID
 ```
 
 ---

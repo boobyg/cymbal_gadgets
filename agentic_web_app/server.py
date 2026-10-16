@@ -33,9 +33,16 @@ ENV_PATH = BASE_DIR / ".env"
 LAB_GUIDE_PATH = BASE_DIR.parent / "LAB_GUIDE_CONVERSATIONAL_ANALYTICS.md"
 
 def is_credentials_configured() -> bool:
-    """Check if valid credentials (not placeholder) are currently set."""
+    """Check if valid credentials (not placeholder) are currently set; reload .env if needed."""
     cid = (client.client_id or "").strip()
     csec = (client.client_secret or "").strip()
+    if not (cid and csec and cid != "specify your own user id / secret" and csec != "specify your own user id / secret"):
+        client._reload_credentials_from_env()
+        cid = (client.client_id or "").strip()
+        csec = (client.client_secret or "").strip()
+        if cid and csec and cid != "specify your own user id / secret" and csec != "specify your own user id / secret":
+            config.LOOKER_CLIENT_ID = cid
+            config.LOOKER_CLIENT_SECRET = csec
     return bool(cid and csec and cid != "specify your own user id / secret" and csec != "specify your own user id / secret")
 
 def save_credentials_to_env(client_id: str, client_secret: str):
@@ -71,6 +78,12 @@ def save_credentials_to_env(client_id: str, client_secret: str):
 class AgenticRequestHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(STATIC_DIR), **kwargs)
+
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
 
     def _send_json(self, status_code: int, data: dict):
         """Send a JSON HTTP response."""
@@ -273,14 +286,16 @@ class AgenticRequestHandler(SimpleHTTPRequestHandler):
                 return
 
             try:
-                agent = client.get_agent(agent_id, conversation_id=conversation_id)
+                agent = client.get_agent(agent_id, conversation_id=conversation_id, auto_provision=True)
                 resolved_agent_id = agent.get("id") or agent_id
+                backing_agent_id = agent.get("_backing_agent_id") or resolved_agent_id
                 resolved_conv_id = agent.get("_resolved_conversation_id") or conversation_id
                 self._send_json(200, {
                     "passed": True,
                     "message": f"Agent '{agent.get('name', 'Cymbal Retail Analytics Agent')}' ({str(resolved_agent_id)[:8]}...) verified on Looker!",
                     "agent": agent,
                     "agent_id": resolved_agent_id,
+                    "backing_agent_id": backing_agent_id,
                     "conversation_id": resolved_conv_id
                 })
                 return

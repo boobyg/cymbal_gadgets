@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-def load_dotenv(filepath=".env"):
+def load_dotenv(filepath=".env", override=False):
     """Simple .env loader without external dependencies."""
     env_path = Path(filepath)
     if not env_path.is_file():
@@ -14,7 +14,7 @@ def load_dotenv(filepath=".env"):
                     key, val = line.split("=", 1)
                     key = key.strip()
                     val = val.strip().strip('"').strip("'")
-                    if key not in os.environ:
+                    if override or key not in os.environ:
                         os.environ[key] = val
 
 load_dotenv()
