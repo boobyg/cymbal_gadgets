@@ -3292,8 +3292,9 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
       ` : '';
 
       let dataTableHtml = '';
-      if (data.data && data.data.data && data.data.data.length > 0) {
-        const rows = data.data.data;
+      const rawRows = Array.isArray(data.data) ? data.data : (data.data && Array.isArray(data.data.data) ? data.data.data : []);
+      if (rawRows.length > 0) {
+        const rows = rawRows;
         const keys = Object.keys(rows[0] || {});
         dataTableHtml = `
           <details class="group bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs mb-3">
