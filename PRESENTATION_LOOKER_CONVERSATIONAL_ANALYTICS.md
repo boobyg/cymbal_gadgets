@@ -362,7 +362,8 @@ Students can complete every step of Task 1 using either of **two dual pathways**
 
 ```bash
 # Launch the client application (port 8080)
-cd /home/user/cymbal_gadgets/agentic_web_app
+# Note: Replace /user/.. with /admin_/.. (or /admin/..) in Argolis Cloud Shell:
+cd /home/admin_/cymbal_gadgets/agentic_web_app || cd ~/cymbal_gadgets/agentic_web_app
 ./run.sh
 ```
 
@@ -430,7 +431,15 @@ Data engineers must understand both the configuration points (**WHERE**) and enf
 
 ### Alternatively use this Python Code Snippet (Dynamic Instruction Tuning - `PATCH /api/4.0/agents/{agent_id}`):
 ```python
-# Option A: Looker Python SDK (looker_sdk)
+# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
+client.update_agent(agent_id, {
+    "context": {
+        "instructions": "- Always begin your answer with '🌟 Cymbal Executive Summary:'...",
+        "show_analytical_details": True
+    }
+})
+
+# Option B: Looker Python SDK (looker_sdk)
 sdk.update_agent(
     agent_id=agent_id,
     body=models40.WriteAgent(
@@ -440,14 +449,6 @@ sdk.update_agent(
         )
     )
 )
-
-# Option B: Zero-Dependency LookerClient
-client.update_agent(agent_id, {
-    "context": {
-        "instructions": "- Always begin your answer with '🌟 Cymbal Executive Summary:'...",
-        "show_analytical_details": True
-    }
-})
 ```
 
 * **Zero Downtime:** Changes take effect immediately on the next prompt.
@@ -508,8 +509,8 @@ In shared enterprise Looker instances and multi-tenant workshops, maintaining cl
 
 ### Alternatively use this Python Code Snippet (Automated Cleanup):
 ```bash
-# In Cloud Shell terminal:
-cd /home/user/cymbal_gadgets/agentic_web_app
+# In Cloud Shell terminal (replace /user/.. with /admin_/.. or use ~):
+cd /home/admin_/cymbal_gadgets/agentic_web_app || cd ~/cymbal_gadgets/agentic_web_app
 python3 cleanup.py [AGENT_ID] [CONVERSATION_ID] [GOLDEN_QUERY_ID]
 ```
 ```python

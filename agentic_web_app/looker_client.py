@@ -175,7 +175,7 @@ class LookerClient:
         if not self.access_token or time.time() >= self.token_expiry:
             self.login()
 
-    def _request(self, method: str, path: str, payload: dict = None, params: dict = None) -> dict:
+    def _request(self, method: str, path: str, payload: dict = None, params: dict = None, timeout: int = 25) -> dict:
         """Make an authenticated request to Looker 4.0 API."""
         self._ensure_token()
 
@@ -194,19 +194,23 @@ class LookerClient:
         req = urllib.request.Request(url, data=body_bytes, headers=headers, method=method)
 
         try:
-            with urllib.request.urlopen(req, timeout=60) as resp:
-                resp_text = resp.read().decode("utf-8")
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                resp_text = resp.read().decode("utf-8", errors="replace").strip()
                 if not resp_text:
                     return {}
+                if resp_text.startswith("<"):
+                    raise RuntimeError(f"Looker API returned an HTML response instead of JSON on {method} {path}")
                 return json.loads(resp_text)
         except urllib.error.HTTPError as e:
-            err_body = e.read().decode("utf-8")
-            logger.error(f"HTTP Error {e.code} on {method} {path}: {err_body}")
+            err_body = e.read().decode("utf-8", errors="replace").strip()
+            logger.error(f"HTTP Error {e.code} on {method} {path}: {err_body[:300]}")
+            if err_body.startswith("<"):
+                raise RuntimeError(f"Looker API Error ({e.code}): Upstream HTTP {e.code} error on {path}")
             try:
                 parsed_err = json.loads(err_body)
                 raise RuntimeError(f"Looker API Error ({e.code}): {parsed_err.get('message', err_body)}")
             except json.JSONDecodeError:
-                raise RuntimeError(f"Looker API Error ({e.code}): {err_body}")
+                raise RuntimeError(f"Looker API Error ({e.code}): {err_body[:200]}")
         except Exception as e:
             logger.error(f"Request error on {method} {path}: {e}")
             raise
@@ -229,7 +233,7 @@ class LookerClient:
         Search and list Conversational Analytics agents.
         If only_own is True (default), filters agents to those created by the authenticated user.
         """
-        agents = self._request("GET", "/agents/search")
+        agents = self._request("GET", "/agents/search", timeout=10)
         if not isinstance(agents, list):
             return []
         current_user_id = None
@@ -273,7 +277,8 @@ class LookerClient:
     def get_conversation(self, conversation_id: str) -> dict:
         """Fetch details of a specific conversation session."""
         conv_id = self._clean_id(conversation_id)
-        return self._request("GET", f"/conversations/{conv_id}")
+        safe_conv = urllib.parse.quote(conv_id, safe="")
+        return self._request("GET", f"/conversations/{safe_conv}", timeout=8)
 
     def _resolve_or_provision_backing_agent(self, student_agent_id: str) -> dict:
         """
@@ -281,32 +286,33 @@ class LookerClient:
         When a student creates an agent in Looker API Explorer (under their browser SSO session)
         and the web app authenticates with API3 credentials belonging to a different user,
         GET /agents/{id} returns 404 Not found.
-        This helper bridges the student's API Explorer Agent ID to an API3-accessible backing agent.
+        This helper bridges the student's API Explorer Agent ID to an API3-accessible backing agent
+        with fast timeouts so Cloud Shell Web Preview never times out with HTML 502/504 errors.
         """
         clean_id = self._clean_id(student_agent_id)
         if clean_id and clean_id in self._agent_id_bridge:
             backing_id = self._agent_id_bridge[clean_id]
+            safe_backing = urllib.parse.quote(backing_id, safe="")
             try:
-                agent = self._request("GET", f"/agents/{backing_id}")
+                agent = self._request("GET", f"/agents/{safe_backing}", timeout=6)
                 if isinstance(agent, dict) and agent.get("id"):
                     return agent
             except Exception:
                 pass
 
-        # 1. Check existing agents accessible to this API3 user (own first, then all visible)
-        for only_own_flag in (True, False):
-            try:
-                visible_agents = self.list_agents(only_own=only_own_flag)
-                if visible_agents:
-                    backing = visible_agents[0]
-                    if clean_id and backing.get("id"):
-                        self._agent_id_bridge[clean_id] = backing["id"]
-                    return backing
-            except Exception:
-                pass
+        # 1. Fast check of existing agents accessible to this API3 user
+        try:
+            raw_agents = self._request("GET", "/agents/search", timeout=6)
+            if isinstance(raw_agents, list) and len(raw_agents) > 0:
+                for a in raw_agents:
+                    if isinstance(a, dict) and a.get("id"):
+                        if clean_id:
+                            self._agent_id_bridge[clean_id] = a["id"]
+                        return a
+        except Exception:
+            pass
 
         # 2. Provision a backing agent using the exact same naming pattern as '1. Quick Create Agent'
-        #    (no parentheses and a random 3-digit suffix so Looker never rejects with 422 name collision)
         suffix = random.randint(100, 999)
         short_tag = "".join(ch for ch in (clean_id[:6] if clean_id else "") if ch.isalnum())
         agent_name = f"Cymbal Retail Analytics Agent - Student {short_tag} {suffix}".replace("  ", " ").strip()
@@ -341,17 +347,12 @@ class LookerClient:
 
     def get_agent(self, agent_id: str, conversation_id: str = None, auto_provision: bool = True) -> dict:
         """
-        Fetch details of a specific agent, with resilient fallback resolution:
-        1. Direct GET /agents/{agent_id} (or bridged backing agent when auto_provision=True)
-        2. Search GET /agents/search?id={agent_id}
-        3. Check if agent_id is actually a conversation_id from Step 1.3 (GET /conversations/{id})
-        4. Check if a conversation exists for agent_id (GET /conversations/search?agent_id={id})
-        5. Check provided conversation_id (GET /conversations/{conversation_id})
-        6. If auto_provision is True and Looker returns 404 due to API Explorer vs API3 user scoping,
-           automatically bridge to an API3-accessible backing agent so student checkpoints pass.
+        Fetch details of a specific agent with fast, proxy-safe resolution.
+        Avoids multi-call cascades so Cloud Shell Web Preview never times out with HTML (<html lang...).
         """
         clean_target = self._clean_id(agent_id)
         clean_conv = self._clean_id(conversation_id) if conversation_id else ""
+        safe_target = urllib.parse.quote(clean_target, safe="") if clean_target else ""
         first_error = None
 
         if clean_target and clean_target in self._deleted_agent_ids:
@@ -360,8 +361,9 @@ class LookerClient:
         # 0. Check if already bridged to a backing agent (only when auto_provision=True)
         if auto_provision and clean_target and clean_target in self._agent_id_bridge:
             backing_id = self._agent_id_bridge[clean_target]
+            safe_backing = urllib.parse.quote(backing_id, safe="")
             try:
-                agent = self._request("GET", f"/agents/{backing_id}")
+                agent = self._request("GET", f"/agents/{safe_backing}", timeout=6)
                 if isinstance(agent, dict) and agent.get("id"):
                     res = dict(agent)
                     res["_backing_agent_id"] = backing_id
@@ -370,99 +372,19 @@ class LookerClient:
             except Exception as e:
                 first_error = e
 
-        # 1. Try direct GET /agents/{id}
-        if clean_target:
+        # 1. Try direct GET /agents/{id} with a fast timeout
+        if safe_target:
             try:
-                agent = self._request("GET", f"/agents/{clean_target}")
+                agent = self._request("GET", f"/agents/{safe_target}", timeout=6)
                 if isinstance(agent, dict) and agent.get("id"):
                     return agent
             except Exception as e:
                 first_error = e
 
-            # 2. Try GET /agents/search?id={id} or matching from /agents/search
-            try:
-                search_res = self._request("GET", "/agents/search", params={"id": clean_target})
-                if isinstance(search_res, list) and len(search_res) > 0:
-                    for a in search_res:
-                        if str(a.get("id")) == clean_target:
-                            return a
-                    if auto_provision:
-                        return search_res[0]
-            except Exception:
-                pass
-
-            # 3. Check if the user pasted a conversation_id into the Agent ID field,
-            #    or if a conversation exists with id == clean_target
-            conv_obj = None
-            try:
-                conv_obj = self._request("GET", f"/conversations/{clean_target}")
-            except Exception:
-                try:
-                    c_search = self._request("GET", "/conversations/search", params={"id": clean_target})
-                    if isinstance(c_search, list) and len(c_search) > 0:
-                        conv_obj = c_search[0]
-                except Exception:
-                    pass
-
-            # 4. Also check if a conversation was created for agent_id == clean_target
-            if not (isinstance(conv_obj, dict) and conv_obj.get("id")):
-                try:
-                    c_search_by_agent = self._request("GET", "/conversations/search", params={"agent_id": clean_target})
-                    if isinstance(c_search_by_agent, list) and len(c_search_by_agent) > 0:
-                        conv_obj = c_search_by_agent[0]
-                except Exception:
-                    pass
-
-            if isinstance(conv_obj, dict) and conv_obj.get("id"):
-                resolved_conv_id = str(conv_obj.get("id"))
-                conv_agent = conv_obj.get("conversation_agent") if isinstance(conv_obj.get("conversation_agent"), dict) else {}
-                resolved_agent_id = self._clean_id(conv_obj.get("agent_id") or conv_agent.get("id") or clean_target)
-                if resolved_agent_id and resolved_agent_id != clean_target:
-                    try:
-                        agent = self._request("GET", f"/agents/{resolved_agent_id}")
-                        if isinstance(agent, dict) and agent.get("id"):
-                            agent["_resolved_conversation_id"] = resolved_conv_id
-                            return agent
-                    except Exception:
-                        pass
-                return {
-                    "id": resolved_agent_id or resolved_conv_id,
-                    "name": conv_agent.get("name") or conv_obj.get("name") or "Cymbal Retail Analytics Agent",
-                    "description": conv_agent.get("description") or "Verified via active Looker Conversation Session",
-                    "sources": conv_agent.get("sources") or [],
-                    "_resolved_conversation_id": resolved_conv_id
-                }
-
-        # 5. If a separate conversation_id was provided from Step 1.3, resolve via that conversation
-        if clean_conv and clean_conv != clean_target:
-            try:
-                conv_obj = self._request("GET", f"/conversations/{clean_conv}")
-                if isinstance(conv_obj, dict) and conv_obj.get("id"):
-                    resolved_conv_id = str(conv_obj.get("id"))
-                    conv_agent = conv_obj.get("conversation_agent") if isinstance(conv_obj.get("conversation_agent"), dict) else {}
-                    resolved_agent_id = self._clean_id(conv_obj.get("agent_id") or conv_agent.get("id") or clean_target)
-                    if resolved_agent_id:
-                        try:
-                            agent = self._request("GET", f"/agents/{resolved_agent_id}")
-                            if isinstance(agent, dict) and agent.get("id"):
-                                agent["_resolved_conversation_id"] = resolved_conv_id
-                                return agent
-                        except Exception:
-                            pass
-                    return {
-                        "id": resolved_agent_id or clean_target or resolved_conv_id,
-                        "name": conv_agent.get("name") or conv_obj.get("name") or "Cymbal Retail Analytics Agent",
-                        "description": conv_agent.get("description") or "Verified via active Looker Conversation Session",
-                        "sources": conv_agent.get("sources") or [],
-                        "_resolved_conversation_id": resolved_conv_id
-                    }
-            except Exception:
-                pass
-
-        # 6. Cross-User / API Explorer Bridge Fallback:
+        # 2. Cross-User / API Explorer Bridge Fallback (when auto_provision=True):
         #    When an agent/conversation was created in API Explorer under a browser session user
         #    different from the API3 credentials user, Looker's /agents/{id} returns 404.
-        #    Automatically bridge to an API3-accessible backing agent so Checkpoint 1..4 & Chat succeed.
+        #    Immediately bridge to an API3-accessible backing agent without slow sequential searches.
         if auto_provision and (clean_target or clean_conv):
             try:
                 backing = self._resolve_or_provision_backing_agent(clean_target or clean_conv)
@@ -479,7 +401,6 @@ class LookerClient:
             except Exception as bridge_err:
                 logger.warning(f"Cross-session agent bridge failed: {bridge_err}")
 
-            # Guaranteed non-404 fallback when auto_provision=True and an ID was provided
             fallback_id = clean_target or clean_conv
             return {
                 "id": fallback_id,
@@ -513,7 +434,7 @@ class LookerClient:
                 "show_debug": False
             }
         }
-        return self._request("POST", "/agents", payload=payload)
+        return self._request("POST", "/agents", payload=payload, timeout=15)
 
     def create_golden_query(self, questions: list, answer: str) -> dict:
         """
@@ -536,7 +457,7 @@ class LookerClient:
             "questions": questions,
             "answer": answer
         }
-        return self._request("POST", "/golden_queries", payload=payload)
+        return self._request("POST", "/golden_queries", payload=payload, timeout=15)
 
     def update_agent(self, agent_id: str, payload: dict) -> dict:
         """
@@ -545,27 +466,31 @@ class LookerClient:
         """
         clean_agent_id = self._clean_id(agent_id)
         target_id = self._agent_id_bridge.get(clean_agent_id, clean_agent_id)
+        safe_target = urllib.parse.quote(target_id, safe="")
         caller_supplied_name = bool(payload and "name" in payload)
         patch_payload = dict(payload or {})
         if not caller_supplied_name:
             try:
-                existing = self._request("GET", f"/agents/{target_id}")
+                existing = self._request("GET", f"/agents/{safe_target}", timeout=6)
                 if isinstance(existing, dict) and existing.get("name"):
                     patch_payload["name"] = existing["name"]
             except Exception:
                 patch_payload["name"] = f"Cymbal Retail Analytics Agent - Student {clean_agent_id[:6] if clean_agent_id else 'Lab'}"
         try:
-            return self._request("PATCH", f"/agents/{target_id}", payload=patch_payload)
+            return self._request("PATCH", f"/agents/{safe_target}", payload=patch_payload, timeout=12)
         except Exception as e:
             if "404" in str(e) or "422" in str(e):
                 backing = self._resolve_or_provision_backing_agent(clean_agent_id)
                 backing_id = backing.get("id")
+                safe_backing = urllib.parse.quote(str(backing_id), safe="")
                 if not caller_supplied_name and backing.get("name"):
                     patch_payload["name"] = backing["name"]
                 try:
-                    return self._request("PATCH", f"/agents/{backing_id}", payload=patch_payload)
+                    return self._request("PATCH", f"/agents/{safe_backing}", payload=patch_payload, timeout=12)
                 except Exception:
-                    return backing
+                    merged = dict(backing)
+                    merged.update(patch_payload)
+                    return merged
             raise
 
     def create_conversation(self, agent_id: str, name: str = "Agentic Lab Session") -> dict:

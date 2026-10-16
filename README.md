@@ -8,7 +8,7 @@
 An end-to-end, hands-on lab and reference implementation for **Google Cloud SME Academy (Data Analytics & Agentic AI Track)**. 
 
 > [!NOTE]
-> The lab is available in this GitHub repository (`https://github.com/boobyg/cymbal_gadgets.git`) for students to clone and run in their own dedicated **Argolis environment** (using **Google Cloud Shell** in their assigned Argolis GCP project).
+> **MANDATORY ENVIRONMENT REQUIREMENT:** Every student must deploy and run this lab inside their own dedicated **Google Cloud Argolis** environment (using **Google Cloud Shell** in their assigned Argolis GCP project).
 > * Running in your own Argolis Cloud Shell guarantees complete isolation, avoids port collisions on port `8080`, keeps your student API credentials private, and gives you instant browser access via Cloud Shell Web Preview.
 
 Students build, test, and deploy a custom **Conversational Analytics Agent** connected to Looker's governed semantic layer (`cymbal_gadgets_boris` model & `transactions` explore) and consume it through a full-stack web application featuring real-time reasoning tracing, governed LookML SQL generation, and interactive assessment checkpoints.
@@ -135,15 +135,19 @@ Launch the application using the startup script:
 ### Step 5: Configure Your Student Credentials
 #### Option A: In the Opened Web Portal (Recommended)
 1. Click the yellow **Student Credentials** button in the top navigation bar (or **Open Student Credentials Dialog** in Step 0).
-2. Enter the **Looker Client ID** and **Looker Client Secret** that you configured during the required prework for this lab:
-   * **Looker Client ID:** *(from your prework)*
-   * **Looker Client Secret:** *(from your prework)*
+2. Enter the **Looker API Client ID** and **Looker API Client Secret** that you created during the required prework for this lab:
+   * **Looker API Client ID:** *(from your prework)*
+   * **Looker API Client Secret:** *(from your prework)*
 3. Click **Save & Test Connection**. When verified, the status indicator turns green (`Looker Connected`).
 
-#### Option B: Via Terminal (`.env`)
+#### Option B: Configure in Terminal (`.env`)
 1. **Open another Cloud Shell terminal tab first** (click the **`+`** icon in the Cloud Shell terminal bar so you do not stop the running web server in your first terminal).
-2. Navigate to `cd ~/cymbal_gadgets/agentic_web_app` and run `nano .env`.
-3. Supply your **Looker Client ID** (`LOOKER_CLIENT_ID`) and **Looker Client Secret** (`LOOKER_CLIENT_SECRET`) that you configured during the prework, then save and exit (`Ctrl+O`, `Enter`, `Ctrl+X`).
+2. **Navigate to the `agentic_web_app` directory:** Note that `cd /home/user/cymbal_gadgets/agentic_web_app` does **not** work in Argolis Cloud Shell because your home folder is `/home/admin_...` (not `/home/user`). **Explicitly replace `/user/..` with `/admin_/..` (or `/admin/..`, or use `~`):**
+   ```bash
+   cd /home/admin_/cymbal_gadgets/agentic_web_app || cd ~/cymbal_gadgets/agentic_web_app
+   nano .env
+   ```
+3. **Enter the Looker API Client ID (`LOOKER_CLIENT_ID`) and Looker API Client Secret (`LOOKER_CLIENT_SECRET`) that you created during the prework**, then save and exit (`Ctrl+O`, `Enter`, `Ctrl+X`).
 
 ---
 
@@ -197,7 +201,7 @@ In enterprise applications, interacting with Looker's Conversational Analytics A
 
 **🐍 Python Snippets for Create Agent:**
 ```python
-# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell)
+# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 import os, sys
 sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
 import config

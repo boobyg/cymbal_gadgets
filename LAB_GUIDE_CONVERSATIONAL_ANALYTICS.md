@@ -152,18 +152,20 @@ Previous test credentials have been cleared from `.env` and the application to e
 >
 > 💡 **Clearing Credentials:** If you ever need to clear or re-enter credentials, open the dialog and click **Clear Saved Credentials** to wipe all stored values.
 
-### Option B: Configure via Terminal (`.env`)
+### Option B: Configure in Terminal (`.env`)
 If you prefer configuring credentials in the command line:
 1. **Open another Cloud Shell terminal tab first** (click the **`+`** icon in the Cloud Shell terminal bar so you do not stop the running web server in your first terminal).
-2. Navigate to the `agentic_web_app` directory and open the `.env` file:
+2. **Navigate to the `agentic_web_app` directory and open `.env`:**  
+   > ⚠️ **Important Note on Path:** `cd /home/user/cymbal_gadgets/agentic_web_app` does **not** work in Argolis Cloud Shell because your Cloud Shell username is `admin_...` (not `user`). **Explicitly replace `/user/..` with `/admin_/..` (or `/admin/..`, or use `~`):**
 ```bash
-cd ~/cymbal_gadgets/agentic_web_app
+# Replace /user/.. with /admin_/.. (or /admin/..):
+cd /home/admin_/cymbal_gadgets/agentic_web_app || cd ~/cymbal_gadgets/agentic_web_app
 nano .env
 ```
-3. **Supply the Looker Client ID and Looker Client Secret that you configured during the required prework for this lab:**
+3. **Enter the Looker API Client ID and Looker API Client Secret that you created during the prework:**
 ```env
-LOOKER_CLIENT_ID=<YOUR_PREWORK_LOOKER_CLIENT_ID>
-LOOKER_CLIENT_SECRET=<YOUR_PREWORK_LOOKER_CLIENT_SECRET>
+LOOKER_CLIENT_ID=<YOUR_PREWORK_LOOKER_API_CLIENT_ID>
+LOOKER_CLIENT_SECRET=<YOUR_PREWORK_LOOKER_API_CLIENT_SECRET>
 ```
 4. Save and exit (`Ctrl+O`, `Enter`, `Ctrl+X`).
 
@@ -299,10 +301,11 @@ Clicking the direct link takes you directly to the `create_agent` method under t
 
 If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to create your agent:
 
-#### Option A: Zero-Dependency LookerClient (Recommended — Works in Cloud Shell)
+#### Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 This option uses Python's standard library (`urllib`) and requires **no external packages or pip installs**:
 
 ```python
+# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 import os, sys
 sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
 import config
@@ -439,8 +442,9 @@ Once the Golden Query is created, you must link its integer ID to your agent:
 
 If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to create and link the golden query:
 
-##### Option A: Zero-Dependency LookerClient (Recommended — Works in Cloud Shell)
+##### Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 ```python
+# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 # 1. Create Golden Query
 gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
@@ -521,8 +525,9 @@ Looker manages stateful conversational threads on the server. Instead of forcing
 
 If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to initialize the session:
 
-##### Option A: Zero-Dependency LookerClient (Recommended — Works in Cloud Shell)
+##### Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 ```python
+# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 conv = client.create_conversation(
     agent_id=agent["id"],  # Or replace with your Step 1 Agent ID
     name="Cymbal Retail Session - Student <YOUR_NAME>"
@@ -581,8 +586,9 @@ The API returns an array of structured event objects. Notice how Looker exposes 
 
 If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to submit your question and parse the 5-stage stream:
 
-##### Option A: Zero-Dependency LookerClient (Stream Parser — Recommended)
+##### Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 ```python
+# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
 result = client.chat(
     conversation_id=conv["id"],  # Or pass conversation ID string
     user_message="What is our total sales amount across all transactions?"
@@ -800,7 +806,31 @@ Question: What is our total sales amount and gross margin percentage across all 
 
 If you prefer programmatic execution rather than using API Explorer, **alternatively use this Python code snippet** to patch your agent's guardrails:
 
-##### Option A: Using Official Looker Python SDK (`looker_sdk`)
+##### Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
+```python
+# Option A: Zero-Dependency LookerClient (Recommended - Works in Cloud Shell, interactive Python3 environment)
+import os, sys
+sys.path.insert(0, os.path.expanduser('~/cymbal_gadgets/agentic_web_app'))
+import config
+from looker_client import LookerClient
+
+client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
+agent_id = 'YOUR_AGENT_ID'  # Replace with your Step 1 Agent ID
+
+new_instructions = """
+- Always begin your answer with '🌟 Cymbal Executive Summary:'
+- Format all currency metrics in EUR with thousands separators (e.g. €1,234,567)
+- If asked about gross margin, always state the exact percentage with two decimals
+- Keep explanations under 3 sentences
+"""
+
+updated = client.update_agent(agent_id, {
+    'context': {'instructions': new_instructions, 'show_analytical_details': True}
+})
+print(f"✅ Successfully updated instructions for: {updated.get('name')}")
+```
+
+##### Option B: Using Official Looker Python SDK (`looker_sdk`)
 ```python
 import looker_sdk
 from looker_sdk import models40
@@ -824,29 +854,6 @@ updated_agent = sdk.update_agent(
     )
 )
 print(f"✅ Successfully updated instructions for: {updated_agent.name}")
-```
-
-##### Option B: Using Zero-Dependency LookerClient
-```python
-import os, sys
-sys.path.insert(0, os.path.expanduser('~/cymbal_gadgets/agentic_web_app'))
-import config
-from looker_client import LookerClient
-
-client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-agent_id = 'YOUR_AGENT_ID'  # Replace with your Step 1 Agent ID
-
-new_instructions = """
-- Always begin your answer with '🌟 Cymbal Executive Summary:'
-- Format all currency metrics in EUR with thousands separators (e.g. €1,234,567)
-- If asked about gross margin, always state the exact percentage with two decimals
-- Keep explanations under 3 sentences
-"""
-
-updated = client.update_agent(agent_id, {
-    'context': {'instructions': new_instructions, 'show_analytical_details': True}
-})
-print(f"✅ Successfully updated instructions for: {updated.get('name')}")
 ```
 
 ##### Run in Cloud Shell Terminal:
