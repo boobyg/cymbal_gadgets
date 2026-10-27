@@ -176,12 +176,13 @@ In enterprise applications, interacting with Looker's Conversational Analytics A
 ---
 
 ### Step 1.1: Run `create_agent` in API Explorer
-1. **Open Method:** 👉 **[CreateAgent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)**
-2. Click **Run It** tab &rarr; scroll to **Request Body (`body`)**.
-3. Paste JSON Payload:
+1. **Enter First Name & Last Name in the Lab Guide UI:** Enter your **First Name** and **Last Name** in the Step 1.1 JSON Builder (or click **Build JSON** / **Copy JSON** / **Open create_agent** to be prompted). The portal builds the API Explorer JSON payload with your First Name and Last Name.
+2. **Open Method:** 👉 **[CreateAgent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)**
+3. Click **Run It** tab &rarr; scroll to **Request Body (`body`)**.
+4. Paste the Built JSON Payload:
 ```json
 {
-  "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
+  "name": "Cymbal Retail Analytics Agent - First Name Last Name",
   "description": "Conversational agent for Cymbal Gadgets retail sales & transactions",
   "sources": [
     {
@@ -196,8 +197,8 @@ In enterprise applications, interacting with Looker's Conversational Analytics A
   }
 }
 ```
-4. Click blue **Run Request** button. Look for status `POST /agents (200: OK)`.
-5. Copy the 32-character `"id"` from the top of the JSON response.
+5. Click blue **Run Request** button. Look for status `POST /agents (200: OK)`.
+6. Copy the 32-character `"id"` from the top of the JSON response.
 
 **🐍 Python Snippets for Create Agent:**
 ```python
@@ -207,16 +208,18 @@ sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_web_app"))
 import config
 from looker_client import LookerClient
 client = LookerClient(config.LOOKER_BASE_URL, config.LOOKER_CLIENT_ID, config.LOOKER_CLIENT_SECRET)
-agent = client.create_agent(name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", model="cymbal_gadgets_boris", explore="transactions")
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+agent = client.create_agent(name=f"Cymbal Retail Analytics Agent - {student_name}", model="cymbal_gadgets_boris", explore="transactions")
 print("Agent ID:", agent["id"])
 
 # Option B: Looker Python SDK (looker_sdk)
 import looker_sdk
 from looker_sdk import models40
 sdk = looker_sdk.init40()
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 new_agent = sdk.create_agent(
     body=models40.WriteAgent(
-        name="Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
+        name=f"Cymbal Retail Analytics Agent - {student_name}",
         sources=[models40.AgentSource(model="cymbal_gadgets_boris", explore="transactions")],
         context=models40.AgentContext(instructions="...", show_analytical_details=True)
     )
@@ -226,9 +229,10 @@ print("Agent ID:", new_agent.id)
 
 ---
 
-### Step 1.2: Supplying a Golden Query Example (`POST /golden_queries`)
-1. **Open Method:** 👉 **[CreateGoldenQuery in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query)**
-2. Click **Run It** &rarr; paste into **Request Body (`body`)** (single question in `questions` array as required by Looker 4.0):
+### Step 1.2: Supplying a Golden Query Example (`POST /golden_queries` & `PATCH /agents/{id}`)
+1. **Confirm First Name & Last Name in Step 1.2 JSON Builder:** Enter/confirm your **First Name** and **Last Name** in the Step 1.2 JSON Builder.
+2. **Open Method:** 👉 **[CreateGoldenQuery in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query)**
+3. Click **Run It** &rarr; paste into **Request Body (`body`)** (single question in `questions` array as required by Looker 4.0):
 ```json
 {
   "questions": [
@@ -237,45 +241,50 @@ print("Agent ID:", new_agent.id)
   "answer": "https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 }
 ```
-3. Click **Run Request** and copy the returned `"id"`.
+4. Click **Run Request** and copy the returned integer `"id"`.
+5. Paste the returned integer `"id"` into the Step 1.2 JSON Builder to build the `update_agent` JSON payload with your First Name, Last Name, and `golden_query_ids`, then run **[UpdateAgent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)**.
 
 **🐍 Python Snippets for Golden Query:**
 ```python
 # Create and link golden query to your agent
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
 gq = client.create_golden_query(
     questions=["What is our total sales amount across all transactions?"],
     answer="https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 )
-client.update_agent(agent_id, {"name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>", "golden_query_ids": [gq["id"]]})
+client.update_agent(agent_id, {"name": f"Cymbal Retail Analytics Agent - {student_name}", "golden_query_ids": [gq["id"]]})
 ```
 
 ---
 
 ### Step 1.3: Create Conversation Using Your Agent ID (`POST /conversations`)
-1. **Open Method:** 👉 **[CreateConversation in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_conversation)**
-2. Click **Run It** &rarr; paste into **Request Body (`body`)**:
+1. **Enter First Name, Last Name & Agent ID in Step 1.3 JSON Builder:** Enter/confirm your **First Name** and **Last Name** and your **Agent ID** to build the JSON payload.
+2. **Open Method:** 👉 **[CreateConversation in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_conversation)**
+3. Click **Run It** &rarr; paste the built JSON into **Request Body (`body`)**:
 ```json
 {
-  "agent_id": "<YOUR_AGENT_ID_FROM_STEP_1.1>",
-  "name": "Cymbal Retail Session - Student <YOUR_NAME>"
+  "agent_id": "a9b6933c74a045de9ed130ad024cca62",
+  "name": "Cymbal Retail Session - First Name Last Name"
 }
 ```
-3. Click **Run Request** and copy the returned `"id"` (`conversation_id`).
+4. Click **Run Request** and copy the returned `"id"` (`conversation_id`).
 
 **🐍 Python Snippets for Create Conversation:**
 ```python
-conv = client.create_conversation(agent_id=agent_id, name="Cymbal Retail Session - Student <YOUR_NAME>")
+student_name = input("Enter your First Name, Last Name: ").strip() or "First Name Last Name"
+conv = client.create_conversation(agent_id=agent_id, name=f"Cymbal Retail Session - {student_name}")
 print("Conversation ID:", conv["id"])
 ```
 
 ---
 
 ### Step 1.4: Test Chat API Method Before Showing Chat UI (`POST /conversational_analytics/chat`)
-1. **Open Method:** 👉 **[ConversationalAnalyticsChat in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/conversational_analytics_chat)**
-2. Click **Run It** &rarr; paste into **Request Body (`body`)**:
+1. **Enter First Name, Last Name & Conversation ID in Step 1.4 JSON Builder:** Confirm your **First Name** and **Last Name** and paste your **Conversation ID** to build the JSON payload.
+2. **Open Method:** 👉 **[ConversationalAnalyticsChat in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/conversational_analytics_chat)**
+3. Click **Run It** &rarr; paste the built JSON into **Request Body (`body`)**:
 ```json
 {
-  "conversation_id": "<YOUR_CONVERSATION_ID_FROM_STEP_1.3>",
+  "conversation_id": "c1f2e3d4-5678-90ab-cdef-1234567890ab",
   "user_message": "What is our total sales amount across all transactions?"
 }
 ```

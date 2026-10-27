@@ -285,7 +285,7 @@ Students can complete every step of Task 1 using either of **two dual pathways**
 
 ### 1. Create Agent (`POST /api/4.0/agents`)
 * 🔗 [Open create_agent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)
-* **Payload:** `{"name": "Cymbal Retail Agent - Student <ID>", "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}], "context": {"instructions": "...", "show_analytical_details": true}}`
+* **Payload (Built with Student First Name & Last Name):** `{"name": "Cymbal Retail Analytics Agent - First Name Last Name", "sources": [{"model": "cymbal_gadgets_boris", "explore": "transactions"}], "context": {"instructions": "...", "show_analytical_details": true}}`
 * **Alternatively use this Python Code Snippet:**
   ```python
   # looker_sdk

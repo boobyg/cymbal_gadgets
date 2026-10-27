@@ -210,9 +210,9 @@ If you choose Pathway 2, you can run the Python code in any of these convenient 
      cd ~/cymbal_gadgets
      python3 create_agent.py
      ```
-   * Or pass your custom name or credentials:
+   * Or pass your custom First Name and Last Name (if omitted, the script prompts you to enter your First Name, Last Name):
      ```bash
-     python3 create_agent.py --name "Cymbal Retail Agent - Student <YOUR_NAME>"
+     python3 create_agent.py --name "Cymbal Retail Agent - First Name Last Name"
      ```
 2. **Google Cloud Shell Interactive REPL:**
    * In your Cloud Shell terminal, start an interactive Python 3 session:
@@ -254,18 +254,21 @@ Clicking the direct link takes you directly to the `create_agent` method under t
 
 ### 1.4 Step-by-Step: How to Run `CreateAgent` in API Explorer
 
-> ⚡ **Multi-Student Naming Rule (500 Concurrent Students):**  
-> Because students share the workshop Looker instance, **you MUST provide a unique name** for your agent (e.g. appending your name, initials, or student ID, such as `Student <YOUR_NAME>`). This ensures you can easily find and query your agent!
+> ⚡ **Multi-Student Naming Rule & Interactive First Name / Last Name JSON Builder:**  
+> Because students share the workshop Looker instance, **every Step 1 API Explorer task in the Lab Guide UI prompts you to enter your First Name and Last Name** and automatically builds the complete JSON payload with your name (e.g. `"name": "Cymbal Retail Analytics Agent - Jane Doe"`). You never have to manually edit a placeholder!
 
-1. **Open the "Run It" Tab:**  
+1. **Enter Your First Name & Last Name to Build the JSON:**  
+   In Step 1.1 of the Lab Guide UI, enter your **First Name** and **Last Name** in the **Student Name Builder** fields (or click **Build JSON** / **Copy JSON** / **Open create_agent** to be prompted). The portal dynamically builds the JSON payload below with your First Name and Last Name.
+
+2. **Open the "Run It" Tab:**  
    In the API Explorer view for `create_agent`, click on the **Run It** tab on the right side of the screen.
 
-2. **Where to Paste the JSON Payload:**  
-   Scroll down to the **Request Body** editor field (labeled `body`). Clear any placeholder text and paste the following JSON payload:
+3. **Where to Paste the Built JSON Payload:**  
+   Scroll down to the **Request Body** editor field (labeled `body`). Clear any placeholder text and paste the dynamically built JSON payload from the Lab Guide UI:
 
 ```json
 {
-  "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
+  "name": "Cymbal Retail Analytics Agent - First Name Last Name",
   "description": "Conversational BI agent providing governed retail insights for Cymbal Gadgets",
   "sources": [
     {
@@ -280,7 +283,7 @@ Clicking the direct link takes you directly to the `create_agent` method under t
   }
 }
 ```
-*(Replace `<YOUR_NAME_OR_ID>` with your unique identifier, e.g. `Student <YOUR_NAME>`).*
+*(Built automatically with your provided **First Name** and **Last Name** in the Step 1 JSON Builder).*
 
 #### Detailed Explanation of What We Are Doing:
 * **`name`**: Unique display name for identifying your agent among peers.
@@ -381,9 +384,10 @@ In Looker Conversational Analytics, a **Golden Query** (also officially known as
 #### Step-by-Step: Run `create_golden_query` in API Explorer
 👉 **Direct Link:** **[CreateGoldenQuery Method in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query)**
 
-1. Navigate to `ConversationalAnalytics > create_golden_query` in Looker API Explorer.
-2. Click the **Run It** tab.
-3. In the **Request Body (`body`)** editor, paste the single-question JSON payload:
+1. Confirm your **First Name** and **Last Name** are entered in the Step 1.2 JSON Builder (it syncs automatically across all Step 1 API Explorer tasks and prompts you if blank).
+2. Navigate to `ConversationalAnalytics > create_golden_query` in Looker API Explorer.
+3. Click the **Run It** tab.
+4. In the **Request Body (`body`)** editor, paste the built single-question JSON payload:
 ```json
 {
   "questions": [
@@ -392,7 +396,7 @@ In Looker Conversational Analytics, a **Golden Query** (also officially known as
   "answer": "https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 }
 ```
-4. Click **Run Request**.  
+5. Click **Run Request**.  
    * **Status:** `POST /golden_queries (200: OK)` (or `201: Created`).  
    * **Response Body:** Returns the created golden query object with both `"id"` and `"query_id"`.
 
@@ -409,26 +413,27 @@ In Looker Conversational Analytics, a **Golden Query** (also officially known as
 👉 **Direct Link:** **[UpdateAgent Method in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)**
 
 Once the Golden Query is created, you must link its integer ID to your agent:
-1. Open the **[UpdateAgent Method in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)** (under `ConversationalAnalytics > update_agent`).
-2. Click the **Run It** tab.
-3. In the **Parameters** section, locate the `agent_id` field and paste your **32-character Agent ID** from Step 1.4.
-4. In the **Request Body (`body`)** editor, paste:
+1. In the Step 1.2 JSON Builder in the Lab Guide UI, confirm your **First Name** and **Last Name** and paste your integer Golden Query `"id"` (e.g. `142`) so the `update_agent` JSON payload is automatically built with your First Name, Last Name, and Golden Query ID.
+2. Open the **[UpdateAgent Method in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)** (under `ConversationalAnalytics > update_agent`).
+3. Click the **Run It** tab.
+4. In the **Parameters** section, locate the `agent_id` field and paste your **32-character Agent ID** from Step 1.4.
+5. In the **Request Body (`body`)** editor, paste the built JSON payload:
 ```json
 {
-  "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",
+  "name": "Cymbal Retail Analytics Agent - First Name Last Name",
   "sources": [
     {
       "model": "cymbal_gadgets_boris",
       "explore": "transactions"
     }
   ],
-  "golden_query_ids": [<YOUR_GOLDEN_QUERY_ID>]
+  "golden_query_ids": [142]
 }
 ```
-*(Replace `<YOUR_NAME_OR_ID>` with your student ID/name from Step 1.4, and replace `<YOUR_GOLDEN_QUERY_ID>` with your actual numeric Golden Query ID returned in the previous step, e.g. `142`).*
-5. Click **Run Request**.  
+*(Built automatically in the Step 1.2 JSON Builder using your provided **First Name**, **Last Name**, and numeric Golden Query `"id"`).*
+6. Click **Run Request**.  
    * **Status:** `PATCH /agents/{agent_id} (200: OK)`  
-   * **Response Body:** The response contains `"golden_query_ids": [<YOUR_GOLDEN_QUERY_ID>]`, confirming that your agent is now officially anchored by the verified golden query!
+   * **Response Body:** The response contains `"golden_query_ids": [142]`, confirming that your agent is now officially anchored by the verified golden query!
 
 ---
 
@@ -481,30 +486,31 @@ Looker manages stateful conversational threads on the server. Instead of forcing
 *(Also accessible under `Conversation > create_conversation`)*
 
 #### Step-by-Step: Run `create_conversation` in API Explorer
-1. Navigate to the `create_conversation` method in API Explorer.
-2. Click the **Run It** tab.
-3. In the **Request Body (`body`)** editor, supply the **`agent_id` you created in Step 1.4**:
+1. In the Step 1.3 JSON Builder in the Lab Guide UI, confirm your **First Name** and **Last Name** and enter your **Agent ID** from Step 1.4. The JSON payload is automatically built with your First Name, Last Name, and Agent ID.
+2. Navigate to the `create_conversation` method in API Explorer.
+3. Click the **Run It** tab.
+4. In the **Request Body (`body`)** editor, paste the built JSON payload:
 ```json
 {
-  "agent_id": "<YOUR_AGENT_ID_FROM_STEP_1>",
-  "name": "Cymbal Retail Session - Student <YOUR_NAME>"
+  "agent_id": "a9b6933c74a045de9ed130ad024cca62",
+  "name": "Cymbal Retail Session - First Name Last Name"
 }
 ```
-*(Replace `<YOUR_AGENT_ID_FROM_STEP_1>` with your 32-character Agent ID from Step 1.4, and `<YOUR_NAME>` with your name).*
+*(Built automatically in the Step 1.3 JSON Builder using your provided **First Name**, **Last Name**, and **Agent ID**).*
 
-4. Click **Run Request**.
-5. **What to Expect as an Output:**  
+5. Click **Run Request**.
+6. **What to Expect as an Output:**  
    * **Status:** **`POST /conversations (200: OK)`** (or `201: Created`).
    * **Response Body:**
    ```json
    {
      "id": "c1f2e3d4-5678-90ab-cdef-1234567890ab",
-     "name": "Cymbal Retail Session - Student <YOUR_NAME>",
+     "name": "Cymbal Retail Session - First Name Last Name",
      "agent_id": "a9b6933c74a045de9ed130ad024cca62",
      "created_at": "2026-09-28T17:30:00.000Z"
    }
    ```
-6. **Where to Find the Newly Created Conversation ID:**  
+7. **Where to Find the Newly Created Conversation ID:**  
    Look at the top-level **`"id"`** property:  
    `"id": "c1f2e3d4-5678-90ab-cdef-1234567890ab"`  
    **Copy this Conversation ID!** You will pass it directly to the Chat API method in Step 1.8.
@@ -541,16 +547,17 @@ Before displaying the interactive web application chat interface, data engineers
 👉 **Direct Link:** **[ConversationalAnalyticsChat Method in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/conversational_analytics_chat)**
 
 #### Step-by-Step: Run `conversational_analytics_chat` in API Explorer
-1. Navigate to `ConversationalAnalytics > conversational_analytics_chat` in Looker API Explorer.
-2. Click the **Run It** tab.
-3. In the **Request Body (`body`)** editor, paste your **`conversation_id` from Step 1.7** and a question:
+1. In the Step 1.4 JSON Builder in the Lab Guide UI, confirm your **First Name** and **Last Name** and enter your **`conversation_id` from Step 1.7** to automatically build the JSON payload.
+2. Navigate to `ConversationalAnalytics > conversational_analytics_chat` in Looker API Explorer.
+3. Click the **Run It** tab.
+4. In the **Request Body (`body`)** editor, paste the built JSON payload with your `conversation_id` and question:
 ```json
 {
-  "conversation_id": "<YOUR_CONVERSATION_ID_FROM_STEP_1.7>",
+  "conversation_id": "c1f2e3d4-5678-90ab-cdef-1234567890ab",
   "user_message": "What is our total sales amount across all transactions?"
 }
 ```
-4. Click **Run Request**.
+5. Click **Run Request**.
 
 #### What to Expect: Anatomy of the 5-Stage Response Stream
 The API returns an array of structured event objects. Notice how Looker exposes the entire AI execution pipeline:

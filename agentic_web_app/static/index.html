@@ -451,22 +451,42 @@ LOOKER_CLIENT_SECRET=your_prework_looker_api_client_secret</pre>
             </div>
 
             <div class="space-y-1 text-xs text-blue-950">
-              <p class="font-semibold text-slate-800">Step-by-Step Instructions (Part 1 - Prepare Request):</p>
+              <p class="font-semibold text-slate-800">Step-by-Step Instructions (Part 1 - Enter Your Name &amp; Prepare Request):</p>
               <ol class="list-decimal pl-5 space-y-1 text-slate-700">
+                <li>Enter your <strong>First Name</strong> and <strong>Last Name</strong> below to automatically build the <code class="font-mono text-indigo-700">create_agent</code> JSON payload with your name.</li>
                 <li>Click <strong>Open create_agent</strong> above (opens/reuses the Looker API Explorer window), then click the <strong>Run It</strong> tab on the right side.</li>
-                <li>Copy and paste the JSON payload below into the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>:</li>
+                <li>Copy and paste the generated JSON payload below into the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>:</li>
               </ol>
+            </div>
+
+            <!-- Student First & Last Name Prompt for Step 1.1 API Explorer JSON -->
+            <div class="bg-blue-100/80 border border-blue-300 rounded-xl p-3 space-y-2">
+              <div class="flex flex-wrap items-center justify-between gap-1">
+                <label for="step1FirstNameInput" class="font-bold text-blue-950 text-xs flex items-center space-x-1.5">
+                  <i class="fa-solid fa-user-pen text-blue-700"></i>
+                  <span>Student Name (Builds API Explorer JSON):</span>
+                </label>
+                <span class="student-name-status-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">Enter First &amp; Last Name to Build JSON</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <input type="text" id="step1FirstNameInput" value="" autocomplete="off" placeholder="First Name (e.g. Jane)" class="student-first-name-input bg-white border border-blue-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none" oninput="handleStudentNameInput(this.value, null)">
+                <input type="text" id="step1LastNameInput" value="" autocomplete="off" placeholder="Last Name (e.g. Doe)" class="student-last-name-input bg-white border border-blue-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-none" oninput="handleStudentNameInput(null, this.value)">
+                <button type="button" onclick="promptOrValidateStudentName()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1.5 transition shadow-xs">
+                  <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
+                  <span>Build JSON</span>
+                </button>
+              </div>
             </div>
 
             <div class="space-y-1.5 text-xs">
               <div class="flex items-center justify-between">
-                <span class="font-bold text-slate-800">Request Body Payload:</span>
-                <span class="text-[11px] text-amber-700 font-medium">⚠️ Provide a unique name!</span>
+                <span class="font-bold text-slate-800">Request Body Payload (<code class="font-mono text-indigo-700">body</code>):</span>
+                <span class="text-[11px] text-emerald-700 font-medium">✨ Auto-built with your First Name &amp; Last Name</span>
               </div>
               <div class="relative group">
-                <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
-  "name": "Cymbal Retail Analytics Agent - Student &lt;YOUR_NAME_OR_ID&gt;",
-  "description": "Conversational agent for Cymbal Gadgets retail sales & transactions",
+                <pre id="step1CreateAgentJsonCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
+  "name": "Cymbal Retail Analytics Agent - First Name Last Name",
+  "description": "Conversational agent for Cymbal Gadgets retail sales &amp; transactions",
   "sources": [
     {
       "model": "cymbal_gadgets_boris",
@@ -594,9 +614,29 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
             <div class="space-y-1 text-xs text-amber-950">
               <p class="font-semibold text-slate-800">Step-by-Step Instructions (Part 1 - Create Golden Query):</p>
               <ol class="list-decimal pl-5 space-y-1 text-slate-700">
+                <li>Confirm or enter your <strong>First Name</strong> and <strong>Last Name</strong> below (synced across all Step 1 API Explorer tasks).</li>
                 <li>Click <strong>Open create_golden_query</strong> above, then click the <strong>Run It</strong> tab.</li>
                 <li>Copy and paste the JSON payload below into the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>:</li>
               </ol>
+            </div>
+
+            <!-- Student First & Last Name Prompt for Step 1.2 Part 1 API Explorer -->
+            <div class="bg-amber-100/70 border border-amber-300 rounded-xl p-2.5 space-y-2">
+              <div class="flex flex-wrap items-center justify-between gap-1">
+                <label class="font-bold text-amber-950 text-xs flex items-center space-x-1.5">
+                  <i class="fa-solid fa-user-pen text-amber-700"></i>
+                  <span>Student Name (Synced for Step 1.2 API Explorer Calls):</span>
+                </label>
+                <span class="student-name-status-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">Enter First &amp; Last Name to Build JSON</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <input type="text" value="" autocomplete="off" placeholder="First Name (e.g. Jane)" class="student-first-name-input bg-white border border-amber-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none" oninput="handleStudentNameInput(this.value, null)">
+                <input type="text" value="" autocomplete="off" placeholder="Last Name (e.g. Doe)" class="student-last-name-input bg-white border border-amber-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none" oninput="handleStudentNameInput(null, this.value)">
+                <button type="button" onclick="promptOrValidateStudentName()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1.5 transition shadow-xs">
+                  <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
+                  <span>Build JSON</span>
+                </button>
+              </div>
             </div>
 
             <div class="space-y-1.5 text-xs">
@@ -670,13 +710,33 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
                 </button>
               </div>
 
+              <!-- Student First & Last Name Prompt for Step 1.2 API Explorer JSON -->
+              <div class="bg-amber-50 border border-amber-300 rounded-xl p-2.5 space-y-2">
+                <div class="flex flex-wrap items-center justify-between gap-1">
+                  <label for="step2FirstNameInput" class="font-bold text-amber-950 text-xs flex items-center space-x-1.5">
+                    <i class="fa-solid fa-user-pen text-amber-700"></i>
+                    <span>Student Name (Builds <code class="font-mono">update_agent</code> JSON):</span>
+                  </label>
+                  <span class="student-name-status-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">Enter First &amp; Last Name to Build JSON</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <input type="text" id="step2FirstNameInput" value="" autocomplete="off" placeholder="First Name (e.g. Jane)" class="student-first-name-input bg-white border border-amber-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none" oninput="handleStudentNameInput(this.value, null)">
+                  <input type="text" id="step2LastNameInput" value="" autocomplete="off" placeholder="Last Name (e.g. Doe)" class="student-last-name-input bg-white border border-amber-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none" oninput="handleStudentNameInput(null, this.value)">
+                  <button type="button" onclick="promptOrValidateStudentName()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1.5 transition shadow-xs">
+                    <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
+                    <span>Build JSON</span>
+                  </button>
+                </div>
+              </div>
+
               <ol class="list-decimal pl-5 space-y-1.5 text-slate-700 text-[11px]">
+                <li>Enter your <strong>First Name</strong> and <strong>Last Name</strong> above to build the JSON payload with your name.</li>
                 <li>Click <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-cyan-700 underline font-medium">Open update_agent in API Explorer</a> above, then click the <strong>Run It</strong> tab.</li>
                 <li>Under <strong>Parameters</strong>, paste your 32-character Agent ID into the <code class="font-mono bg-slate-100 text-slate-900 px-1 rounded">agent_id</code> field (use <strong>Copy Agent ID</strong> above).</li>
-                <li>In the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>, paste the JSON below (it automatically reflects the Golden Query ID you entered above):
+                <li>In the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>, paste the JSON below (auto-built with your First Name, Last Name, and Golden Query ID):
                   <div class="relative group mt-1">
                     <pre id="step2LinkingJsonCode" class="bg-slate-900 text-slate-100 p-2.5 rounded text-[11px] font-mono select-all">{
-  "name": "Cymbal Retail Analytics Agent - Student &lt;YOUR_NAME_OR_ID&gt;",
+  "name": "Cymbal Retail Analytics Agent - First Name Last Name",
   "golden_query_ids": [142],
   "sources": [
     {
@@ -745,15 +805,37 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
             </div>
 
             <p class="text-xs text-purple-950 leading-relaxed">
-              <strong>Server-Side Memory:</strong> Looker manages conversational state and token budgeting on the server. Call <code class="font-mono text-purple-700">POST /conversations</code> with the <strong>Agent ID you created in Step 1.1</strong> to receive a persistent <code class="font-mono text-purple-700">conversation_id</code>.
+              <strong>Server-Side Memory:</strong> Looker manages conversational state and token budgeting on the server. Call <code class="font-mono text-purple-700">POST /conversations</code> with the <strong>Agent ID you created in Step 1.1</strong> and your <strong>First Name &amp; Last Name</strong> to receive a persistent <code class="font-mono text-purple-700">conversation_id</code>.
             </p>
 
+            <!-- Student First & Last Name Prompt for Step 1.3 API Explorer JSON -->
+            <div class="bg-purple-100/80 border border-purple-300 rounded-xl p-3 space-y-2">
+              <div class="flex flex-wrap items-center justify-between gap-1">
+                <label for="step3FirstNameInput" class="font-bold text-purple-950 text-xs flex items-center space-x-1.5">
+                  <i class="fa-solid fa-user-pen text-purple-700"></i>
+                  <span>Student Name (Builds <code class="font-mono">create_conversation</code> JSON):</span>
+                </label>
+                <span class="student-name-status-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">Enter First &amp; Last Name to Build JSON</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <input type="text" id="step3FirstNameInput" value="" autocomplete="off" placeholder="First Name (e.g. Jane)" class="student-first-name-input bg-white border border-purple-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-purple-500 focus:outline-none" oninput="handleStudentNameInput(this.value, null)">
+                <input type="text" id="step3LastNameInput" value="" autocomplete="off" placeholder="Last Name (e.g. Doe)" class="student-last-name-input bg-white border border-purple-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-purple-500 focus:outline-none" oninput="handleStudentNameInput(null, this.value)">
+                <button type="button" onclick="promptOrValidateStudentName()" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1.5 transition shadow-xs">
+                  <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
+                  <span>Build JSON</span>
+                </button>
+              </div>
+            </div>
+
             <div class="space-y-1.5 text-xs">
-              <span class="font-bold text-slate-800">Request Body (<code class="font-mono text-indigo-700">body</code>):</span>
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-800">Request Body (<code class="font-mono text-indigo-700">body</code>):</span>
+                <span class="text-[11px] text-purple-800 font-medium">✨ Auto-built with your Agent ID, First Name &amp; Last Name</span>
+              </div>
               <div class="relative group">
                 <pre id="step3RequestBodyCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
   "agent_id": "&lt;YOUR_AGENT_ID_FROM_STEP_1.1&gt;",
-  "name": "Cymbal Retail Session - Student &lt;YOUR_NAME&gt;"
+  "name": "Cymbal Retail Session - First Name Last Name"
 }</pre>
                 <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy JSON</button>
               </div>
@@ -844,8 +926,30 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
               <strong>Inspect the HTTP Stream Contract:</strong> Before launching the web UI, test the Chat API directly with your <code class="font-mono text-emerald-700">conversation_id</code> from Step 1.3. Observe how Looker returns the 5 stages: <code class="font-mono text-slate-700">THOUGHT</code>, <code class="font-mono text-slate-700">SCHEMA</code>, <code class="font-mono text-slate-700">QUERY</code>, <code class="font-mono text-slate-700">DATA</code>, and <code class="font-mono text-slate-700">FINAL_RESPONSE</code>.
             </p>
 
+            <!-- Student First & Last Name Prompt for Step 1.4 API Explorer JSON -->
+            <div class="bg-emerald-100/80 border border-emerald-300 rounded-xl p-3 space-y-2">
+              <div class="flex flex-wrap items-center justify-between gap-1">
+                <label for="step4FirstNameInput" class="font-bold text-emerald-950 text-xs flex items-center space-x-1.5">
+                  <i class="fa-solid fa-user-pen text-emerald-700"></i>
+                  <span>Student Name (Builds <code class="font-mono">conversational_analytics_chat</code> JSON):</span>
+                </label>
+                <span class="student-name-status-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">Enter First &amp; Last Name to Build JSON</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <input type="text" id="step4FirstNameInput" value="" autocomplete="off" placeholder="First Name (e.g. Jane)" class="student-first-name-input bg-white border border-emerald-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="handleStudentNameInput(this.value, null)">
+                <input type="text" id="step4LastNameInput" value="" autocomplete="off" placeholder="Last Name (e.g. Doe)" class="student-last-name-input bg-white border border-emerald-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="handleStudentNameInput(null, this.value)">
+                <button type="button" onclick="promptOrValidateStudentName()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1.5 transition shadow-xs">
+                  <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
+                  <span>Build JSON</span>
+                </button>
+              </div>
+            </div>
+
             <div class="space-y-1.5 text-xs">
-              <span class="font-bold text-slate-800">Request Body (<code class="font-mono text-indigo-700">body</code>):</span>
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-800">Request Body (<code class="font-mono text-indigo-700">body</code>):</span>
+                <span class="text-[11px] text-emerald-800 font-medium">✨ Auto-built for your Session</span>
+              </div>
               <div class="relative group">
                 <pre id="step4RequestBodyCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
   "conversation_id": "&lt;YOUR_CONVERSATION_ID_FROM_STEP_1.3&gt;",
@@ -1794,6 +1898,8 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
     let currentAgentId = null;
     let currentConversationId = null;
     let currentGoldenQueryId = null;
+    let studentFirstName = '';
+    let studentLastName = '';
     let availableAgents = [];
     let completedCheckpoints = new Set();
     let isConfigured = false;
@@ -2123,14 +2229,8 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
         cleanupAgentInput.value = agentId;
       }
 
-      // Dynamically update Step 3 Request Body pre element
-      const step3Pre = document.getElementById('step3RequestBodyCode');
-      if (step3Pre) {
-        step3Pre.textContent = JSON.stringify({
-          agent_id: agentId,
-          name: "Cymbal Retail Session - Student <YOUR_NAME>"
-        }, null, 2);
-      }
+      // Dynamically update Step 1 API Explorer JSON payloads (including Step 3 Request Body)
+      buildAllStep1ApiExplorerJson();
 
       // Dynamically update Step 2 Python code snippet
       const step2Py = document.getElementById('step2PythonCode');
@@ -2235,13 +2335,7 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
         el.textContent = 'Awaiting Step 1 Agent ID';
       });
 
-      const step3Pre = document.getElementById('step3RequestBodyCode');
-      if (step3Pre) {
-        step3Pre.textContent = JSON.stringify({
-          agent_id: "<YOUR_AGENT_ID_FROM_STEP_1.1>",
-          name: "Cymbal Retail Session - Student <YOUR_NAME>"
-        }, null, 2);
-      }
+      buildAllStep1ApiExplorerJson();
 
       const step2Py = document.getElementById('step2PythonCode');
       if (step2Py) {
@@ -2468,11 +2562,14 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
     async function ensureBridgedBackingAgent(studentAgentId) {
       if (window.bridgedBackingAgentId) return window.bridgedBackingAgentId;
       try {
+        const agentDisplayName = hasStudentName()
+          ? `Cymbal Retail Analytics Agent - ${getFormattedStudentName()}`
+          : `Cymbal Retail Analytics Agent - Student ${Math.floor(100 + Math.random() * 900)}`;
         const createRes = await fetch('/api/agents', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            name: `Cymbal Retail Analytics Agent - Student ${Math.floor(100 + Math.random() * 900)}`,
+            name: agentDisplayName,
             description: 'Governed retail analytics agent for Cymbal Gadgets',
             model: 'cymbal_gadgets_boris',
             explore: 'transactions',
@@ -2845,9 +2942,14 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
     // QUICK CREATE AGENT MODAL
     // ----------------------------------------------------
     function openCreateAgentModal() {
+      if (!hasStudentName()) {
+        ensureStudentNameProvided();
+      }
       const nameInput = document.getElementById('newAgentName');
-      if (nameInput && (!nameInput.value || nameInput.value === 'Cymbal Retail Analytics Agent')) {
-        nameInput.value = `Cymbal Retail Analytics Agent - Student ${Math.floor(100 + Math.random() * 900)}`;
+      if (nameInput) {
+        nameInput.value = hasStudentName()
+          ? `Cymbal Retail Analytics Agent - ${getFormattedStudentName()}`
+          : `Cymbal Retail Analytics Agent - Student ${Math.floor(100 + Math.random() * 900)}`;
       }
       createAgentModal.classList.remove('hidden');
     }
@@ -3574,10 +3676,154 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
     }
 
     // ----------------------------------------------------
+    // STUDENT FIRST & LAST NAME API EXPLORER JSON BUILDER
+    // ----------------------------------------------------
+    function getFormattedStudentName() {
+      const first = (studentFirstName || '').trim();
+      const last = (studentLastName || '').trim();
+      if (first && last) return `${first} ${last}`;
+      if (first) return first;
+      if (last) return last;
+      return 'First Name Last Name';
+    }
+
+    function hasStudentName() {
+      return Boolean((studentFirstName || '').trim() && (studentLastName || '').trim());
+    }
+
+    function handleStudentNameInput(firstVal, lastVal) {
+      if (firstVal !== null && firstVal !== undefined) {
+        studentFirstName = firstVal;
+      }
+      if (lastVal !== null && lastVal !== undefined) {
+        studentLastName = lastVal;
+      }
+
+      document.querySelectorAll('.student-first-name-input').forEach(el => {
+        if (el.value !== studentFirstName) {
+          el.value = studentFirstName;
+        }
+      });
+
+      document.querySelectorAll('.student-last-name-input').forEach(el => {
+        if (el.value !== studentLastName) {
+          el.value = studentLastName;
+        }
+      });
+
+      const fullName = getFormattedStudentName();
+      const isComplete = hasStudentName();
+      document.querySelectorAll('.student-name-status-badge').forEach(badge => {
+        if (isComplete) {
+          badge.className = 'student-name-status-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300';
+          badge.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i>JSON Built for: ${escapeHtml(fullName)}`;
+        } else {
+          badge.className = 'student-name-status-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300';
+          badge.textContent = 'Enter First & Last Name to Build JSON';
+        }
+      });
+
+      buildAllStep1ApiExplorerJson();
+    }
+
+    function ensureStudentNameProvided() {
+      let first = (studentFirstName || '').trim();
+      let last = (studentLastName || '').trim();
+      if (!first) {
+        const promptedFirst = window.prompt('Please enter your First Name to build the API Explorer JSON payload:', '');
+        if (promptedFirst !== null && promptedFirst.trim()) {
+          first = promptedFirst.trim();
+        }
+      }
+      if (!last) {
+        const promptedLast = window.prompt('Please enter your Last Name to build the API Explorer JSON payload:', '');
+        if (promptedLast !== null && promptedLast.trim()) {
+          last = promptedLast.trim();
+        }
+      }
+      handleStudentNameInput(first, last);
+      return hasStudentName();
+    }
+
+    function promptOrValidateStudentName() {
+      if (!hasStudentName()) {
+        ensureStudentNameProvided();
+      } else {
+        buildAllStep1ApiExplorerJson();
+      }
+    }
+
+    function buildAllStep1ApiExplorerJson() {
+      const fullName = getFormattedStudentName();
+
+      // 1. Step 1.1: create_agent JSON
+      const step1Pre = document.getElementById('step1CreateAgentJsonCode');
+      if (step1Pre) {
+        step1Pre.textContent = JSON.stringify({
+          name: `Cymbal Retail Analytics Agent - ${fullName}`,
+          description: "Conversational agent for Cymbal Gadgets retail sales & transactions",
+          sources: [
+            {
+              model: "cymbal_gadgets_boris",
+              explore: "transactions"
+            }
+          ],
+          context: {
+            instructions: "- Always use Gross Margin Percentage when asked about profitability, margin, or sales performance.\n- When asked for trends over time, group by transaction date or transaction month.\n- If the user asks for store performance, breakdown by store country.\n- Keep executive summaries concise with key metrics highlighted in bold.",
+            show_analytical_details: true,
+            show_debug: false
+          }
+        }, null, 2);
+      }
+
+      // 2. Step 1.2: update_agent (Link Golden Query) JSON
+      const gqInput = document.getElementById('step2GqIdInput');
+      const step2LinkingPre = document.getElementById('step2LinkingJsonCode');
+      if (step2LinkingPre) {
+        const rawVal = gqInput ? gqInput.value.trim() : '';
+        const parsedGq = rawVal ? parseInt(rawVal, 10) : 142;
+        const gqId = isNaN(parsedGq) ? 142 : parsedGq;
+        step2LinkingPre.textContent = JSON.stringify({
+          name: `Cymbal Retail Analytics Agent - ${fullName}`,
+          golden_query_ids: [gqId],
+          sources: [
+            {
+              model: "cymbal_gadgets_boris",
+              explore: "transactions"
+            }
+          ]
+        }, null, 2);
+      }
+
+      // 3. Step 1.3: create_conversation JSON
+      const step3Pre = document.getElementById('step3RequestBodyCode');
+      if (step3Pre) {
+        step3Pre.textContent = JSON.stringify({
+          agent_id: currentAgentId || "<YOUR_AGENT_ID_FROM_STEP_1.1>",
+          name: `Cymbal Retail Session - ${fullName}`
+        }, null, 2);
+      }
+
+      // 4. Step 1.4: conversational_analytics_chat JSON
+      const step4Pre = document.getElementById('step4RequestBodyCode');
+      if (step4Pre) {
+        step4Pre.textContent = JSON.stringify({
+          conversation_id: currentConversationId || "<YOUR_CONVERSATION_ID_FROM_STEP_1.3>",
+          user_message: "What is our total sales amount across all transactions?"
+        }, null, 2);
+      }
+    }
+
+    // ----------------------------------------------------
     // POPUP WINDOW MANAGER & COPY HELPERS
     // ----------------------------------------------------
     let apiExplorerWindow = null;
     function openApiExplorer(url) {
+      if (!hasStudentName()) {
+        ensureStudentNameProvided();
+      } else {
+        buildAllStep1ApiExplorerJson();
+      }
       const windowFeatures = 'width=1280,height=900,left=100,top=50,resizable=yes,scrollbars=yes,status=yes';
       if (!apiExplorerWindow || apiExplorerWindow.closed) {
         apiExplorerWindow = window.open(url, 'looker_api_explorer_window', windowFeatures);
@@ -3592,11 +3838,10 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
 
     function updateGoldenQueryLinkingJson() {
       const gqInput = document.getElementById('step2GqIdInput');
-      const jsonCode = document.getElementById('step2LinkingJsonCode');
-      if (!jsonCode) return;
       const rawVal = gqInput ? gqInput.value.trim() : '';
       const gqId = rawVal ? parseInt(rawVal, 10) : 142;
-      jsonCode.textContent = `{\n  "name": "Cymbal Retail Analytics Agent - Student <YOUR_NAME_OR_ID>",\n  "golden_query_ids": [${isNaN(gqId) ? 142 : gqId}],\n  "sources": [\n    {\n      "model": "cymbal_gadgets_boris",\n      "explore": "transactions"\n    }\n  ]\n}`;
+
+      buildAllStep1ApiExplorerJson();
 
       if (rawVal && !isNaN(gqId)) {
         currentGoldenQueryId = String(gqId);
@@ -3618,6 +3863,13 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
       const pre = btn.parentElement.querySelector('pre');
       if (pre) {
         const isPython = btn && btn.textContent && btn.textContent.includes('Python');
+        if (!isPython && pre.closest('#section-step1')) {
+          if (!hasStudentName()) {
+            ensureStudentNameProvided();
+          } else {
+            buildAllStep1ApiExplorerJson();
+          }
+        }
         const text = pre.textContent.trim();
         copyToClipboard(isPython ? text + '\n' : text, btn);
       }
