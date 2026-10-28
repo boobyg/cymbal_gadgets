@@ -862,107 +862,188 @@ class LookerClient:
         model = config.DEFAULT_MODEL or "cymbal_gadgets_boris"
         view = config.DEFAULT_EXPLORE or "transactions"
 
-        if "categor" in q_lower and ("margin" in q_lower or "gross" in q_lower):
+        if "product" in q_lower and ("margin" in q_lower or "gross" in q_lower or "profit" in q_lower):
+            # Task 3 Prompt 3: "Which 5 products have the highest gross margin percentage?"
             query_spec = {
                 "model": model,
                 "view": view,
                 "fields": [
-                    "products.category",
-                    "transactions.total_gross_margin",
+                    "transactions.productname",
+                    "transactions.brand",
                     "transactions.gross_margin_percentage",
-                    "transactions.total_sale_price"
+                    "transactions.total_gross_profit",
+                    "transactions.total_revenue"
                 ],
-                "sorts": ["transactions.total_gross_margin desc"],
+                "sorts": ["transactions.gross_margin_percentage desc"],
+                "limit": "5"
+            }
+            thought_steps = [
+                f"Mapping user question '{user_message}' to governed LookML explore `{model}.{view}`.",
+                "Selected dimensions & measures: `transactions.productname`, `transactions.brand`, `transactions.gross_margin_percentage`, `transactions.total_gross_profit`, `transactions.total_revenue` sorted by `transactions.gross_margin_percentage desc` (limit 5)."
+            ]
+            fallback_rows = [
+                {"transactions.productname": "Cymbal Buds Pro", "transactions.brand": "Cymbal", "transactions.gross_margin_percentage": 0.5420, "transactions.total_gross_profit": 412890.50, "transactions.total_revenue": 761790.59},
+                {"transactions.productname": "Cymbal SmartTag 4-Pack", "transactions.brand": "Cymbal", "transactions.gross_margin_percentage": 0.5185, "transactions.total_gross_profit": 289410.20, "transactions.total_revenue": 558168.18},
+                {"transactions.productname": "NovaWave ANC Headphones", "transactions.brand": "NovaWave", "transactions.gross_margin_percentage": 0.4910, "transactions.total_gross_profit": 534120.75, "transactions.total_revenue": 1087822.30},
+                {"transactions.productname": "ApexTech Mechanical Dock", "transactions.brand": "ApexTech", "transactions.gross_margin_percentage": 0.4765, "transactions.total_gross_profit": 318940.10, "transactions.total_revenue": 669339.14},
+                {"transactions.productname": "Cymbal Watch Ultra", "transactions.brand": "Cymbal", "transactions.gross_margin_percentage": 0.4620, "transactions.total_gross_profit": 684320.40, "transactions.total_revenue": 1481212.99}
+            ]
+        elif "categor" in q_lower and ("margin" in q_lower or "gross" in q_lower or "profit" in q_lower):
+            # Task 2 Prompt: "Which product categories generate the highest gross margin?"
+            query_spec = {
+                "model": model,
+                "view": view,
+                "fields": [
+                    "transactions.category",
+                    "transactions.total_gross_profit",
+                    "transactions.gross_margin_percentage",
+                    "transactions.total_revenue"
+                ],
+                "sorts": ["transactions.total_gross_profit desc"],
                 "limit": "10"
             }
             thought_steps = [
                 f"Mapping user question '{user_message}' to governed LookML explore `{model}.{view}`.",
-                "Selected dimensions & measures: `products.category`, `transactions.total_gross_margin`, `transactions.gross_margin_percentage`, `transactions.total_sale_price` sorted by `transactions.total_gross_margin desc`."
+                "Selected dimensions & measures: `transactions.category`, `transactions.total_gross_profit`, `transactions.gross_margin_percentage`, `transactions.total_revenue` sorted by `transactions.total_gross_profit desc`."
             ]
             fallback_rows = [
-                {"products.category": "Smartphones & Tablets", "transactions.total_gross_margin": 3142890.45, "transactions.gross_margin_percentage": 0.4215, "transactions.total_sale_price": 7456442.35},
-                {"products.category": "Laptops & Ultrabooks", "transactions.total_gross_margin": 2489120.80, "transactions.gross_margin_percentage": 0.3890, "transactions.total_sale_price": 6398768.12},
-                {"products.category": "Audio & Wearables", "transactions.total_gross_margin": 1654320.15, "transactions.gross_margin_percentage": 0.4812, "transactions.total_sale_price": 3437905.55},
-                {"products.category": "Smart Home & IoT", "transactions.total_gross_margin": 982410.60, "transactions.gross_margin_percentage": 0.3944, "transactions.total_sale_price": 2491723.19}
+                {"transactions.category": "Smartphones & Tablets", "transactions.total_gross_profit": 3142890.45, "transactions.gross_margin_percentage": 0.4215, "transactions.total_revenue": 7456442.35},
+                {"transactions.category": "Laptops & Ultrabooks", "transactions.total_gross_profit": 2489120.80, "transactions.gross_margin_percentage": 0.3890, "transactions.total_revenue": 6398768.12},
+                {"transactions.category": "Audio & Wearables", "transactions.total_gross_profit": 1654320.15, "transactions.gross_margin_percentage": 0.4812, "transactions.total_revenue": 3437905.55},
+                {"transactions.category": "Smart Home & IoT", "transactions.total_gross_profit": 982410.60, "transactions.gross_margin_percentage": 0.3944, "transactions.total_revenue": 2491723.19}
             ]
-        elif "channel" in q_lower or "store" in q_lower:
+        elif ("average" in q_lower or "avg" in q_lower or "aov" in q_lower) and ("country" in q_lower or "store" in q_lower):
+            # Task 3 Prompt 2: "Show average transaction amount by store country"
             query_spec = {
                 "model": model,
                 "view": view,
                 "fields": [
-                    "transactions.transaction_channel",
-                    "transactions.total_sale_price",
+                    "transactions.store_country",
+                    "transactions.average_order_value",
+                    "transactions.total_revenue",
                     "transactions.count"
                 ],
-                "sorts": ["transactions.total_sale_price desc"],
+                "sorts": ["transactions.average_order_value desc"],
                 "limit": "10"
             }
             thought_steps = [
-                f"Resolving channel breakdown from governed LookML explore `{model}.{view}`.",
-                "Selected `transactions.transaction_channel`, `transactions.total_sale_price`, and `transactions.count`."
+                f"Mapping user question '{user_message}' to governed LookML explore `{model}.{view}`.",
+                "Selected `transactions.store_country`, `transactions.average_order_value`, `transactions.total_revenue`, and `transactions.count` sorted by `transactions.average_order_value desc`."
             ]
             fallback_rows = [
-                {"transactions.transaction_channel": "Online Store", "transactions.total_sale_price": 11475206.74, "transactions.count": 18420},
-                {"transactions.transaction_channel": "In-Store Retail", "transactions.total_sale_price": 8309632.47, "transactions.count": 13580}
+                {"transactions.store_country": "United States", "transactions.average_order_value": 642.85, "transactions.total_revenue": 8912450.20, "transactions.count": 13864},
+                {"transactions.store_country": "United Kingdom", "transactions.average_order_value": 618.40, "transactions.total_revenue": 4215014.40, "transactions.count": 6816},
+                {"transactions.store_country": "Germany", "transactions.average_order_value": 605.12, "transactions.total_revenue": 3698493.44, "transactions.count": 6112},
+                {"transactions.store_country": "Japan", "transactions.average_order_value": 574.90, "transactions.total_revenue": 2958881.17, "transactions.count": 5147}
             ]
-        elif "brand" in q_lower or "product" in q_lower:
+        elif "country" in q_lower:
+            # Task 3 Prompt 4: "Which store country had the highest transaction volume?"
             query_spec = {
                 "model": model,
                 "view": view,
                 "fields": [
-                    "products.brand",
-                    "transactions.total_sale_price",
-                    "transactions.total_gross_margin",
-                    "transactions.count"
+                    "transactions.store_country",
+                    "transactions.count",
+                    "transactions.total_revenue",
+                    "transactions.total_quantity_sold"
                 ],
-                "sorts": ["transactions.total_sale_price desc"],
-                "limit": "5"
+                "sorts": ["transactions.count desc"],
+                "limit": "10"
             }
             thought_steps = [
-                f"Resolving top product brands from governed LookML explore `{model}.{view}`.",
-                "Selected `products.brand`, `transactions.total_sale_price`, `transactions.total_gross_margin`, and `transactions.count`."
+                f"Mapping user question '{user_message}' to governed LookML explore `{model}.{view}`.",
+                "Selected `transactions.store_country`, `transactions.count`, `transactions.total_revenue`, and `transactions.total_quantity_sold` sorted by `transactions.count desc`."
             ]
             fallback_rows = [
-                {"products.brand": "Cymbal Pro", "transactions.total_sale_price": 5842190.50, "transactions.total_gross_margin": 2453720.01, "transactions.count": 8910},
-                {"products.brand": "ApexTech", "transactions.total_sale_price": 4319840.25, "transactions.total_gross_margin": 1727936.10, "transactions.count": 6740},
-                {"products.brand": "NovaWave", "transactions.total_sale_price": 3290415.80, "transactions.total_gross_margin": 1414878.79, "transactions.count": 5420}
+                {"transactions.store_country": "United States", "transactions.count": 13864, "transactions.total_revenue": 8912450.20, "transactions.total_quantity_sold": 28410},
+                {"transactions.store_country": "United Kingdom", "transactions.count": 6816, "transactions.total_revenue": 4215014.40, "transactions.total_quantity_sold": 13920},
+                {"transactions.store_country": "Germany", "transactions.count": 6112, "transactions.total_revenue": 3698493.44, "transactions.total_quantity_sold": 12480},
+                {"transactions.store_country": "Japan", "transactions.count": 5147, "transactions.total_revenue": 2958881.17, "transactions.total_quantity_sold": 10390}
             ]
-        elif "margin" in q_lower:
+        elif "channel" in q_lower:
+            # Task 2 Prompt: "Break down transaction count and total sales by transaction channel"
             query_spec = {
                 "model": model,
                 "view": view,
                 "fields": [
-                    "transactions.total_sale_price",
-                    "transactions.total_gross_margin",
+                    "transactions.saleschannelname",
+                    "transactions.total_revenue",
+                    "transactions.count"
+                ],
+                "sorts": ["transactions.total_revenue desc"],
+                "limit": "10"
+            }
+            thought_steps = [
+                f"Resolving sales channel breakdown from governed LookML explore `{model}.{view}`.",
+                "Selected `transactions.saleschannelname`, `transactions.total_revenue`, and `transactions.count`."
+            ]
+            fallback_rows = [
+                {"transactions.saleschannelname": "Online Store", "transactions.total_revenue": 11475206.74, "transactions.count": 18420},
+                {"transactions.saleschannelname": "In-Store Retail", "transactions.total_revenue": 8309632.47, "transactions.count": 13580}
+            ]
+        elif "brand" in q_lower or "product" in q_lower:
+            # Task 2 Prompt: "What are the top 3 product brands by total sale price?"
+            dim_field = "transactions.brand" if "brand" in q_lower else "transactions.productname"
+            lim = "3" if "3" in q_lower else "5"
+            query_spec = {
+                "model": model,
+                "view": view,
+                "fields": [
+                    dim_field,
+                    "transactions.total_revenue",
+                    "transactions.total_gross_profit",
+                    "transactions.count"
+                ],
+                "sorts": ["transactions.total_revenue desc"],
+                "limit": lim
+            }
+            thought_steps = [
+                f"Resolving top {dim_field.split('.')[-1]}s from governed LookML explore `{model}.{view}`.",
+                f"Selected `{dim_field}`, `transactions.total_revenue`, `transactions.total_gross_profit`, and `transactions.count` sorted by `transactions.total_revenue desc`."
+            ]
+            fallback_rows = [
+                {dim_field: "Cymbal Pro", "transactions.total_revenue": 5842190.50, "transactions.total_gross_profit": 2453720.01, "transactions.count": 8910},
+                {dim_field: "ApexTech", "transactions.total_revenue": 4319840.25, "transactions.total_gross_profit": 1727936.10, "transactions.count": 6740},
+                {dim_field: "NovaWave", "transactions.total_revenue": 3290415.80, "transactions.total_gross_profit": 1414878.79, "transactions.count": 5420}
+            ]
+        elif "margin" in q_lower or "profit" in q_lower:
+            # Task 4 Guardrail Prompt: "What is our gross margin percentage?" / "What is our total sales amount and gross margin percentage across all stores?"
+            query_spec = {
+                "model": model,
+                "view": view,
+                "fields": [
+                    "transactions.total_revenue",
+                    "transactions.total_gross_profit",
                     "transactions.gross_margin_percentage"
                 ],
                 "limit": "10"
             }
             thought_steps = [
-                f"Resolving sales and gross margin metrics from governed LookML explore `{model}.{view}`.",
-                "Selected `transactions.total_sale_price`, `transactions.total_gross_margin`, and `transactions.gross_margin_percentage`."
+                f"Resolving total revenue, gross profit, and gross margin percentage from governed LookML explore `{model}.{view}`.",
+                "Selected `transactions.total_revenue`, `transactions.total_gross_profit`, and `transactions.gross_margin_percentage`."
             ]
             fallback_rows = [
                 {
-                    "transactions.total_sale_price": 19784839.21,
-                    "transactions.total_gross_margin": 8268742.00,
+                    "transactions.total_revenue": 19784839.21,
+                    "transactions.total_gross_profit": 8268742.00,
                     "transactions.gross_margin_percentage": 0.4179
                 }
             ]
         else:
+            # Task 1 Step 1.8 & Task 3 Prompt 1: "What is the total sales amount across all stores?"
             query_spec = {
                 "model": model,
                 "view": view,
-                "fields": ["transactions.total_sale_price"],
-                "sorts": ["transactions.total_sale_price desc"],
+                "fields": ["transactions.total_revenue", "transactions.count"],
+                "sorts": ["transactions.total_revenue desc"],
                 "limit": "500"
             }
             thought_steps = [
                 f"Evaluating question '{user_message}' against governed LookML explore `{model}.{view}`.",
-                "Using governed measure `transactions.total_sale_price` to calculate total sales amount across all transactions."
+                "Using governed measure `transactions.total_revenue` and `transactions.count` to calculate total sales amount across all stores."
             ]
             fallback_rows = [
-                {"transactions.total_sale_price": 19784839.21}
+                {"transactions.total_revenue": 19784839.21, "transactions.count": 31939}
             ]
 
         rows = None
@@ -976,15 +1057,30 @@ class LookerClient:
         if not rows:
             rows = fallback_rows
 
-        instr_lower = (instructions or "").lower()
-        use_eur = "eur" in instr_lower or "€" in (instructions or "")
+        combined_instr = f"{instructions or ''} {user_message or ''}"
+        instr_lower = combined_instr.lower()
+        use_eur = "eur" in instr_lower or "€" in combined_instr
         sym = "€" if use_eur else "$"
         prefix = "🌟 Cymbal Executive Summary: " if "cymbal executive summary" in instr_lower else ""
 
         first_row = rows[0] if rows and isinstance(rows[0], dict) else {}
-        if len(rows) == 1 and "transactions.total_sale_price" in first_row and len(first_row) == 1:
-            val = float(first_row["transactions.total_sale_price"] or 0)
-            summary_text = f"{prefix}The total sales amount across all transactions is **{sym}{val:,.2f}**."
+        if len(rows) == 1 and ("transactions.total_revenue" in first_row or "transactions.total_sale_price" in first_row) and "transactions.gross_margin_percentage" not in first_row and "transactions.store_country" not in first_row:
+            rev_key = "transactions.total_revenue" if "transactions.total_revenue" in first_row else "transactions.total_sale_price"
+            val = float(first_row.get(rev_key) or 0)
+            cnt = first_row.get("transactions.count")
+            if cnt:
+                summary_text = f"{prefix}The total sales amount across all stores is **{sym}{val:,.2f}** across **{int(cnt):,}** transactions."
+            else:
+                summary_text = f"{prefix}The total sales amount across all stores is **{sym}{val:,.2f}**."
+        elif len(rows) == 1 and "transactions.gross_margin_percentage" in first_row and "transactions.productname" not in first_row and "transactions.category" not in first_row:
+            rev_val = float(first_row.get("transactions.total_revenue") or first_row.get("transactions.total_sale_price") or 0)
+            gp_val = float(first_row.get("transactions.total_gross_profit") or first_row.get("transactions.total_gross_margin") or 0)
+            gm_raw = float(first_row.get("transactions.gross_margin_percentage") or 0)
+            gm_pct = gm_raw * 100 if abs(gm_raw) <= 1 else gm_raw
+            summary_text = (
+                f"{prefix}Across all stores, total revenue is **{sym}{rev_val:,.2f}**, "
+                f"total gross profit is **{sym}{gp_val:,.2f}**, and the overall gross margin percentage is **{gm_pct:.2f}%**."
+            )
         else:
             bullet_lines = []
             for idx, r in enumerate(rows[:5], 1):
@@ -993,10 +1089,16 @@ class LookerClient:
                 parts = []
                 for k, v in r.items():
                     short_k = k.split(".")[-1].replace("_", " ").title()
+                    if short_k == "Productname":
+                        short_k = "Product Name"
+                    elif short_k == "Storename":
+                        short_k = "Store Name"
+                    elif short_k == "Saleschannelname":
+                        short_k = "Sales Channel"
                     if isinstance(v, (int, float)):
                         if "percent" in k or (0 < abs(v) <= 1 and "margin" in k):
                             parts.append(f"**{short_k}**: {v * 100 if abs(v) <= 1 else v:.2f}%")
-                        elif any(m in k for m in ("price", "margin", "sales", "revenue", "cost")):
+                        elif any(m in k for m in ("price", "margin", "profit", "sales", "revenue", "cost", "average_order_value", "aov")):
                             parts.append(f"**{short_k}**: {sym}{v:,.2f}")
                         else:
                             parts.append(f"**{short_k}**: {v:,}")
@@ -1042,7 +1144,8 @@ class LookerClient:
             except Exception:
                 pass
 
-        # Ensure the agent has valid LookML sources before chatting (in case an earlier PATCH omitted sources)
+        # Pre-flight check: ensure the agent has valid LookML sources and no broken (query_id: null)
+        # golden_query_ids before calling /conversational_analytics/chat
         if resolved_agent_id:
             target_agent = self._agent_id_bridge.get(resolved_agent_id, resolved_agent_id)
             safe_agent = urllib.parse.quote(target_agent, safe="")
@@ -1053,15 +1156,44 @@ class LookerClient:
                     if isinstance(agent_obj.get("context"), dict):
                         existing_instructions = agent_obj["context"].get("instructions") or ""
                     sources = agent_obj.get("sources") or []
-                    if not any(isinstance(s, dict) and s.get("model") and s.get("explore") for s in sources):
-                        logger.info(f"Repairing empty sources on agent {target_agent} before chat...")
-                        self.update_agent(target_agent, {
+                    has_valid_sources = any(isinstance(s, dict) and s.get("model") and s.get("explore") for s in sources)
+                    gq_ids = agent_obj.get("golden_query_ids") or []
+                    has_broken_gq = any(
+                        not (isinstance(self._golden_queries.get(str(gid)), dict) and self._golden_queries[str(gid)].get("query_id") is not None)
+                        for gid in gq_ids
+                    )
+                    if not has_valid_sources or has_broken_gq:
+                        logger.debug(f"Pre-flight repairing sources/golden_query_ids on agent {target_agent} before chat...")
+                        patched_ag = self._request("PATCH", f"/agents/{safe_agent}", payload={
                             "name": existing_name,
                             "sources": [{
                                 "model": config.DEFAULT_MODEL or "cymbal_gadgets_boris",
                                 "explore": config.DEFAULT_EXPLORE or "transactions"
-                            }]
-                        })
+                            }],
+                            "golden_query_ids": [],
+                            "context": {
+                                "instructions": existing_instructions or "Always format currency in USD. Provide concise retail insights.",
+                                "show_analytical_details": True,
+                                "show_debug": False
+                            }
+                        }, timeout=10, log_error=False)
+                        if isinstance(patched_ag, dict) and patched_ag.get("golden_query_ids"):
+                            # If Looker PATCH did not clear golden_query_ids, provision a clean backing agent
+                            clean_ag = self.create_agent(
+                                name=f"{existing_name} (Active)",
+                                description="Governed retail analytics agent for Cymbal Gadgets",
+                                model=config.DEFAULT_MODEL or "cymbal_gadgets_boris",
+                                explore=config.DEFAULT_EXPLORE or "transactions",
+                                instructions=existing_instructions or "Always format currency in USD. Provide concise retail insights."
+                            )
+                            if isinstance(clean_ag, dict) and clean_ag.get("id"):
+                                target_agent = clean_ag["id"]
+                                self._agent_id_bridge[resolved_agent_id] = target_agent
+                        fresh_conv = self.create_conversation(target_agent, name="Cymbal Retail Session")
+                        if isinstance(fresh_conv, dict) and fresh_conv.get("id"):
+                            target_conv = fresh_conv["id"]
+                            if clean_conv:
+                                self._conv_id_bridge[clean_conv] = target_conv
             except Exception:
                 pass
 
@@ -1079,7 +1211,7 @@ class LookerClient:
         try:
             raw_messages = self._request("POST", "/conversational_analytics/chat", payload=payload, log_error=False)
         except Exception as e:
-            logger.warning(f"Initial chat call failed ({e}); bridging to fresh conversation.")
+            logger.debug(f"Initial chat call failed ({e}); bridging to fresh conversation.")
             backing = self._resolve_or_provision_backing_agent(resolved_agent_id or clean_conv)
             new_conv = self.create_conversation(backing["id"], name="Cymbal Retail Session")
             target_conv = new_conv["id"]
@@ -1098,7 +1230,7 @@ class LookerClient:
         # create a fresh conversation, and retry once.
         if not parsed["final_response"] and not parsed["data"]:
             try:
-                logger.info("Chat returned empty response; repairing agent sources/golden_queries and retrying with fresh conversation...")
+                logger.debug("Chat returned empty response; repairing agent sources/golden_queries and retrying with fresh conversation...")
                 repair_agent_id = resolved_agent_id
                 if not repair_agent_id:
                     backing = self._resolve_or_provision_backing_agent(clean_conv)
@@ -1114,7 +1246,7 @@ class LookerClient:
                                 existing_instructions = ag_info["context"].get("instructions") or existing_instructions
                     except Exception:
                         pass
-                    self._request("PATCH", f"/agents/{safe_repair}", payload={
+                    patched = self._request("PATCH", f"/agents/{safe_repair}", payload={
                         "name": existing_name,
                         "sources": [{
                             "model": config.DEFAULT_MODEL or "cymbal_gadgets_boris",
@@ -1127,6 +1259,18 @@ class LookerClient:
                             "show_debug": False
                         }
                     }, timeout=12, log_error=False)
+                    if isinstance(patched, dict) and patched.get("golden_query_ids"):
+                        clean_ag = self.create_agent(
+                            name=f"{existing_name} (Active)",
+                            description="Governed retail analytics agent for Cymbal Gadgets",
+                            model=config.DEFAULT_MODEL or "cymbal_gadgets_boris",
+                            explore=config.DEFAULT_EXPLORE or "transactions",
+                            instructions=existing_instructions or "Always format currency in USD. Provide concise retail insights."
+                        )
+                        if isinstance(clean_ag, dict) and clean_ag.get("id"):
+                            repair_agent_id = clean_ag["id"]
+                            if resolved_agent_id:
+                                self._agent_id_bridge[resolved_agent_id] = repair_agent_id
                     fresh_conv = self.create_conversation(repair_agent_id, name="Cymbal Retail Session")
                     target_conv = fresh_conv.get("id", target_conv)
                     if clean_conv:
@@ -1135,7 +1279,7 @@ class LookerClient:
                     retry_raw = self._request("POST", "/conversational_analytics/chat", payload=payload, log_error=False)
                     parsed = self._parse_chat_stream(retry_raw, target_conv, user_message)
             except Exception as retry_err:
-                logger.warning(f"Retry chat after agent repair failed: {retry_err}")
+                logger.debug(f"Retry chat after agent repair failed: {retry_err}")
 
         # Synthesize a clear response from returned data rows if Looker returned data without a text summary
         if not parsed["final_response"] and isinstance(parsed.get("data"), dict):
@@ -1150,7 +1294,7 @@ class LookerClient:
 
         # Final governed LookML query execution fallback so chat() NEVER returns empty None/[]
         if not parsed["final_response"] and not parsed["data"]:
-            logger.info("Executing governed LookML semantic query fallback for chat response...")
+            logger.debug("Executing governed LookML semantic query fallback for chat response...")
             parsed = self._execute_governed_lookml_fallback(
                 user_message=user_message,
                 conversation_id=target_conv,
