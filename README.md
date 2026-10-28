@@ -142,12 +142,10 @@ Launch the application using the startup script:
 
 #### Option B: Configure in Terminal (`.env`)
 1. **Open another Cloud Shell terminal tab first** (click the **`+`** icon in the Cloud Shell terminal bar so you do not stop the running web server in your first terminal).
-2. **Navigate to the `agentic_web_app` directory:** Note that `cd /home/user/cymbal_gadgets/agentic_web_app` does **not** work in Argolis Cloud Shell because your home folder is `/home/admin_...` (not `/home/user`). **Explicitly replace `/user/..` with `/admin_/..` (or `/admin/..`, or use `~`):**
+2. **Run the interactive credential command below:** It navigates to `~/cymbal_gadgets/agentic_web_app`, prompts you for your prework **Looker Client ID** and **Looker Client Secret**, and writes them directly into `.env`:
    ```bash
-   cd /home/admin_/cymbal_gadgets/agentic_web_app || cd ~/cymbal_gadgets/agentic_web_app
-   nano .env
+   cd /home/admin_/cymbal_gadgets/agentic_web_app 2>/dev/null || cd ~/cymbal_gadgets/agentic_web_app; read -p "Enter your Looker Client ID: " CID && read -p "Enter your Looker Client Secret: " CSEC && CID=$(echo "$CID" | tr -d " '\"") && CSEC=$(echo "$CSEC" | tr -d " '\"") && printf "LOOKER_BASE_URL=https://ceworkshops.cloud.looker.com\nLOOKER_CLIENT_ID=%s\nLOOKER_CLIENT_SECRET=%s\nDEFAULT_MODEL=cymbal_gadgets_boris\nDEFAULT_EXPLORE=transactions\nPORT=8080\n" "$CID" "$CSEC" > .env && echo "✅ Saved Looker credentials to $(pwd)/.env"
    ```
-3. **Enter the Looker API Client ID (`LOOKER_CLIENT_ID`) and Looker API Client Secret (`LOOKER_CLIENT_SECRET`) that you created during the prework**, then save and exit (`Ctrl+O`, `Enter`, `Ctrl+X`).
 
 ---
 

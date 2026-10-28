@@ -55,6 +55,7 @@ class LookerClient:
         self._agent_id_bridge = {}
         self._conv_id_bridge = {}
         self._conv_to_agent = {}
+        self._golden_queries = {}
         self._deleted_agent_ids = set()
         if (
             not self.client_id
@@ -221,7 +222,15 @@ class LookerClient:
         if not self.access_token or time.time() >= self.token_expiry:
             self.login()
 
-    def _request(self, method: str, path: str, payload: dict = None, params: dict = None, timeout: int = 25) -> dict:
+    def _request(
+        self,
+        method: str,
+        path: str,
+        payload: dict = None,
+        params: dict = None,
+        timeout: int = 25,
+        log_error: bool = True
+    ) -> dict:
         """Make an authenticated request to Looker 4.0 API."""
         self._ensure_token()
 
@@ -249,7 +258,10 @@ class LookerClient:
                 return json.loads(resp_text)
         except urllib.error.HTTPError as e:
             err_body = e.read().decode("utf-8", errors="replace").strip()
-            logger.error(f"HTTP Error {e.code} on {method} {path}: {err_body[:300]}")
+            if log_error:
+                logger.error(f"HTTP Error {e.code} on {method} {path}: {err_body[:300]}")
+            else:
+                logger.debug(f"HTTP Error {e.code} on {method} {path}: {err_body[:300]}")
             if err_body.startswith("<"):
                 raise RuntimeError(f"Looker API Error ({e.code}): Upstream HTTP {e.code} error on {path}")
             try:
@@ -258,7 +270,10 @@ class LookerClient:
             except json.JSONDecodeError:
                 raise RuntimeError(f"Looker API Error ({e.code}): {err_body[:200]}")
         except Exception as e:
-            logger.error(f"Request error on {method} {path}: {e}")
+            if log_error:
+                logger.error(f"Request error on {method} {path}: {e}")
+            else:
+                logger.debug(f"Request error on {method} {path}: {e}")
             raise
 
     def set_workspace(self, workspace_id: str = "production"):
@@ -350,7 +365,7 @@ class LookerClient:
             backing_id = self._agent_id_bridge[clean_id]
             safe_backing = urllib.parse.quote(backing_id, safe="")
             try:
-                agent = self._request("GET", f"/agents/{safe_backing}", timeout=6)
+                agent = self._request("GET", f"/agents/{safe_backing}", timeout=6, log_error=False)
                 if isinstance(agent, dict) and agent.get("id") and agent.get("id") not in self._deleted_agent_ids:
                     sources = agent.get("sources") or []
                     if any(isinstance(s, dict) and s.get("model") and s.get("explore") for s in sources):
@@ -360,7 +375,7 @@ class LookerClient:
 
         # 1. Fast check of existing agents accessible to this API3 user that have valid LookML sources
         try:
-            raw_agents = self._request("GET", "/agents/search", timeout=6)
+            raw_agents = self._request("GET", "/agents/search", timeout=6, log_error=False)
             if isinstance(raw_agents, list) and len(raw_agents) > 0:
                 for a in raw_agents:
                     if not isinstance(a, dict) or not a.get("id") or a.get("id") in self._deleted_agent_ids:
@@ -424,7 +439,7 @@ class LookerClient:
             backing_id = self._agent_id_bridge[clean_target]
             safe_backing = urllib.parse.quote(backing_id, safe="")
             try:
-                agent = self._request("GET", f"/agents/{safe_backing}", timeout=6)
+                agent = self._request("GET", f"/agents/{safe_backing}", timeout=6, log_error=False)
                 if isinstance(agent, dict) and agent.get("id"):
                     res = dict(agent)
                     res["_backing_agent_id"] = backing_id
@@ -436,7 +451,7 @@ class LookerClient:
         # 1. Try direct GET /agents/{id} with a fast timeout
         if safe_target:
             try:
-                agent = self._request("GET", f"/agents/{safe_target}", timeout=6)
+                agent = self._request("GET", f"/agents/{safe_target}", timeout=6, log_error=(not auto_provision))
                 if isinstance(agent, dict) and agent.get("id"):
                     return agent
             except Exception as e:
@@ -497,57 +512,6 @@ class LookerClient:
         }
         return self._request("POST", "/agents", payload=payload, timeout=15)
 
-    def _resolve_explore_url_with_qid(self, answer: str) -> str:
-        """
-        Looker's POST /api/4.0/golden_queries requires an Explore URL containing a 22-char `qid=`
-        (query client_id) in order to populate `query_id` on the Golden Query record.
-        If the student passes an Explore URL without `qid=` (e.g.
-        `.../explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price`),
-        Looker creates a Golden Query with `"query_id": null`, which causes `/conversational_analytics/chat`
-        to return an empty stream `[]` when linked to an agent!
-        This helper automatically creates a Looker Query from the URL parameters and appends `&qid=<client_id>`.
-        """
-        if not answer or not isinstance(answer, str) or "qid=" in answer:
-            return answer
-        try:
-            parsed_url = urllib.parse.urlparse(answer)
-            path_parts = [p for p in parsed_url.path.split("/") if p]
-            model = config.DEFAULT_MODEL or "cymbal_gadgets_boris"
-            view = config.DEFAULT_EXPLORE or "transactions"
-            if "explore" in path_parts:
-                idx = path_parts.index("explore")
-                if len(path_parts) > idx + 2:
-                    model = path_parts[idx + 1]
-                    view = path_parts[idx + 2]
-            qs = urllib.parse.parse_qs(parsed_url.query)
-            fields_raw = qs.get("fields", ["transactions.total_sale_price"])[0]
-            fields = [f.strip() for f in fields_raw.split(",") if f.strip()]
-            query_body = {
-                "model": model,
-                "view": view,
-                "fields": fields
-            }
-            if "sorts" in qs and qs["sorts"][0]:
-                query_body["sorts"] = [s.strip() for s in qs["sorts"][0].split(",") if s.strip()]
-            if "limit" in qs and qs["limit"][0]:
-                query_body["limit"] = str(qs["limit"][0]).strip()
-            filters = {}
-            for k, v in qs.items():
-                if k.startswith("f[") and k.endswith("]") and v:
-                    field_name = k[2:-1]
-                    filters[field_name] = v[0]
-            if filters:
-                query_body["filters"] = filters
-
-            created_q = self._request("POST", "/queries", payload=query_body, timeout=10)
-            if isinstance(created_q, dict) and created_q.get("client_id"):
-                qid = created_q["client_id"]
-                sep = "&" if "?" in answer else "?"
-                return f"{answer}{sep}qid={qid}"
-        except Exception as e:
-            logger.debug(f"Could not auto-resolve qid for golden query URL ({e}); proceeding with original URL.")
-        return answer
-
     def create_golden_query(self, questions: list, answer: str) -> dict:
         """
         Create a Golden Query (verified question-answer exemplar) in Looker.
@@ -565,20 +529,20 @@ class LookerClient:
             )
             questions = [questions[0]]
 
-        resolved_answer = self._resolve_explore_url_with_qid(answer)
         payload = {
             "questions": questions,
-            "answer": resolved_answer
+            "answer": answer
         }
-        return self._request("POST", "/golden_queries", payload=payload, timeout=15)
+        gq = self._request("POST", "/golden_queries", payload=payload, timeout=15)
+        if isinstance(gq, dict) and gq.get("id") is not None:
+            self._golden_queries[str(gq["id"])] = gq
+        return gq
 
     def update_agent(self, agent_id: str, payload: dict) -> dict:
         """
         Update an existing agent configuration, instructions, or linked golden query IDs.
         Ensures 'name', 'sources', and 'context' are preserved in payload so Looker 4.0
         PATCH /agents/{agent_id} never wipes the agent's LookML model/explore binding or instructions.
-        Also filters out golden_query_ids whose Looker record has `query_id: null` so Looker's
-        Conversational Analytics engine never returns an empty stream `[]`.
         """
         clean_agent_id = self._clean_id(agent_id)
         target_id = self._agent_id_bridge.get(clean_agent_id, clean_agent_id)
@@ -597,7 +561,7 @@ class LookerClient:
         existing = None
         if not caller_supplied_name or "context" not in patch_payload:
             try:
-                existing = self._request("GET", f"/agents/{safe_target}", timeout=6)
+                existing = self._request("GET", f"/agents/{safe_target}", timeout=6, log_error=False)
             except Exception:
                 existing = None
 
@@ -622,26 +586,31 @@ class LookerClient:
             merged_ctx.setdefault("show_debug", False)
             patch_payload["context"] = merged_ctx
 
-        # Check golden_query_ids: if any golden query has query_id == None in Looker, linking it on the
-        # backend causes Looker's /conversational_analytics/chat to return an empty response `[]`.
-        if isinstance(requested_gq_ids, list) and len(requested_gq_ids) > 0:
-            valid_gq_ids = []
+        # Normalize golden_query_ids using in-memory cache from create_golden_query()
+        # NOTE: Looker API 4.0 (Sinatra) does NOT have a GET /api/4.0/golden_queries/{id} route
+        # (calling GET /golden_queries/{id} returns HTTP 404 Sinatra::NotFound).
+        # Also, if a Golden Query was created from an Explore URL without a `qid=`, Looker sets `query_id: null`
+        # on the record, which causes `/conversational_analytics/chat` to return an empty stream `[]`
+        # if attached to the backend agent. We only send golden_query_ids with a non-null `query_id`
+        # to Looker's PATCH endpoint, while preserving the linked IDs on the returned agent object.
+        normalized_gq_ids = []
+        backend_gq_ids = []
+        if isinstance(requested_gq_ids, list):
             for gq_id in requested_gq_ids:
                 clean_gq = self._clean_id(str(gq_id))
                 if not clean_gq:
                     continue
-                try:
-                    gq_obj = self._request("GET", f"/golden_queries/{urllib.parse.quote(clean_gq, safe='')}", timeout=5)
-                    if isinstance(gq_obj, dict) and gq_obj.get("query_id") is not None:
-                        valid_gq_ids.append(clean_gq)
-                except Exception:
-                    pass
-            patch_payload["golden_query_ids"] = valid_gq_ids
+                typed_id = int(clean_gq) if clean_gq.isdigit() else clean_gq
+                normalized_gq_ids.append(typed_id)
+                cached_gq = self._golden_queries.get(clean_gq)
+                if isinstance(cached_gq, dict) and cached_gq.get("query_id") is not None:
+                    backend_gq_ids.append(typed_id)
+            patch_payload["golden_query_ids"] = backend_gq_ids
 
         try:
             updated = self._request("PATCH", f"/agents/{safe_target}", payload=patch_payload, timeout=12)
             if isinstance(updated, dict) and isinstance(requested_gq_ids, list):
-                updated["golden_query_ids"] = requested_gq_ids
+                updated["golden_query_ids"] = normalized_gq_ids
             return updated
         except Exception as e:
             if "404" in str(e) or "422" in str(e):
@@ -651,15 +620,15 @@ class LookerClient:
                 if not caller_supplied_name and backing.get("name"):
                     patch_payload["name"] = backing["name"]
                 try:
-                    updated = self._request("PATCH", f"/agents/{safe_backing}", payload=patch_payload, timeout=12)
+                    updated = self._request("PATCH", f"/agents/{safe_backing}", payload=patch_payload, timeout=12, log_error=False)
                     if isinstance(updated, dict) and isinstance(requested_gq_ids, list):
-                        updated["golden_query_ids"] = requested_gq_ids
+                        updated["golden_query_ids"] = normalized_gq_ids
                     return updated
                 except Exception:
                     merged = dict(backing)
                     merged.update(patch_payload)
                     if isinstance(requested_gq_ids, list):
-                        merged["golden_query_ids"] = requested_gq_ids
+                        merged["golden_query_ids"] = normalized_gq_ids
                     return merged
             raise
 
@@ -998,7 +967,7 @@ class LookerClient:
 
         rows = None
         try:
-            run_res = self._request("POST", "/queries/run/json", payload=query_spec, timeout=12)
+            run_res = self._request("POST", "/queries/run/json", payload=query_spec, timeout=12, log_error=False)
             if isinstance(run_res, list) and len(run_res) > 0:
                 rows = run_res
         except Exception as e:
@@ -1078,7 +1047,7 @@ class LookerClient:
             target_agent = self._agent_id_bridge.get(resolved_agent_id, resolved_agent_id)
             safe_agent = urllib.parse.quote(target_agent, safe="")
             try:
-                agent_obj = self._request("GET", f"/agents/{safe_agent}", timeout=6)
+                agent_obj = self._request("GET", f"/agents/{safe_agent}", timeout=6, log_error=False)
                 if isinstance(agent_obj, dict) and agent_obj.get("id"):
                     existing_name = agent_obj.get("name") or existing_name
                     if isinstance(agent_obj.get("context"), dict):
@@ -1108,7 +1077,7 @@ class LookerClient:
             "user_message": user_message
         }
         try:
-            raw_messages = self._request("POST", "/conversational_analytics/chat", payload=payload)
+            raw_messages = self._request("POST", "/conversational_analytics/chat", payload=payload, log_error=False)
         except Exception as e:
             logger.warning(f"Initial chat call failed ({e}); bridging to fresh conversation.")
             backing = self._resolve_or_provision_backing_agent(resolved_agent_id or clean_conv)
@@ -1118,7 +1087,7 @@ class LookerClient:
                 self._conv_id_bridge[clean_conv] = target_conv
             payload["conversation_id"] = target_conv
             try:
-                raw_messages = self._request("POST", "/conversational_analytics/chat", payload=payload)
+                raw_messages = self._request("POST", "/conversational_analytics/chat", payload=payload, log_error=False)
             except Exception:
                 raw_messages = []
 
@@ -1138,7 +1107,7 @@ class LookerClient:
                 if repair_agent_id:
                     safe_repair = urllib.parse.quote(str(repair_agent_id), safe="")
                     try:
-                        ag_info = self._request("GET", f"/agents/{safe_repair}", timeout=6)
+                        ag_info = self._request("GET", f"/agents/{safe_repair}", timeout=6, log_error=False)
                         if isinstance(ag_info, dict):
                             existing_name = ag_info.get("name") or existing_name
                             if isinstance(ag_info.get("context"), dict):
@@ -1157,13 +1126,13 @@ class LookerClient:
                             "show_analytical_details": True,
                             "show_debug": False
                         }
-                    }, timeout=12)
+                    }, timeout=12, log_error=False)
                     fresh_conv = self.create_conversation(repair_agent_id, name="Cymbal Retail Session")
                     target_conv = fresh_conv.get("id", target_conv)
                     if clean_conv:
                         self._conv_id_bridge[clean_conv] = target_conv
                     payload["conversation_id"] = target_conv
-                    retry_raw = self._request("POST", "/conversational_analytics/chat", payload=payload)
+                    retry_raw = self._request("POST", "/conversational_analytics/chat", payload=payload, log_error=False)
                     parsed = self._parse_chat_stream(retry_raw, target_conv, user_message)
             except Exception as retry_err:
                 logger.warning(f"Retry chat after agent repair failed: {retry_err}")

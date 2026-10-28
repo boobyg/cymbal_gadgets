@@ -331,17 +331,10 @@
             </h4>
             <ol class="list-decimal pl-5 space-y-1 text-[11px] text-slate-700">
               <li><strong>Open another Cloud Shell terminal first:</strong> Click the <code class="font-mono bg-slate-200 text-slate-900 px-1.5 py-0.5 rounded font-bold">+</code> icon in the Cloud Shell terminal toolbar to open a new terminal tab (do <strong>not</strong> stop the first terminal running <code class="font-mono">./run.sh</code>).</li>
-              <li><strong>Navigate to the app directory:</strong> Note that <code class="font-mono bg-rose-100 text-rose-800 px-1 rounded">cd /home/user/cymbal_gadgets/agentic_web_app</code> does <strong>not</strong> work in Cloud Shell because your home directory is <code class="font-mono text-indigo-700">/home/admin_</code> (or <code class="font-mono text-indigo-700">/home/admin</code>). <strong>Explicitly replace <code class="font-mono text-rose-700">/user/..</code> with <code class="font-mono text-emerald-700">/admin_/..</code> (or <code class="font-mono text-emerald-700">/admin/..</code>)</strong>, or use <code class="font-mono text-emerald-700">~/cymbal_gadgets/agentic_web_app</code>.</li>
-              <li><strong>Enter your prework Looker API credentials:</strong> Open <code class="font-mono text-indigo-700">.env</code> and enter the <strong>Looker API Client ID</strong> (<code class="font-mono text-indigo-700">LOOKER_CLIENT_ID</code>) and <strong>Looker API Client Secret</strong> (<code class="font-mono text-indigo-700">LOOKER_CLIENT_SECRET</code>) that you created during the prework:</li>
+              <li><strong>Run the interactive credential prompt command below:</strong> It navigates to <code class="font-mono text-emerald-700">~/cymbal_gadgets/agentic_web_app</code>, prompts you for your prework <strong>Looker Client ID</strong> and <strong>Looker Client Secret</strong>, and writes them directly into <code class="font-mono text-indigo-700">.env</code>:</li>
             </ol>
             <div class="relative group">
-              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono"># 1. In your new Cloud Shell terminal tab (replace /user/.. with /admin_/..):
-cd /home/admin_/cymbal_gadgets/agentic_web_app || cd ~/cymbal_gadgets/agentic_web_app
-nano .env
-
-# 2. Enter the Looker API Client ID and Looker API Client Secret you created during the prework:
-LOOKER_CLIENT_ID=your_prework_looker_api_client_id
-LOOKER_CLIENT_SECRET=your_prework_looker_api_client_secret</pre>
+              <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">cd /home/admin_/cymbal_gadgets/agentic_web_app 2>/dev/null || cd ~/cymbal_gadgets/agentic_web_app; read -p "Enter your Looker Client ID: " CID && read -p "Enter your Looker Client Secret: " CSEC && CID=$(echo "$CID" | tr -d " '\"") && CSEC=$(echo "$CSEC" | tr -d " '\"") && printf "LOOKER_BASE_URL=https://ceworkshops.cloud.looker.com\nLOOKER_CLIENT_ID=%s\nLOOKER_CLIENT_SECRET=%s\nDEFAULT_MODEL=cymbal_gadgets_boris\nDEFAULT_EXPLORE=transactions\nPORT=8080\n" "$CID" "$CSEC" > .env && echo "✅ Saved Looker credentials to $(pwd)/.env"</pre>
               <button onclick="copyCode(this)" class="absolute top-2 right-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded text-[10px] border border-slate-700">Copy</button>
             </div>
           </div>

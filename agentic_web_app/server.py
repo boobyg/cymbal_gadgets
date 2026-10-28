@@ -33,17 +33,21 @@ ENV_PATH = BASE_DIR / ".env"
 LAB_GUIDE_PATH = BASE_DIR.parent / "LAB_GUIDE_CONVERSATIONAL_ANALYTICS.md"
 
 def is_credentials_configured() -> bool:
-    """Check if valid credentials (not placeholder) are currently set; reload .env if needed."""
+    """Check if valid credentials (not placeholder) are currently set; reload .env if updated."""
+    prev_cid = (client.client_id or "").strip()
+    prev_csec = (client.client_secret or "").strip()
+    client._reload_credentials_from_env()
     cid = (client.client_id or "").strip()
     csec = (client.client_secret or "").strip()
-    if not (cid and csec and cid != "specify your own user id / secret" and csec != "specify your own user id / secret"):
-        client._reload_credentials_from_env()
-        cid = (client.client_id or "").strip()
-        csec = (client.client_secret or "").strip()
-        if cid and csec and cid != "specify your own user id / secret" and csec != "specify your own user id / secret":
-            config.LOOKER_CLIENT_ID = cid
-            config.LOOKER_CLIENT_SECRET = csec
-    return bool(cid and csec and cid != "specify your own user id / secret" and csec != "specify your own user id / secret")
+    if cid and csec and cid != "specify your own user id / secret" and csec != "specify your own user id / secret":
+        config.LOOKER_CLIENT_ID = cid
+        config.LOOKER_CLIENT_SECRET = csec
+        if (cid, csec) != (prev_cid, prev_csec):
+            client.access_token = None
+            client.token_expiry = 0
+            client._current_user = None
+        return True
+    return False
 
 def save_credentials_to_env(client_id: str, client_secret: str):
     """Persist student credentials to the .env file."""

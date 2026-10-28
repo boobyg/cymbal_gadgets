@@ -155,19 +155,10 @@ Previous test credentials have been cleared from `.env` and the application to e
 ### Option B: Configure in Terminal (`.env`)
 If you prefer configuring credentials in the command line:
 1. **Open another Cloud Shell terminal tab first** (click the **`+`** icon in the Cloud Shell terminal bar so you do not stop the running web server in your first terminal).
-2. **Navigate to the `agentic_web_app` directory and open `.env`:**  
-   > ⚠️ **Important Note on Path:** `cd /home/user/cymbal_gadgets/agentic_web_app` does **not** work in Argolis Cloud Shell because your Cloud Shell username is `admin_...` (not `user`). **Explicitly replace `/user/..` with `/admin_/..` (or `/admin/..`, or use `~`):**
+2. **Run the interactive credential command below:** It navigates to `~/cymbal_gadgets/agentic_web_app`, prompts you for your prework **Looker Client ID** and **Looker Client Secret**, and writes them directly into `.env`:
 ```bash
-# Replace /user/.. with /admin_/.. (or /admin/..):
-cd /home/admin_/cymbal_gadgets/agentic_web_app || cd ~/cymbal_gadgets/agentic_web_app
-nano .env
+cd /home/admin_/cymbal_gadgets/agentic_web_app 2>/dev/null || cd ~/cymbal_gadgets/agentic_web_app; read -p "Enter your Looker Client ID: " CID && read -p "Enter your Looker Client Secret: " CSEC && CID=$(echo "$CID" | tr -d " '\"") && CSEC=$(echo "$CSEC" | tr -d " '\"") && printf "LOOKER_BASE_URL=https://ceworkshops.cloud.looker.com\nLOOKER_CLIENT_ID=%s\nLOOKER_CLIENT_SECRET=%s\nDEFAULT_MODEL=cymbal_gadgets_boris\nDEFAULT_EXPLORE=transactions\nPORT=8080\n" "$CID" "$CSEC" > .env && echo "✅ Saved Looker credentials to $(pwd)/.env"
 ```
-3. **Enter the Looker API Client ID and Looker API Client Secret that you created during the prework:**
-```env
-LOOKER_CLIENT_ID=<YOUR_PREWORK_LOOKER_API_CLIENT_ID>
-LOOKER_CLIENT_SECRET=<YOUR_PREWORK_LOOKER_API_CLIENT_SECRET>
-```
-4. Save and exit (`Ctrl+O`, `Enter`, `Ctrl+X`).
 
 ---
 
