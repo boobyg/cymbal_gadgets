@@ -4,7 +4,7 @@
 **Prerequisites:** Familiarity with SQL, REST APIs, and basic JSON. **Zero prior Looker or LookML experience required!**  
 **Duration:** ~30 Minutes  
 **Track:** Google Cloud SME Academy &bull; Agentic & Data Analytics Track  
-**Companion Presentations:** [Google Slides (Standard Google Cloud Style)](https://docs.google.com/presentation/d/1Bl7_ApzMmlsCay9NbthnulxUMKXBpLlbUplNXAdqvsk/edit?slide=id.h1097fa95fc4670d5_0_647&resourcekey=0-G10zZ62rbmyYF_-4_1K6JA#slide=id.h1097fa95fc4670d5_0_647) | [Interactive Presentation Slides](http://localhost:8080/presentation.html) | [Markdown Presentation Deck](PRESENTATION_LOOKER_CONVERSATIONAL_ANALYTICS.md)  
+**Companion Presentations:** [Google Slides (Standard Google Cloud Style)](https://docs.google.com/presentation/d/1VO70erJXhbblyzuDl0P5szp_XkK-02C3uAm05mKhMC4/edit?userstoinvite=anitaquevedo%40google.com&sharingaction=manageaccess&role=writer&resourcekey=0-GzTY4Co7y7L9ru_05HXVIg&slide=id.hf1a6a000f23deba_0_106#slide=id.hf1a6a000f23deba_0_106) | [Interactive Presentation Slides](http://localhost:8080/presentation.html) | [Markdown Presentation Deck](PRESENTATION_LOOKER_CONVERSATIONAL_ANALYTICS.md)  
 **Walkthrough Video:** [Looker Conversational Analytics API (YouTube)](https://www.youtube.com/watch?v=XyU90O49p8o) by Looker EMEA Customer Engineering  
 
 ## 🧭 Introduction for Data Engineers: Why Looker Conversational Analytics?
@@ -153,6 +153,9 @@ Previous test credentials have been cleared from `.env` and the application to e
 > 💡 **Clearing Credentials:** If you ever need to clear or re-enter credentials, open the dialog and click **Clear Saved Credentials** to wipe all stored values.
 
 ### Option B: Configure in Terminal (`.env`)
+> [!WARNING]
+> **Warning:** If you choose **Option B) Python**, this **Option B: Configure in Terminal (`.env`)** is **mandatory**.
+
 If you prefer configuring credentials in the command line:
 1. **Open another Cloud Shell terminal tab first** (click the **`+`** icon in the Cloud Shell terminal bar so you do not stop the running web server in your first terminal).
 2. **Run the interactive credential command below:** It navigates to `~/cymbal_gadgets/agentic_web_app`, prompts you for your prework **Looker Client ID** and **Looker Client Secret**, and writes them directly into `.env`:
@@ -661,11 +664,8 @@ cd ~/cymbal_gadgets/agentic_web_app
    * **Do NOT run in the first terminal** (it is busy running `./run.sh`).
    * **Do NOT run on your local laptop** (`localhost:8080` exists in remote Cloud Shell).
    * **Do NOT curl external `https://*.cloudshell.dev` URLs**:
-     > [!CAUTION]
-     > **Troubleshooting `jq: parse error: Invalid numeric literal at line 1, column 3`:**  
-     > **If you get the error `jq: parse error: Invalid numeric literal at line 1, column 3`, you can safely ignore it and continue directly to clicking "Check my progress" in Task 2!**  
-     > **Why this happens:** If you run `curl -s https://<port>-cs-...cloudshell.dev/api/health | jq .` (using the external Cloud Shell Web Preview URL instead of `http://localhost:8080`), the Cloud Shell proxy requires browser SSO cookies and returns an HTTP 302 HTML redirect (`<a href="...">Found</a>.`), which fails `jq` parsing at column 3 (`<a `).  
-     > **What to do:** Simply ignore that `jq` error and click **Check my progress** in **Task 2** in the web portal (or run `curl -s http://localhost:8080/api/health | jq .` against local HTTP loopback).
+     > [!NOTE]
+     > **Note:** If you get `jq: parse error: Invalid numeric literal at line 1, column 3`, you can safely ignore it and continue directly to clicking **"Check my progress"** in Task 2!
    * In your second Cloud Shell terminal:
    ```bash
    curl -s http://localhost:8080/api/health | jq .

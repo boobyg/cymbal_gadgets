@@ -1,6 +1,6 @@
 # 📊 Presentation Deck: Looker Conversational Analytics for Data Engineers
 **Google Cloud SME Academy &bull; Data & Agentic AI Track**  
-*Google Slides (Standard Google Cloud Style):* [Official Slide Deck](https://docs.google.com/presentation/d/1Bl7_ApzMmlsCay9NbthnulxUMKXBpLlbUplNXAdqvsk/edit?slide=id.h1097fa95fc4670d5_0_647&resourcekey=0-G10zZ62rbmyYF_-4_1K6JA#slide=id.h1097fa95fc4670d5_0_647)  
+*Google Slides (Standard Google Cloud Style):* [Official Slide Deck](https://docs.google.com/presentation/d/1VO70erJXhbblyzuDl0P5szp_XkK-02C3uAm05mKhMC4/edit?userstoinvite=anitaquevedo%40google.com&sharingaction=manageaccess&role=writer&resourcekey=0-GzTY4Co7y7L9ru_05HXVIg&slide=id.hf1a6a000f23deba_0_106#slide=id.hf1a6a000f23deba_0_106)  
 *Companion Interactive Web Presentation:* [http://localhost:8080/presentation.html](http://localhost:8080/presentation.html)  
 *Repository:* [https://github.com/boobyg/cymbal_gadgets.git](https://github.com/boobyg/cymbal_gadgets.git)  
 

@@ -191,7 +191,7 @@
               <span><strong>New to Looker?</strong> View the visual slide deck.</span>
             </div>
             <div class="flex items-center space-x-2">
-              <a href="https://docs.google.com/presentation/d/1Bl7_ApzMmlsCay9NbthnulxUMKXBpLlbUplNXAdqvsk/edit?slide=id.h1097fa95fc4670d5_0_647&resourcekey=0-G10zZ62rbmyYF_-4_1K6JA#slide=id.h1097fa95fc4670d5_0_647" target="_blank" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold px-2.5 py-1.5 rounded-lg text-xs transition shadow-sm flex items-center space-x-1">
+              <a href="https://docs.google.com/presentation/d/1VO70erJXhbblyzuDl0P5szp_XkK-02C3uAm05mKhMC4/edit?userstoinvite=anitaquevedo%40google.com&sharingaction=manageaccess&role=writer&resourcekey=0-GzTY4Co7y7L9ru_05HXVIg&slide=id.hf1a6a000f23deba_0_106#slide=id.hf1a6a000f23deba_0_106" target="_blank" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold px-2.5 py-1.5 rounded-lg text-xs transition shadow-sm flex items-center space-x-1">
                 <i class="fa-solid fa-file-powerpoint text-amber-500"></i>
                 <span>Google Slides (Standard Style)</span>
                 <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-70"></i>
@@ -329,6 +329,10 @@
               <i class="fa-solid fa-terminal text-indigo-600"></i>
               <span>Option B: Configure in Terminal (.env)</span>
             </h4>
+            <div class="bg-amber-50 border border-amber-300 rounded-lg p-2.5 text-[11px] text-amber-900 flex items-start space-x-2">
+              <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5 shrink-0"></i>
+              <span><strong>Warning:</strong> If you choose <strong>Option B) Python</strong>, this <strong>Option B: Configure in Terminal (.env)</strong> is <strong>mandatory</strong>.</span>
+            </div>
             <ol class="list-decimal pl-5 space-y-1 text-[11px] text-slate-700">
               <li><strong>Open another Cloud Shell terminal first:</strong> Click the <code class="font-mono bg-slate-200 text-slate-900 px-1.5 py-0.5 rounded font-bold">+</code> icon in the Cloud Shell terminal toolbar to open a new terminal tab (do <strong>not</strong> stop the first terminal running <code class="font-mono">./run.sh</code>).</li>
               <li><strong>Run the interactive credential prompt command below:</strong> It navigates to <code class="font-mono text-emerald-700">~/cymbal_gadgets/agentic_web_app</code>, prompts you for your prework <strong>Looker Client ID</strong> and <strong>Looker Client Secret</strong>, and writes them directly into <code class="font-mono text-indigo-700">.env</code>:</li>
@@ -993,26 +997,10 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
           <div class="space-y-2 text-xs">
             <h4 class="font-bold text-slate-800">Local Health Verification via curl:</h4>
 
-            <!-- PROMINENT CLOUD SHELL WARNING: HTTPS vs HTTP LOOPBACK -->
-            <div class="bg-rose-50 border-2 border-rose-300 rounded-xl p-3.5 text-xs text-rose-950 space-y-2 shadow-sm">
-              <div class="font-bold flex items-center space-x-1.5 text-rose-900">
-                <i class="fa-solid fa-triangle-exclamation text-rose-600 text-sm"></i>
-                <span>CRITICAL: What to do if you see "jq: parse error: Invalid numeric literal at line 1, column 3"</span>
-              </div>
-              <p class="text-[11px] leading-relaxed text-rose-900">
-                If you receive the following error in your terminal:
-              </p>
-              <div class="bg-rose-950 text-rose-200 p-2.5 rounded-lg font-mono text-[11px] border border-rose-800">
-                jq: parse error: Invalid numeric literal at line 1, column 3
-              </div>
-              <div class="bg-emerald-100/90 border border-emerald-400 rounded-lg p-2.5 text-[11px] text-emerald-950 font-semibold">
-                <i class="fa-solid fa-circle-check text-emerald-700 mr-1"></i>
-                <strong>Action Required:</strong> If you get <code class="font-mono">jq: parse error: Invalid numeric literal at line 1, column 3</code>, <strong>simply ignore it and continue directly to clicking "Check my progress" in Task 2 below!</strong>
-              </div>
-              <div class="space-y-1 text-[11px] text-slate-700">
-                <p><strong>Why this error occurs:</strong> The external <code class="font-mono text-indigo-700">https://8080-cs-*.cloudshell.dev</code> URL is an external proxy requiring Google SSO session cookies. When accessed via curl without browser cookies, it returns an HTTP 302 HTML redirect (<code class="font-mono">&lt;a href="..."&gt;Found&lt;/a&gt;</code>), and <code class="font-mono text-indigo-700">jq</code> fails on the HTML bracket <code class="font-mono">&lt;</code>.</p>
-                <p><strong>Optional Terminal Alternative:</strong> If you want to test via curl in Cloud Shell, use plain <strong>HTTP loopback</strong> on port 8080:</p>
-              </div>
+            <!-- CLOUD SHELL NOTE -->
+            <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-[11px] text-slate-600">
+              <i class="fa-solid fa-circle-info text-slate-500 mr-1"></i>
+              <strong>Note:</strong> If you get <code class="font-mono text-slate-800">jq: parse error: Invalid numeric literal at line 1, column 3</code>, simply ignore it and continue directly to clicking <strong>"Check my progress"</strong> in Task 2 below.
             </div>
 
             <div class="relative group">
