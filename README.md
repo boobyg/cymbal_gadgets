@@ -176,7 +176,7 @@ In enterprise applications, interacting with Looker's Conversational Analytics A
 ---
 
 ### Step 1.1: Run `create_agent` in API Explorer
-1. **Enter First Name & Last Name in the Lab Guide UI:** Enter your **First Name** and **Last Name** in the Step 1.1 JSON Builder (or click **Build JSON** / **Copy JSON** / **Open create_agent** to be prompted). The portal builds the API Explorer JSON payload with your First Name and Last Name.
+1. **Enter First Name & Last Name in Step 1, Task 1:** Enter your **First Name** and **Last Name** in the Step 1.1 JSON Builder and click **Build JSON** (or click **Copy JSON** / **Open create_agent** to be prompted). The portal builds the API Explorer JSON payload with your First Name and Last Name and automatically propagates it to Step 1.2, Step 1.3, and Step 1.4.
 2. **Open Method:** 👉 **[CreateAgent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_agent)**
 3. Click **Run It** tab &rarr; scroll to **Request Body (`body`)**.
 4. Paste the Built JSON Payload:
@@ -230,9 +230,8 @@ print("Agent ID:", new_agent.id)
 ---
 
 ### Step 1.2: Supplying a Golden Query Example (`POST /golden_queries` & `PATCH /agents/{id}`)
-1. **Confirm First Name & Last Name in Step 1.2 JSON Builder:** Enter/confirm your **First Name** and **Last Name** in the Step 1.2 JSON Builder.
-2. **Open Method:** 👉 **[CreateGoldenQuery in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query)**
-3. Click **Run It** &rarr; paste into **Request Body (`body`)** (single question in `questions` array as required by Looker 4.0):
+1. **Open Method:** 👉 **[CreateGoldenQuery in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_golden_query)**
+2. Click **Run It** &rarr; paste into **Request Body (`body`)** (single question in `questions` array as required by Looker 4.0):
 ```json
 {
   "questions": [
@@ -241,8 +240,8 @@ print("Agent ID:", new_agent.id)
   "answer": "https://ceworkshops.cloud.looker.com/explore/cymbal_gadgets_boris/transactions?fields=transactions.total_sale_price"
 }
 ```
-4. Click **Run Request** and copy the returned integer `"id"`.
-5. Paste the returned integer `"id"` into the Step 1.2 JSON Builder to build the `update_agent` JSON payload with your First Name, Last Name, and `golden_query_ids`, then run **[UpdateAgent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)**.
+3. Click **Run Request** and copy the returned integer `"id"`.
+4. Paste the returned integer `"id"` into Step 1, Task 2 to build the `update_agent` JSON payload (your First Name and Last Name are automatically propagated from Task 1), then run **[UpdateAgent in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent)**.
 
 **🐍 Python Snippets for Golden Query:**
 ```python
@@ -258,7 +257,7 @@ client.update_agent(agent_id, {"name": f"Cymbal Retail Analytics Agent - {studen
 ---
 
 ### Step 1.3: Create Conversation Using Your Agent ID (`POST /conversations`)
-1. **Enter First Name, Last Name & Agent ID in Step 1.3 JSON Builder:** Enter/confirm your **First Name** and **Last Name** and your **Agent ID** to build the JSON payload.
+1. **Enter Agent ID in Step 1, Task 3:** Enter your **Agent ID** to build the JSON payload (your First Name and Last Name are automatically propagated from Task 1).
 2. **Open Method:** 👉 **[CreateConversation in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/create_conversation)**
 3. Click **Run It** &rarr; paste the built JSON into **Request Body (`body`)**:
 ```json
@@ -279,7 +278,7 @@ print("Conversation ID:", conv["id"])
 ---
 
 ### Step 1.4: Test Chat API Method Before Showing Chat UI (`POST /conversational_analytics/chat`)
-1. **Enter First Name, Last Name & Conversation ID in Step 1.4 JSON Builder:** Confirm your **First Name** and **Last Name** and paste your **Conversation ID** to build the JSON payload.
+1. **Enter Conversation ID in Step 1, Task 4:** Paste your **Conversation ID** to build the JSON payload.
 2. **Open Method:** 👉 **[ConversationalAnalyticsChat in API Explorer](https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/conversational_analytics_chat)**
 3. Click **Run It** &rarr; paste the built JSON into **Request Body (`body`)**:
 ```json

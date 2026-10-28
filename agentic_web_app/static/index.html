@@ -614,29 +614,9 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
             <div class="space-y-1 text-xs text-amber-950">
               <p class="font-semibold text-slate-800">Step-by-Step Instructions (Part 1 - Create Golden Query):</p>
               <ol class="list-decimal pl-5 space-y-1 text-slate-700">
-                <li>Confirm or enter your <strong>First Name</strong> and <strong>Last Name</strong> below (synced across all Step 1 API Explorer tasks).</li>
                 <li>Click <strong>Open create_golden_query</strong> above, then click the <strong>Run It</strong> tab.</li>
                 <li>Copy and paste the JSON payload below into the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>:</li>
               </ol>
-            </div>
-
-            <!-- Student First & Last Name Prompt for Step 1.2 Part 1 API Explorer -->
-            <div class="bg-amber-100/70 border border-amber-300 rounded-xl p-2.5 space-y-2">
-              <div class="flex flex-wrap items-center justify-between gap-1">
-                <label class="font-bold text-amber-950 text-xs flex items-center space-x-1.5">
-                  <i class="fa-solid fa-user-pen text-amber-700"></i>
-                  <span>Student Name (Synced for Step 1.2 API Explorer Calls):</span>
-                </label>
-                <span class="student-name-status-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">Enter First &amp; Last Name to Build JSON</span>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input type="text" value="" autocomplete="off" placeholder="First Name (e.g. Jane)" class="student-first-name-input bg-white border border-amber-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none" oninput="handleStudentNameInput(this.value, null)">
-                <input type="text" value="" autocomplete="off" placeholder="Last Name (e.g. Doe)" class="student-last-name-input bg-white border border-amber-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none" oninput="handleStudentNameInput(null, this.value)">
-                <button type="button" onclick="promptOrValidateStudentName()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1.5 transition shadow-xs">
-                  <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
-                  <span>Build JSON</span>
-                </button>
-              </div>
             </div>
 
             <div class="space-y-1.5 text-xs">
@@ -710,30 +690,10 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
                 </button>
               </div>
 
-              <!-- Student First & Last Name Prompt for Step 1.2 API Explorer JSON -->
-              <div class="bg-amber-50 border border-amber-300 rounded-xl p-2.5 space-y-2">
-                <div class="flex flex-wrap items-center justify-between gap-1">
-                  <label for="step2FirstNameInput" class="font-bold text-amber-950 text-xs flex items-center space-x-1.5">
-                    <i class="fa-solid fa-user-pen text-amber-700"></i>
-                    <span>Student Name (Builds <code class="font-mono">update_agent</code> JSON):</span>
-                  </label>
-                  <span class="student-name-status-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">Enter First &amp; Last Name to Build JSON</span>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  <input type="text" id="step2FirstNameInput" value="" autocomplete="off" placeholder="First Name (e.g. Jane)" class="student-first-name-input bg-white border border-amber-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none" oninput="handleStudentNameInput(this.value, null)">
-                  <input type="text" id="step2LastNameInput" value="" autocomplete="off" placeholder="Last Name (e.g. Doe)" class="student-last-name-input bg-white border border-amber-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none" oninput="handleStudentNameInput(null, this.value)">
-                  <button type="button" onclick="promptOrValidateStudentName()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1.5 transition shadow-xs">
-                    <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
-                    <span>Build JSON</span>
-                  </button>
-                </div>
-              </div>
-
               <ol class="list-decimal pl-5 space-y-1.5 text-slate-700 text-[11px]">
-                <li>Enter your <strong>First Name</strong> and <strong>Last Name</strong> above to build the JSON payload with your name.</li>
                 <li>Click <a href="https://ceworkshops.cloud.looker.com/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/ConversationalAnalytics/update_agent" onclick="return openApiExplorer(this.href);" target="looker_api_explorer_window" rel="noopener noreferrer" class="text-cyan-700 underline font-medium">Open update_agent in API Explorer</a> above, then click the <strong>Run It</strong> tab.</li>
                 <li>Under <strong>Parameters</strong>, paste your 32-character Agent ID into the <code class="font-mono bg-slate-100 text-slate-900 px-1 rounded">agent_id</code> field (use <strong>Copy Agent ID</strong> above).</li>
-                <li>In the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>, paste the JSON below (auto-built with your First Name, Last Name, and Golden Query ID):
+                <li>In the <strong>Request Body (<code class="font-mono text-indigo-700">body</code>)</strong>, paste the JSON below (auto-built with your First Name &amp; Last Name propagated from Task 1, plus your Golden Query ID):
                   <div class="relative group mt-1">
                     <pre id="step2LinkingJsonCode" class="bg-slate-900 text-slate-100 p-2.5 rounded text-[11px] font-mono select-all">{
   "name": "Cymbal Retail Analytics Agent - First Name Last Name",
@@ -805,32 +765,13 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
             </div>
 
             <p class="text-xs text-purple-950 leading-relaxed">
-              <strong>Server-Side Memory:</strong> Looker manages conversational state and token budgeting on the server. Call <code class="font-mono text-purple-700">POST /conversations</code> with the <strong>Agent ID you created in Step 1.1</strong> and your <strong>First Name &amp; Last Name</strong> to receive a persistent <code class="font-mono text-purple-700">conversation_id</code>.
+              <strong>Server-Side Memory:</strong> Looker manages conversational state and token budgeting on the server. Call <code class="font-mono text-purple-700">POST /conversations</code> with the <strong>Agent ID you created in Step 1.1</strong> and your <strong>First Name &amp; Last Name</strong> (propagated from Task 1) to receive a persistent <code class="font-mono text-purple-700">conversation_id</code>.
             </p>
-
-            <!-- Student First & Last Name Prompt for Step 1.3 API Explorer JSON -->
-            <div class="bg-purple-100/80 border border-purple-300 rounded-xl p-3 space-y-2">
-              <div class="flex flex-wrap items-center justify-between gap-1">
-                <label for="step3FirstNameInput" class="font-bold text-purple-950 text-xs flex items-center space-x-1.5">
-                  <i class="fa-solid fa-user-pen text-purple-700"></i>
-                  <span>Student Name (Builds <code class="font-mono">create_conversation</code> JSON):</span>
-                </label>
-                <span class="student-name-status-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">Enter First &amp; Last Name to Build JSON</span>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input type="text" id="step3FirstNameInput" value="" autocomplete="off" placeholder="First Name (e.g. Jane)" class="student-first-name-input bg-white border border-purple-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-purple-500 focus:outline-none" oninput="handleStudentNameInput(this.value, null)">
-                <input type="text" id="step3LastNameInput" value="" autocomplete="off" placeholder="Last Name (e.g. Doe)" class="student-last-name-input bg-white border border-purple-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-purple-500 focus:outline-none" oninput="handleStudentNameInput(null, this.value)">
-                <button type="button" onclick="promptOrValidateStudentName()" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1.5 transition shadow-xs">
-                  <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
-                  <span>Build JSON</span>
-                </button>
-              </div>
-            </div>
 
             <div class="space-y-1.5 text-xs">
               <div class="flex items-center justify-between">
                 <span class="font-bold text-slate-800">Request Body (<code class="font-mono text-indigo-700">body</code>):</span>
-                <span class="text-[11px] text-purple-800 font-medium">✨ Auto-built with your Agent ID, First Name &amp; Last Name</span>
+                <span class="text-[11px] text-purple-800 font-medium">✨ Auto-built with your Agent ID &amp; Name propagated from Task 1</span>
               </div>
               <div class="relative group">
                 <pre id="step3RequestBodyCode" class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs font-mono">{
@@ -925,25 +866,6 @@ import os, sys; sys.path.insert(0, os.path.expanduser("~/cymbal_gadgets/agentic_
             <p class="text-xs text-emerald-950 leading-relaxed">
               <strong>Inspect the HTTP Stream Contract:</strong> Before launching the web UI, test the Chat API directly with your <code class="font-mono text-emerald-700">conversation_id</code> from Step 1.3. Observe how Looker returns the 5 stages: <code class="font-mono text-slate-700">THOUGHT</code>, <code class="font-mono text-slate-700">SCHEMA</code>, <code class="font-mono text-slate-700">QUERY</code>, <code class="font-mono text-slate-700">DATA</code>, and <code class="font-mono text-slate-700">FINAL_RESPONSE</code>.
             </p>
-
-            <!-- Student First & Last Name Prompt for Step 1.4 API Explorer JSON -->
-            <div class="bg-emerald-100/80 border border-emerald-300 rounded-xl p-3 space-y-2">
-              <div class="flex flex-wrap items-center justify-between gap-1">
-                <label for="step4FirstNameInput" class="font-bold text-emerald-950 text-xs flex items-center space-x-1.5">
-                  <i class="fa-solid fa-user-pen text-emerald-700"></i>
-                  <span>Student Name (Builds <code class="font-mono">conversational_analytics_chat</code> JSON):</span>
-                </label>
-                <span class="student-name-status-badge text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">Enter First &amp; Last Name to Build JSON</span>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input type="text" id="step4FirstNameInput" value="" autocomplete="off" placeholder="First Name (e.g. Jane)" class="student-first-name-input bg-white border border-emerald-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="handleStudentNameInput(this.value, null)">
-                <input type="text" id="step4LastNameInput" value="" autocomplete="off" placeholder="Last Name (e.g. Doe)" class="student-last-name-input bg-white border border-emerald-400 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none" oninput="handleStudentNameInput(null, this.value)">
-                <button type="button" onclick="promptOrValidateStudentName()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3 py-1.5 rounded-lg text-xs flex items-center justify-center space-x-1.5 transition shadow-xs">
-                  <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
-                  <span>Build JSON</span>
-                </button>
-              </div>
-            </div>
 
             <div class="space-y-1.5 text-xs">
               <div class="flex items-center justify-between">
